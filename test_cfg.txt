@@ -1,0 +1,7 @@
+name1=string
+name2= 33
+name2 = 3
+longlong = 60020001000
+array :aa,2,b
+array:1,2,3
+array2:aa,2,b
