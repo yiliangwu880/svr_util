@@ -2,7 +2,8 @@
 	linux 服务器常见可复用功能
 	静态库
 	编译成功后，使用include,lib两个目录的内容到你的项目就可以使用了。
-
+	部分代码和 CppUtility一样，已svr_utili为准。优先维护
+	
 编译方法：
 	整个文件夹放到linux目录，安装cmake gcc等。
 	当前目录执行：sh clearBuild.sh 完成编译
