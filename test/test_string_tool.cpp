@@ -109,5 +109,9 @@ UNITTEST(testStringTool)
     test2();
 	test3();
 	test4();
-	UNIT_INFO("test string tool done");
+
+
+
+
+
 }

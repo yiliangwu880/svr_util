@@ -22,7 +22,7 @@ int main(int argc, char* argv[])
 #pragma once
 #include <string>
 
-namespace svr_util
+namespace su
 {
 enum LogLv
 {

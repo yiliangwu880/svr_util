@@ -5,7 +5,7 @@
 #include <stdarg.h>
 
 using namespace std;
-namespace svr_util
+namespace su
 {
 void LogMgr::SetLogPrinter(ILogPrinter &iprinter)
 {

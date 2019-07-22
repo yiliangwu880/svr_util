@@ -70,7 +70,6 @@ UNITTEST( testReadCfg)
 {
 	test1();
 
-	UNIT_INFO("test read cfg done");
 }
 
 

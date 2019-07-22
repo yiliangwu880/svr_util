@@ -1,7 +1,7 @@
 #pragma once
 
 #include <assert.h>
-#include "noncopyable.h"
+
 
 /************************************************************************/
 /* 
@@ -14,6 +14,17 @@ concreterClass(){};
 };
 */
 /************************************************************************/
+
+class Noncopyable
+{
+protected:
+	Noncopyable() {}; 
+	~Noncopyable() {};
+
+private:
+	Noncopyable(const Noncopyable&); 
+	Noncopyable & operator= (const Noncopyable &);
+};
 
 
 template <typename T, bool INIT = true>
@@ -29,10 +40,10 @@ protected:
 	~SingletonBase() {}
 
 public:
-	static T& instance()
-    {
-        return obj();
-	}
+	//static T& instance()
+ //   {
+ //       return obj();
+	//}
 	static T& obj()
 	{
 		static T t;

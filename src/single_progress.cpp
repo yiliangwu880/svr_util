@@ -10,7 +10,7 @@
 #include <signal.h>
 #include "log_def.h"
 
-using namespace svr_util;
+using namespace su;
 file_lock::file_lock(const std::string& file_name)
 :m_fd(-1)
 {
