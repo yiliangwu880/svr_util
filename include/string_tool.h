@@ -11,7 +11,8 @@
 #include <stdlib.h>
 #include "cnt_typedef.h"
 
-
+namespace su
+{
 class StringTool
 {
     
@@ -546,4 +547,5 @@ inline int StringTool::hash_code(const CharType* str)
 		}
 	}
 	return (hash & 0x7FFFFFFF);
+}
 }

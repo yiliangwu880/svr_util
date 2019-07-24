@@ -2,6 +2,9 @@
 #include <algorithm>
 
 using namespace std;
+namespace su
+{
+
 
 void StringTool::format(std::string& resultOUT, const char* fmt, ...)
 {
@@ -229,3 +232,4 @@ void StringTool::tolower(std::string& str)
 	std::transform(str.begin(), str.end(), str.begin(), ::tolower);
 }
 
+}

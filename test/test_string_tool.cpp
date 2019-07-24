@@ -4,6 +4,7 @@
 #include <cassert>
 #include "unit_test.h"
 using namespace std;
+using namespace su;
 namespace
 {
 	void test1()

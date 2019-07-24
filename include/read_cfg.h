@@ -10,7 +10,8 @@ name:v0,v1,v2 ...
 #include "typedef.h"
 #include "cnt_typedef.h"
 #include <utility>
-
+namespace su
+{
 class Config
 {
 public:
@@ -28,3 +29,4 @@ private:
     Str2Str m_str_2_array;
     VecStr m_repeat_str;
 };
+}

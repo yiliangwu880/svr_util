@@ -15,6 +15,7 @@ namespace
 {
 	void test1()
 	{
+
 		//test create id
 		{
 			IdCreater c;
@@ -38,6 +39,15 @@ namespace
 			UNIT_ASSERT(ret);
 			ret = s.insert(c2.CreateId()).second;
 			UNIT_ASSERT(ret==false); //非常低概率，再秒时间边界运行会失败.
+
+			uint64 id1 = c1.CreateId();
+			uint64 id2 = c1.CreateId();
+
+			//UNIT_INFO("%lld %lld", (id1 & 0xffffffff), (id2 & 0xffffffff));
+			ret = ((id1 & 0xffffffff) == (id2 & 0xffffffff));//非常低概率，再秒时间边界运行会失败.
+			UNIT_ASSERT(!ret);
+			ret = ((id1 >> 32)==(id2 >> 32));
+			UNIT_ASSERT(ret);
 		}
 		//test FOR_IT
 		{

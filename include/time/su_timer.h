@@ -4,6 +4,8 @@
 	写了个应用层定时器，使用简单，问题容易跟踪。 需要底层一个定时器回调做驱动，
 
 etc:
+驱动timer,定时调用：
+		TimeCallBack::obj().checkTimeOut();
 虚函数用法：
 		class MyTimer : public Timer
 		{
@@ -41,6 +43,7 @@ std::bind用法：
 #include <vector>
 #include <map>
 #include <functional>
+#include "cnt_typedef.h"
 
 namespace su
 {
@@ -75,17 +78,17 @@ namespace su
 		typedef std::multimap<time_t, inner::CtrlData> TimeMapData;   //到期绝对时间 map 数据   需要优化，频繁增加删除会有内存碎片
 	public:
         //检测timeout事件，执行回调。（一般循环调用这个函数）
-		void checkTimeOut();
+		void CheckTimeOut();
 
         //清所有定时事件
-		void clear();
+		void Clear();
 
         //获取等待到期的定时器数量
         uint32 GetTimeNum();
 
     private:
 		//涉及指针接口私有化，防君子犯错.
-		bool CreateTimer(Timer *pTimer, uint32 interval, bool is_loop= false);
+		bool NewTimer(Timer *pTimer, uint32 interval, bool is_loop= false);
 		bool DelTimer(Timer *pTimer); //deattach and stop timer, 里面保证Timer指针删掉，不会野掉
 
 
@@ -129,5 +132,32 @@ namespace su
 		TimerCB m_cb; //用std::bind方式绑定的回调函数
 	};
 	
+
+	typedef std::function<bool(void)> IncTimerCB;
+	//递增定时器，通常断线重连需要用。
+	class IncTimer
+	{
+	public:
+		IncTimer()
+			:m_vi_idx(0)
+		{}
+		//启动定时器，按照间隔列表 逐次递增间隔。最后一个间隔做循环定时。
+		//直至回调函数返回true或者调用Stop()，才结束定时器。
+		//@para const TimerCB &cb,  用std::bind绑定的函数
+		//@para VecUint32 vec_interval, 间隔列表
+		//@return 非法参数就返回false,重复Start返回false
+		bool Start(const IncTimerCB &cb, const VecUint32 &vec_interval);
+		//缺省时间间隔列表： 10,60,60*5,60*30
+		bool Start(const IncTimerCB &cb);
+		bool Stop();
+
+	private:
+		void TimerCb();
+	private:
+		Timer m_timer;
+		IncTimerCB m_cb;
+		VecUint32 m_vi; //vec_interval 时间间隔
+		uint32 m_vi_idx;
+	};
 
 }//namespace su

@@ -4,7 +4,8 @@
 #include "string_tool.h"
 
 using namespace std;
-
+namespace su
+{
 bool Config::init( const char *file_name )
 {
     ifstream file;
@@ -121,4 +122,5 @@ void Config::GetStrArray( const char *name, VecStr &vec_str )
 const VecStr & Config::GetRepeatName()
 {
     return m_repeat_str;
+}
 }

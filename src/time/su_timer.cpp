@@ -17,8 +17,12 @@ namespace su
 {
     using namespace std;
 
-	bool TimeCallBack::CreateTimer(Timer *pTimer, uint32 interval, bool is_loop)
+	bool TimeCallBack::NewTimer(Timer *pTimer, uint32 interval, bool is_loop)
 	{
+		if (0 == interval)
+		{
+			return false;
+		}
 		if (nullptr == pTimer)
 		{
 			return false;
@@ -29,7 +33,7 @@ namespace su
 			return 0;
 		}
 
-		time_t sec = g_time.Sec();
+		time_t sec = SysTime::obj().Sec();
 		time_t key = sec + interval;
 		if (key < sec)//时间太大溢出，好几千年都不过期，没意义。
 		{
@@ -75,9 +79,9 @@ namespace su
 		return ret;
 	}
 
-	void TimeCallBack::checkTimeOut()
+	void TimeCallBack::CheckTimeOut()
 	{
-		time_t sec = g_time.Sec();
+		time_t sec = SysTime::obj().Sec();
         VecData vec_timeout;
 
 		{
@@ -117,7 +121,7 @@ namespace su
         }
 	}
 
-	void TimeCallBack::clear()
+	void TimeCallBack::Clear()
 	{
 		FOR_IT_CONST(m_time2data)
 		{
@@ -156,12 +160,16 @@ namespace su
 
 	bool Timer::StartTimer(uint32 interval, const TimerCB &cb, bool is_loop)
 	{
+		if (0 == interval)
+		{
+			return false;
+		}
 		if (S_WAIT_START_TIMER != m_state)
 		{
 			//L_ERROR("state error, repeated start timer");
 			return false;
 		}
-		bool ret = TimeCallBack::obj().CreateTimer(this, interval, is_loop);
+		bool ret = TimeCallBack::obj().NewTimer(this, interval, is_loop);
 		if (!ret)
 		{
 			//L_ERROR("AttachTimer fail");
@@ -183,4 +191,65 @@ namespace su
 		m_state = S_WAIT_START_TIMER;
 		return true;
 	}
+
+	bool IncTimer::Start(const IncTimerCB &cb, const VecUint32 &vec_interval)
+	{
+		if (vec_interval.empty())
+		{
+			return false;
+		}
+		FOR_IT_CONST(vec_interval)
+		{
+			if (*it==0)
+			{
+				return false;
+			}
+		}
+		auto f = std::bind(&IncTimer::TimerCb, this);
+		bool ret = m_timer.StartTimer(vec_interval[0], f);
+		if (!ret)
+		{
+			return false;
+		}
+		//成功才改变对象状态
+		m_cb = cb;
+		m_vi_idx = 0;
+		m_vi = vec_interval;
+		return true;
+	}
+
+	bool IncTimer::Start(const IncTimerCB &cb)
+	{
+		VecUint32 vec_interval = { 10,60,60*5,60*30 };
+		return Start(cb, vec_interval);
+	}
+
+	bool IncTimer::Stop()
+	{
+		return m_timer.StopTimer();
+	}
+
+	void IncTimer::TimerCb()
+	{
+		bool ret = m_cb();
+		if (ret)
+		{
+			return;
+		}
+		//继续递增定时器
+		m_vi_idx++;
+		if (m_vi_idx>(m_vi.size()-1))
+		{
+			m_vi_idx = m_vi.size() - 1;
+		}
+
+		auto f = std::bind(&IncTimer::TimerCb, this);
+		ret = m_timer.StartTimer(m_vi[m_vi_idx], f);
+		if (!ret)
+		{
+			L_ERROR("StartTimer fail");
+			return;
+		}
+	}
+
 }

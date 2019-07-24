@@ -10,7 +10,8 @@ author: YiliangWu
 #include "typedef.h"
 #include "cnt_typedef.h"
 
-
+namespace su
+{
 /*
 brief: 倒计时功能
 criteria:
@@ -237,3 +238,4 @@ private:
 	time_t m_last_cycle_cnt;  //最近访问周期数
 	CurCycleNum m_period_cnt;	
 };
+}

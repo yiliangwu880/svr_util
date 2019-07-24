@@ -7,7 +7,7 @@ brief: use example and test code
 #include <cassert>
 #include "unit_test.h"
 using namespace std;
-
+using namespace su;
 namespace
 {
 

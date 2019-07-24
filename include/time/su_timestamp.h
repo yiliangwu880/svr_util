@@ -15,13 +15,13 @@ namespace su
 {
     //参数描述中的术语年月： 表示实际数字，比如 2015 1 就是2015年1月
     //time_t表达：  格林威治时间1970 年 1 月 1 日 00:00:00 开始计算的秒数。 换成中国时间是 1970-01-01 08:00:00
-	//使用方法：用定时器每秒调用g_time.refresh()，其他时间不刷新。好处，比每次调用刷新效率高一点， 函数运行过程中，g_time不会发生变化。避免时间变化引起的bug
+	//使用方法：用定时器每秒调用SysTime::obj().refresh()，其他时间不刷新。好处，比每次调用刷新效率高一点， 函数运行过程中，SysTime::obj()不会发生变化。避免时间变化引起的bug
 	//使用例子：
 	/*
 		main_loop()
 		{
-			g_time.refresh();刷新当前系统时间
-			const tm &t = g_time.getTm();
+			SysTime::obj().refresh();刷新当前系统时间
+			const tm &t = SysTime::obj().getTm();
 		}
 
 	*/
@@ -98,8 +98,6 @@ namespace su
         CurCycleNum m_week_period_cnt;
         time_t m_offset;
 	};
-	extern SysTime &g_time;
-	
 
 	// 计时器，操作：开始，暂停，恢复，获取流逝时间
 	class TimerCnt
