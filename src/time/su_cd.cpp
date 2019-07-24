@@ -10,8 +10,8 @@ author: YiliangWu
 
 
 #include <time.h>
-#include "time/cd.h"
-#include "time/sys_time.h"
+#include "time/su_cd.h"
+#include "time/su_timestamp.h"
 #include "misc.h"
 #include <stdio.h>
 #include <algorithm>

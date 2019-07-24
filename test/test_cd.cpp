@@ -1,8 +1,8 @@
 
 
-#include "time/cd.h"
-#include "time/sys_time.h"
-#include "time/alarm_clock.h"
+#include "time/su_cd.h"
+#include "time/su_timestamp.h"
+#include "time/su_timer.h"
 //#include "../utility/memoryStream.h"
 
 #include   <stdio.h>      

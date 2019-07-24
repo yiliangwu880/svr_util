@@ -36,7 +36,7 @@ std::bind”√∑®£∫
 #pragma once
 #include "typedef.h"
 #include "singleton.h"
-#include "cd.h"
+#include "su_cd.h"
 #include <time.h>
 #include <vector>
 #include <map>
