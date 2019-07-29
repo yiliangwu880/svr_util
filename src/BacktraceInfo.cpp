@@ -134,7 +134,7 @@ using namespace std;
 
 	void CBacktraceInfo::s_WidebrightSegvHandler(int signum)
 	{
-		CBacktraceInfo::Instance().WidebrightSegvHandler(signum);
+		CBacktraceInfo::Obj().WidebrightSegvHandler(signum);
 	}
 
 	void CBacktraceInfo::RegHangUpHandler()

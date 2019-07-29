@@ -5,7 +5,7 @@
 
 etc:
 驱动timer,定时调用：
-		TimeCallBack::obj().checkTimeOut();
+		TimeDriver::Obj().checkTimeOut();
 虚函数用法：
 		class MyTimer : public Timer
 		{
@@ -36,14 +36,14 @@ std::bind用法：
 */
 
 #pragma once
-#include "typedef.h"
-#include "singleton.h"
+#include "../typedef.h"
+#include "../singleton.h"
 #include "su_cd.h"
 #include <time.h>
 #include <vector>
 #include <map>
 #include <functional>
-#include "cnt_typedef.h"
+#include "../cnt_typedef.h"
 
 namespace su
 {
@@ -71,7 +71,7 @@ namespace su
 		定时器，注册回调函数，timeout调用函数。
         注意：定时器不合适设置太多，经验证明很多问题的。
 	*/
-	class TimeCallBack : public SingletonBase<TimeCallBack>
+	class TimeDriver : public Singleton<TimeDriver>
 	{
 		friend class Timer;
         typedef std::vector<inner::CtrlData> VecData;
@@ -101,7 +101,7 @@ namespace su
 	//里面做创建，销毁定时器，保证不泄露资源, 不会回调不存在的Timer
 	class Timer
 	{
-		friend class TimeCallBack;
+		friend class TimeDriver;
 	public:
 		Timer();
 		virtual ~Timer();

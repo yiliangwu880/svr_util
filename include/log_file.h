@@ -78,7 +78,8 @@ public:
 		return d;
 	}
 	void SetLogPrinter(ILogPrinter &iprinter); //改变日志实现
-	void Printf(LogLv lv, const char * file, int line, const char *pFun, const char * pattern, ...) ;
+	void Printf(LogLv lv, const char * file, int line, const char *fun, const char * pattern, ...) ;
+	void PrintfCond(LogLv lv, const char * file, int line, const char *fun, const char * cond, const char * pattern="", ...) ;
 
 private:
 	LogMgr();

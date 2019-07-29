@@ -369,7 +369,7 @@ namespace su
 
     void TimerCnt::start()
     {
-        m_start=SysTime::obj().Sec();
+        m_start=SysTime::Obj().Sec();
         m_state = TIMER_S_RUN;
     }
 
@@ -377,7 +377,7 @@ namespace su
     {
         if(TIMER_S_RUN == m_state )
         {
-            m_pause=SysTime::obj().Sec();
+            m_pause=SysTime::Obj().Sec();
             m_state = TIMER_S_PAUSE;
         }
     }
@@ -386,7 +386,7 @@ namespace su
     {
         if(TIMER_S_PAUSE == m_state )
         {
-            time_t cur_sec = SysTime::obj().Sec();
+            time_t cur_sec = SysTime::Obj().Sec();
             assert(cur_sec>=m_pause);
             m_start += ( cur_sec - m_pause ); //加上暂停时间
             m_state = TIMER_S_RUN;
@@ -397,7 +397,7 @@ namespace su
     {
         if(TIMER_S_RUN == m_state)
         {
-            return SysTime::obj().Sec() - m_start;
+            return SysTime::Obj().Sec() - m_start;
         }
         else if(TIMER_S_PAUSE == m_state )
         { 
@@ -411,7 +411,7 @@ namespace su
         if(TIMER_S_RUN == m_state)
         {
             m_state = TIMER_S_NULL;
-            return SysTime::obj().Sec() - m_start;
+            return SysTime::Obj().Sec() - m_start;
         }
         else if(TIMER_S_PAUSE == m_state )
         { //暂停，先恢复

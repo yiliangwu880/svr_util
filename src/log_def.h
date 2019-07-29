@@ -1,6 +1,6 @@
 /*
 	日志宏
-	用来做库时，一般不给用户用。 用户自己定义新的宏来定义新的实现
+	用来做库时，不给用户使用，避免用户也有log_def.h文件，冲突。 用户可以复制这个文件，或者自己定义新的宏来定义新的实现
 */
 #pragma once
 #include <string>
@@ -13,31 +13,42 @@
 #define L_INFO(x, ...)   su::LogMgr::Obj().Printf(su::LL_INFO, __FILE__, __LINE__, __FUNCTION__, x, ##__VA_ARGS__);
 
 //简化if语句写法
-#define L_COND(cond, ret, x, ...)\
+
+//条件非法返回false
+#define L_COND_F(cond, ...)\
 	do{\
 	if(!(cond)){\
-	LogMgr::Obj().Printf(LL_ERROR, __FILE__, __LINE__, __FUNCTION__, x, ##__VA_ARGS__); \
-	return ret;\
+	LogMgr::Obj().PrintfCond(LL_ERROR, __FILE__, __LINE__, __FUNCTION__, "condition fail \[" #cond "]. ", ##__VA_ARGS__); \
+	return false;\
 	}	\
 	}while(0)
 
-#define L_COND_VOID(cond, x, ...)\
+//条件非法返回
+#define L_COND(cond, ...)\
 	do{\
 	if(!(cond))	\
 	{\
-	LogMgr::Obj().Printf(LL_ERROR, __FILE__, __LINE__, __FUNCTION__, x, ##__VA_ARGS__); \
+	LogMgr::Obj().PrintfCond(LL_ERROR, __FILE__, __LINE__, __FUNCTION__, "condition fail \[" #cond "]. ", ##__VA_ARGS__); \
 		return; \
 	}\
 	}while(0)
 
-#define COND(cond, ret)\
+#define L_COND_R(cond, ret, ...)\
+	do{\
+	if(!(cond)){\
+	LogMgr::Obj().PrintfCond(LL_ERROR, __FILE__, __LINE__, __FUNCTION__, "condition fail \[" #cond "]. ", ##__VA_ARGS__); \
+	return ret;\
+	}	\
+	}while(0)
+
+#define COND_R(cond, ret)\
 	do{\
 	if(!(cond)){\
 	return ret;\
 	}	\
 	}while(0)
 
-#define COND_VOID(cond)\
+#define COND(cond)\
 	do{\
 	if(!(cond))	\
 	return; \

@@ -45,14 +45,14 @@ time_t CurCycleNum::Get( const time_t &cur_sec ) const
 
 time_t CurCycleNum::GetCurrent() const
 {
-	return Get(SysTime::obj().Sec());
+	return Get(SysTime::Obj().Sec());
 }
 
 
 
 time_t CurCycleNum::GetCurPeriodNum( time_t start, time_t period )
 {
-	time_t cur = SysTime::obj().Sec();
+	time_t cur = SysTime::Obj().Sec();
 	if (start>cur)
 	{
 		return 0;
@@ -95,7 +95,7 @@ CdDefault::CdDefault( const time_t& period, time_t start )
 
 bool CdDefault::IsCD() const
 {
-	const time_t current = SysTime::obj().Sec();
+	const time_t current = SysTime::Obj().Sec();
 	if (current<m_start)
 	{
 		return true;
@@ -109,7 +109,7 @@ bool CdDefault::IsCD() const
 
 time_t CdDefault::GetCountDownTime() const
 {
-	const time_t current = SysTime::obj().Sec();
+	const time_t current = SysTime::Obj().Sec();
 	if (current<m_start)
 	{
 		return m_period+m_start-current;
@@ -134,7 +134,7 @@ void CdDefault::ChangePeriod( const time_t& period )
 
 void CdDefault::StartCD()
 {
-	m_start=SysTime::obj().Sec();
+	m_start=SysTime::Obj().Sec();
 }
 
 void CdDefault::ClearCD()
@@ -213,7 +213,7 @@ CycleMoreReset::CycleMoreReset( const time_t &period, const VecInt64 &vec_limit 
 
 time_t CycleMoreReset::GetCurCycleNum() const
 {
-	time_t cur_sec = SysTime::obj().Sec();
+	time_t cur_sec = SysTime::Obj().Sec();
 	if (cur_sec<CurCycleNum::START_SEC)
 	{
 		return 0;

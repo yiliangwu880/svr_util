@@ -23,7 +23,7 @@ addr2line -e ./zonesvr 0xbd0f18
 	{
 		typedef void(*sig_t)(int);
 	public:
-		static CBacktraceInfo &Instance()
+		static CBacktraceInfo &Obj()
 		{
 			static CBacktraceInfo d;
 			return d;

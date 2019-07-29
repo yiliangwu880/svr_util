@@ -17,7 +17,7 @@ namespace su
 {
     using namespace std;
 
-	bool TimeCallBack::NewTimer(Timer *pTimer, uint32 interval, bool is_loop)
+	bool TimeDriver::NewTimer(Timer *pTimer, uint32 interval, bool is_loop)
 	{
 		if (0 == interval)
 		{
@@ -33,7 +33,7 @@ namespace su
 			return 0;
 		}
 
-		time_t sec = SysTime::obj().Sec();
+		time_t sec = SysTime::Obj().Sec();
 		time_t key = sec + interval;
 		if (key < sec)//时间太大溢出，好几千年都不过期，没意义。
 		{
@@ -54,7 +54,7 @@ namespace su
 
 
 
-	bool TimeCallBack::DelTimer(Timer *pTimer)
+	bool TimeDriver::DelTimer(Timer *pTimer)
 	{
 		if (nullptr == pTimer)
 		{
@@ -79,9 +79,10 @@ namespace su
 		return ret;
 	}
 
-	void TimeCallBack::CheckTimeOut()
+	void TimeDriver::CheckTimeOut()
 	{
-		time_t sec = SysTime::obj().Sec();
+		SysTime::Obj().Refresh();
+		time_t sec = SysTime::Obj().Sec();
         VecData vec_timeout;
 
 		{
@@ -121,7 +122,7 @@ namespace su
         }
 	}
 
-	void TimeCallBack::Clear()
+	void TimeDriver::Clear()
 	{
 		FOR_IT_CONST(m_time2data)
 		{
@@ -131,7 +132,7 @@ namespace su
 		m_time2data.clear();
 	}
 
-    uint32 TimeCallBack::GetTimeNum()
+    uint32 TimeDriver::GetTimeNum()
     {
         return m_time2data.size();
     }
@@ -169,7 +170,7 @@ namespace su
 			//L_ERROR("state error, repeated start timer");
 			return false;
 		}
-		bool ret = TimeCallBack::obj().NewTimer(this, interval, is_loop);
+		bool ret = TimeDriver::Obj().NewTimer(this, interval, is_loop);
 		if (!ret)
 		{
 			//L_ERROR("AttachTimer fail");
@@ -186,7 +187,7 @@ namespace su
 		{
 			return false;
 		}
-		TimeCallBack::obj().DelTimer(this);//里面保证Timer指针删掉，不会野掉
+		TimeDriver::Obj().DelTimer(this);//里面保证Timer指针删掉，不会野掉
 
 		m_state = S_WAIT_START_TIMER;
 		return true;

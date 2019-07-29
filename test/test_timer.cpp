@@ -18,17 +18,17 @@ namespace
 	void test1()
 	{
 		//这代码测试出错，如果低概率相差一秒就正常。
-		SysTime::obj().SetTimeOffset(0);
-		SysTime::obj().Refresh();
-		time_t a = SysTime::obj().Sec();
-		SysTime::obj().SetTimeOffset(1);
-		UNIT_ASSERT(a + 1 == SysTime::obj().Sec());
-		SysTime::obj().SetTimeOffset(100);
-		UNIT_ASSERT(a + 100 == SysTime::obj().Sec());
-		SysTime::obj().SetTimeOffset(1);
-		UNIT_ASSERT(a + 1 == SysTime::obj().Sec());
-		SysTime::obj().SetTimeOffset(0);
-		UNIT_ASSERT(a == SysTime::obj().Sec());
+		SysTime::Obj().SetTimeOffset(0);
+		SysTime::Obj().Refresh();
+		time_t a = SysTime::Obj().Sec();
+		SysTime::Obj().SetTimeOffset(1);
+		UNIT_ASSERT(a + 1 == SysTime::Obj().Sec());
+		SysTime::Obj().SetTimeOffset(100);
+		UNIT_ASSERT(a + 100 == SysTime::Obj().Sec());
+		SysTime::Obj().SetTimeOffset(1);
+		UNIT_ASSERT(a + 1 == SysTime::Obj().Sec());
+		SysTime::Obj().SetTimeOffset(0);
+		UNIT_ASSERT(a == SysTime::Obj().Sec());
 
 	}
 
@@ -42,17 +42,17 @@ namespace
 	void test2()
 	{
 
-		SysTime::obj().SetTimeOffset(0);
+		SysTime::Obj().SetTimeOffset(0);
 		// g_timer_cb.setTimer(1, TimeCBFun2, 1, (void*)2);
 		{
 			static Timer tm;
 			auto f = std::bind(TimeCBFun2, 1, (void*)2);
 			tm.StartTimer(1, f);
 		}
-		UNIT_ASSERT(1 == TimeCallBack::obj().GetTimeNum());
-		SysTime::obj().SetTimeOffset(1);
-		TimeCallBack::obj().CheckTimeOut();
-		UNIT_ASSERT(0 == TimeCallBack::obj().GetTimeNum());
+		UNIT_ASSERT(1 == TimeDriver::Obj().GetTimeNum());
+		SysTime::Obj().SetTimeOffset(1);
+		TimeDriver::Obj().CheckTimeOut();
+		UNIT_ASSERT(0 == TimeDriver::Obj().GetTimeNum());
 		UNIT_ASSERT(1 == s_cnt_1);
 		//UNIT_ASSERT(!g_timer_cb.delTimer(0));
 
@@ -94,7 +94,7 @@ namespace
 			}
 			// g_timer_cb.setTimer(3, TimeCBFun3, 1);
 			// g_timer_cb.setTimer(4, TimeCBFun3, 1);
-			SysTime::obj().AddTimerOffset(4);
+			SysTime::Obj().AddTimerOffset(4);
 			// UNIT_ASSERT(0!=s_t3_id);
 		}
 		else if (5 == s_cnt_3)
@@ -104,27 +104,27 @@ namespace
 				tm.StartTimer(9, std::bind(TimeCBFun3, 1, (void *)0));
 			}
 			//  s_t3_id = g_timer_cb.setTimer(9, TimeCBFun3, 1);
-			SysTime::obj().AddTimerOffset(9);
+			SysTime::Obj().AddTimerOffset(9);
 			// UNIT_ASSERT(0!=s_t3_id);
 		}
 	}
 	void test3()
 	{
-		SysTime::obj().SetTimeOffset(0);
+		SysTime::Obj().SetTimeOffset(0);
 		{
 			static Timer tm;
 			tm.StartTimer(1, std::bind(TimeCBFun3, 1, (void *)0));
 		}
 		//  s_t3_id = g_timer_cb.setTimer(1, TimeCBFun3, 1);
 		 // UNIT_ASSERT(0!=s_t3_id);
-		SysTime::obj().AddTimerOffset(1);
-		UNIT_ASSERT(1 == TimeCallBack::obj().GetTimeNum());
-		TimeCallBack::obj().CheckTimeOut();
-		UNIT_ASSERT(4 == TimeCallBack::obj().GetTimeNum());
-		TimeCallBack::obj().CheckTimeOut();
-		TimeCallBack::obj().CheckTimeOut();
+		SysTime::Obj().AddTimerOffset(1);
+		UNIT_ASSERT(1 == TimeDriver::Obj().GetTimeNum());
+		TimeDriver::Obj().CheckTimeOut();
+		UNIT_ASSERT(4 == TimeDriver::Obj().GetTimeNum());
+		TimeDriver::Obj().CheckTimeOut();
+		TimeDriver::Obj().CheckTimeOut();
 		UNIT_ASSERT(6 == s_cnt_3);
-		UNIT_ASSERT(0 == TimeCallBack::obj().GetTimeNum());
+		UNIT_ASSERT(0 == TimeDriver::Obj().GetTimeNum());
 	}
 
 	//loop timer回调里面能删除timer
@@ -135,8 +135,8 @@ namespace
 	}
 	void test5()
 	{
-		TimeCallBack::obj().Clear();
-		SysTime::obj().SetTimeOffset(0);
+		TimeDriver::Obj().Clear();
+		SysTime::Obj().SetTimeOffset(0);
 
 		{
 			static Timer tm;
@@ -144,42 +144,42 @@ namespace
 
 			// uint32 id = g_timer_cb.setLoopTimer(1, TimeCBFun5);
 			// UNIT_ASSERT(0!=id);
-			UNIT_ASSERT(1 == TimeCallBack::obj().GetTimeNum());
+			UNIT_ASSERT(1 == TimeDriver::Obj().GetTimeNum());
 			//  UNIT_ASSERT(!g_timer_cb.delTimer(0));
 			 // UNIT_ASSERT(g_timer_cb.delTimer(id));
 			tm.StopTimer();
 		}
-		SysTime::obj().AddTimerOffset(1);
-		TimeCallBack::obj().CheckTimeOut();
-		UNIT_ASSERT(0 == TimeCallBack::obj().GetTimeNum());
+		SysTime::Obj().AddTimerOffset(1);
+		TimeDriver::Obj().CheckTimeOut();
+		UNIT_ASSERT(0 == TimeDriver::Obj().GetTimeNum());
 		UNIT_ASSERT(0 == s_cnt_5);
 
-		SysTime::obj().SetTimeOffset(0);
+		SysTime::Obj().SetTimeOffset(0);
 		{
 			static Timer tm;
 			tm.StartTimer(1, std::bind(TimeCBFun5, 1, (void *)0), true);
 
 			//  id = g_timer_cb.setLoopTimer(1, TimeCBFun5);
-			SysTime::obj().AddTimerOffset(1);
-			TimeCallBack::obj().CheckTimeOut();
-			SysTime::obj().AddTimerOffset(1);
-			TimeCallBack::obj().CheckTimeOut();
-			SysTime::obj().AddTimerOffset(2);
-			TimeCallBack::obj().CheckTimeOut();
-			SysTime::obj().AddTimerOffset(5);
+			SysTime::Obj().AddTimerOffset(1);
+			TimeDriver::Obj().CheckTimeOut();
+			SysTime::Obj().AddTimerOffset(1);
+			TimeDriver::Obj().CheckTimeOut();
+			SysTime::Obj().AddTimerOffset(2);
+			TimeDriver::Obj().CheckTimeOut();
+			SysTime::Obj().AddTimerOffset(5);
 			for (uint32 i = 0; i < 100; ++i)
 			{
-				TimeCallBack::obj().CheckTimeOut();
+				TimeDriver::Obj().CheckTimeOut();
 			}
-			UNIT_ASSERT(1 == TimeCallBack::obj().GetTimeNum());
+			UNIT_ASSERT(1 == TimeDriver::Obj().GetTimeNum());
 			UNIT_ASSERT(9 == s_cnt_5);
 
 
 			tm.StopTimer(); //UNIT_ASSERT(g_timer_cb.delTimer(id));
-			SysTime::obj().AddTimerOffset(9);
-			TimeCallBack::obj().CheckTimeOut();
+			SysTime::Obj().AddTimerOffset(9);
+			TimeDriver::Obj().CheckTimeOut();
 
-			UNIT_ASSERT(0 == TimeCallBack::obj().GetTimeNum());
+			UNIT_ASSERT(0 == TimeDriver::Obj().GetTimeNum());
 			UNIT_ASSERT(9 == s_cnt_5);
 		}
 	}
@@ -193,7 +193,7 @@ namespace
 	}
 	void test6()
 	{
-		SysTime::obj().SetTimeOffset(0);
+		SysTime::Obj().SetTimeOffset(0);
 		// g_timer_cb.setTimer(1, TimeCBFun6);
 		{
 			static Timer tm;
@@ -204,13 +204,13 @@ namespace
 			static Timer tm;
 			tm.StartTimer(1, std::bind(TimeCBFun6, 1, (void *)0), true);
 		}
-		UNIT_ASSERT(2 == TimeCallBack::obj().GetTimeNum());
-		TimeCallBack::obj().Clear();
-		UNIT_ASSERT(0 == TimeCallBack::obj().GetTimeNum());
-		SysTime::obj().AddTimerOffset(1);
-		TimeCallBack::obj().CheckTimeOut();
-		SysTime::obj().AddTimerOffset(2);
-		TimeCallBack::obj().CheckTimeOut();
+		UNIT_ASSERT(2 == TimeDriver::Obj().GetTimeNum());
+		TimeDriver::Obj().Clear();
+		UNIT_ASSERT(0 == TimeDriver::Obj().GetTimeNum());
+		SysTime::Obj().AddTimerOffset(1);
+		TimeDriver::Obj().CheckTimeOut();
+		SysTime::Obj().AddTimerOffset(2);
+		TimeDriver::Obj().CheckTimeOut();
 		UNIT_ASSERT(0 == s_cnt_6);
 
 		// g_timer_cb.setTimer(1, TimeCBFun6);
@@ -223,8 +223,8 @@ namespace
 			static Timer tm;
 			tm.StartTimer(1, std::bind(TimeCBFun6, 1, (void *)0), true);
 		}
-		SysTime::obj().AddTimerOffset(7);
-		TimeCallBack::obj().CheckTimeOut();
+		SysTime::Obj().AddTimerOffset(7);
+		TimeDriver::Obj().CheckTimeOut();
 		UNIT_ASSERT(2 == s_cnt_6);
 	}
 
@@ -284,8 +284,8 @@ namespace
 	void test7()
 	{
 		bool r = false;
-		SysTime::obj().SetTimeOffset(0);
-		TimeCallBack::obj().Clear();
+		SysTime::Obj().SetTimeOffset(0);
+		TimeDriver::Obj().Clear();
 		//g_timer_cb.setTimer(1, TimeCBFun7, 1);
 		{
 			static Timer tm;
@@ -295,12 +295,12 @@ namespace
 		//UNIT_INFO("id=%d", id);
 	   // UNIT_ASSERT(1 == id);
 
-		SysTime::obj().AddTimerOffset(1);
-		TimeCallBack::obj().CheckTimeOut();
-		SysTime::obj().AddTimerOffset(1);
-		TimeCallBack::obj().CheckTimeOut();
-		SysTime::obj().AddTimerOffset(1);
-		TimeCallBack::obj().CheckTimeOut();
+		SysTime::Obj().AddTimerOffset(1);
+		TimeDriver::Obj().CheckTimeOut();
+		SysTime::Obj().AddTimerOffset(1);
+		TimeDriver::Obj().CheckTimeOut();
+		SysTime::Obj().AddTimerOffset(1);
+		TimeDriver::Obj().CheckTimeOut();
 		UNIT_ASSERT(5 == s_cnt_7);
 	}
 
@@ -327,8 +327,8 @@ namespace
 	}
 	void test8()
 	{
-		SysTime::obj().SetTimeOffset(0);
-		TimeCallBack::obj().Clear();
+		SysTime::Obj().SetTimeOffset(0);
+		TimeDriver::Obj().Clear();
 		// s_8_del_id1 = g_timer_cb.setTimer(1, TimeCBFun8, 1);
 		{
 			all_tm_t8[1].StartTimer(1, std::bind(TimeCBFun8, 1, (void *)0));
@@ -338,8 +338,8 @@ namespace
 			static Timer tm;
 			all_tm_t8[2].StartTimer(1, std::bind(TimeCBFun8, 2, (void *)0), true);
 		}
-		SysTime::obj().AddTimerOffset(1);
-		TimeCallBack::obj().CheckTimeOut();
+		SysTime::Obj().AddTimerOffset(1);
+		TimeDriver::Obj().CheckTimeOut();
 
 		UNIT_ASSERT(2 == s_cnt_8);
 	}
@@ -351,25 +351,25 @@ namespace
 		s_cnt_9++;
 		if (1 == para1)
 		{
-			TimeCallBack::obj().Clear();
+			TimeDriver::Obj().Clear();
 		}
 	}
 	void test9()
 	{
-		SysTime::obj().SetTimeOffset(0);
-		TimeCallBack::obj().Clear();
+		SysTime::Obj().SetTimeOffset(0);
+		TimeDriver::Obj().Clear();
 		//s_8_del_id1 = g_timer_cb.setLoopTimer(1, TimeCBFun9, 1);
 		{
 			static Timer tm;
 			tm.StartTimer(1, std::bind(TimeCBFun9, 1, (void *)0), true);
 		}
-		SysTime::obj().AddTimerOffset(1);
-		TimeCallBack::obj().CheckTimeOut();
-		SysTime::obj().AddTimerOffset(2);
-		TimeCallBack::obj().CheckTimeOut();
+		SysTime::Obj().AddTimerOffset(1);
+		TimeDriver::Obj().CheckTimeOut();
+		SysTime::Obj().AddTimerOffset(2);
+		TimeDriver::Obj().CheckTimeOut();
 
 		UNIT_ASSERT(1 == s_cnt_9);
-		UNIT_ASSERT(0 == TimeCallBack::obj().GetTimeNum());
+		UNIT_ASSERT(0 == TimeDriver::Obj().GetTimeNum());
 	}
 
 	//测试数量溢出
@@ -380,8 +380,8 @@ namespace
 	}
 	void test10()
 	{
-		SysTime::obj().SetTimeOffset(0);
-		TimeCallBack::obj().Clear();
+		SysTime::Obj().SetTimeOffset(0);
+		TimeDriver::Obj().Clear();
 		UNIT_INFO("next line print [fatal] and [error] is ok.");
 		//uint32 id_1st = 0;
 		vector< Timer> all_tm(NUM_1W);
@@ -395,12 +395,12 @@ namespace
 				break;
 			}
 		}
-		UNIT_ASSERT(1000 == TimeCallBack::obj().GetTimeNum());
+		UNIT_ASSERT(1000 == TimeDriver::Obj().GetTimeNum());
 		//g_timer_cb.delTimer(id_1st);
 		all_tm[0].StopTimer();
-		UNIT_ASSERT(999 == TimeCallBack::obj().GetTimeNum());
-		SysTime::obj().AddTimerOffset(1);
-		TimeCallBack::obj().CheckTimeOut();
+		UNIT_ASSERT(999 == TimeDriver::Obj().GetTimeNum());
+		SysTime::Obj().AddTimerOffset(1);
+		TimeDriver::Obj().CheckTimeOut();
 		UNIT_ASSERT(999 == s_cnt_10);
 
 	}
@@ -421,8 +421,8 @@ namespace
 	}
 	void testStop()
 	{
-		SysTime::obj().SetTimeOffset(0);
-		TimeCallBack::obj().Clear();
+		SysTime::Obj().SetTimeOffset(0);
+		TimeDriver::Obj().Clear();
 		//bool r = false;
 
 		{
@@ -435,9 +435,9 @@ namespace
 
 			UNIT_ASSERT(!t2.StopTimer());
 
-			UNIT_ASSERT(1 == TimeCallBack::obj().GetTimeNum());
-			SysTime::obj().AddTimerOffset(1);
-			TimeCallBack::obj().CheckTimeOut();
+			UNIT_ASSERT(1 == TimeDriver::Obj().GetTimeNum());
+			SysTime::Obj().AddTimerOffset(1);
+			TimeDriver::Obj().CheckTimeOut();
 			UNIT_ASSERT(1 == stop_cnt);
 		}
 	}
@@ -455,10 +455,10 @@ namespace
 	}
 	void testFree()
 	{
-		SysTime::obj().SetTimeOffset(0);
-		TimeCallBack::obj().Clear();
+		SysTime::Obj().SetTimeOffset(0);
+		TimeDriver::Obj().Clear();
 		bool r = false;
-		{//测试TimeCallBack::obj().clear()
+		{//测试TimeDriver::Obj().clear()
 			Timer t1, t2;
 			t1.StartTimer(1, nullptr);
 			t2.StartTimer(1, testFreeCb);
@@ -468,28 +468,28 @@ namespace
 			r = t2.StartTimer(1, nullptr);
 			UNIT_ASSERT(!r);
 
-			UNIT_ASSERT(2 == TimeCallBack::obj().GetTimeNum());
-			TimeCallBack::obj().Clear();
-			UNIT_ASSERT(0 == TimeCallBack::obj().GetTimeNum());
+			UNIT_ASSERT(2 == TimeDriver::Obj().GetTimeNum());
+			TimeDriver::Obj().Clear();
+			UNIT_ASSERT(0 == TimeDriver::Obj().GetTimeNum());
 
 			r = t1.StartTimer(1, nullptr);
 			UNIT_ASSERT(r);
 			r = t2.StartTimer(1, nullptr);
 			UNIT_ASSERT(r);
 
-			UNIT_ASSERT(2 == TimeCallBack::obj().GetTimeNum());
+			UNIT_ASSERT(2 == TimeDriver::Obj().GetTimeNum());
 		}
 		//测试局部timer自动释放
-		UNIT_ASSERT(0 == TimeCallBack::obj().GetTimeNum());//free t1, t2
+		UNIT_ASSERT(0 == TimeDriver::Obj().GetTimeNum());//free t1, t2
 		{
 			Timer *t1=new Timer();
 
 			UNIT_ASSERT(t1->StartTimer(1, testFreeNoCb));
-			UNIT_ASSERT(1 == TimeCallBack::obj().GetTimeNum());
+			UNIT_ASSERT(1 == TimeDriver::Obj().GetTimeNum());
 			delete t1; t1 = nullptr;
-			SysTime::obj().AddTimerOffset(1);
-			TimeCallBack::obj().CheckTimeOut();
-			UNIT_ASSERT(0 == TimeCallBack::obj().GetTimeNum());
+			SysTime::Obj().AddTimerOffset(1);
+			TimeDriver::Obj().CheckTimeOut();
+			UNIT_ASSERT(0 == TimeDriver::Obj().GetTimeNum());
 		}
 		{//illegal arg
 
@@ -517,8 +517,8 @@ namespace
 	{
 		{//test illegal para
 			IncTimer timer;
-			SysTime::obj().SetTimeOffset(0);
-			TimeCallBack::obj().Clear();
+			SysTime::Obj().SetTimeOffset(0);
+			TimeDriver::Obj().Clear();
 			IncTimer_cnt1 = 0;
 			IncTimerCb_Ret = false;
 
@@ -539,8 +539,8 @@ namespace
 		}
 		{//test start stop
 			IncTimer timer;
-			SysTime::obj().SetTimeOffset(0);
-			TimeCallBack::obj().Clear();
+			SysTime::Obj().SetTimeOffset(0);
+			TimeDriver::Obj().Clear();
 			IncTimer_cnt1 = 0;
 			IncTimerCb_Ret = false;
 
@@ -554,26 +554,26 @@ namespace
 			timer.Start(IncTimerCbRet, vi);
 
 
-			SysTime::obj().AddTimerOffset(vi[0]);
-			TimeCallBack::obj().CheckTimeOut();
+			SysTime::Obj().AddTimerOffset(vi[0]);
+			TimeDriver::Obj().CheckTimeOut();
 			UNIT_ASSERT(1 == IncTimer_cnt1);
 
 
-			SysTime::obj().AddTimerOffset(vi[1]);
-			TimeCallBack::obj().CheckTimeOut();
+			SysTime::Obj().AddTimerOffset(vi[1]);
+			TimeDriver::Obj().CheckTimeOut();
 			UNIT_ASSERT(2 == IncTimer_cnt1);
 
 			UNIT_ASSERT(timer.Stop());
-			SysTime::obj().AddTimerOffset(vi[2]);
-			TimeCallBack::obj().CheckTimeOut();
+			SysTime::Obj().AddTimerOffset(vi[2]);
+			TimeDriver::Obj().CheckTimeOut();
 			UNIT_ASSERT(2 == IncTimer_cnt1);
 
 		}
 		//测试回调返回true结束
 		{
 			IncTimer timer;
-			SysTime::obj().SetTimeOffset(0);
-			TimeCallBack::obj().Clear();
+			SysTime::Obj().SetTimeOffset(0);
+			TimeDriver::Obj().Clear();
 			IncTimer_cnt1 = 0;
 			IncTimerCb_Ret = false;
 
@@ -581,17 +581,17 @@ namespace
 			timer.Start(IncTimerCbRet, vi);
 
 			IncTimerCb_Ret = true;
-			SysTime::obj().AddTimerOffset(vi[0]);
-			TimeCallBack::obj().CheckTimeOut();
+			SysTime::Obj().AddTimerOffset(vi[0]);
+			TimeDriver::Obj().CheckTimeOut();
 			UNIT_ASSERT(1 == IncTimer_cnt1);
 
 			//timer停了
-			SysTime::obj().AddTimerOffset(vi[1]);
-			TimeCallBack::obj().CheckTimeOut();
+			SysTime::Obj().AddTimerOffset(vi[1]);
+			TimeDriver::Obj().CheckTimeOut();
 			UNIT_ASSERT(1 == IncTimer_cnt1);
 
-			SysTime::obj().AddTimerOffset(vi[2]);
-			TimeCallBack::obj().CheckTimeOut();
+			SysTime::Obj().AddTimerOffset(vi[2]);
+			TimeDriver::Obj().CheckTimeOut();
 			UNIT_ASSERT(1 == IncTimer_cnt1);
 
 			UNIT_ASSERT(!timer.Stop());
@@ -600,37 +600,37 @@ namespace
 		}
 		{//test default Start
 			IncTimer timer;
-			SysTime::obj().SetTimeOffset(0);
-			TimeCallBack::obj().Clear();
+			SysTime::Obj().SetTimeOffset(0);
+			TimeDriver::Obj().Clear();
 			IncTimer_cnt1 = 0;
 
 			timer.Start(DefIncTimerCb); //10,60,60*5,60*30
-			SysTime::obj().AddTimerOffset(1);
-			SysTime::obj().AddTimerOffset(2);
-			TimeCallBack::obj().CheckTimeOut();
+			SysTime::Obj().AddTimerOffset(1);
+			SysTime::Obj().AddTimerOffset(2);
+			TimeDriver::Obj().CheckTimeOut();
 			UNIT_ASSERT(0 == IncTimer_cnt1);
 
-			SysTime::obj().SetTimeOffset(0);
-			SysTime::obj().AddTimerOffset(10);
-			TimeCallBack::obj().CheckTimeOut();
+			SysTime::Obj().SetTimeOffset(0);
+			SysTime::Obj().AddTimerOffset(10);
+			TimeDriver::Obj().CheckTimeOut();
 			UNIT_ASSERT(1 == IncTimer_cnt1);
 
-			SysTime::obj().AddTimerOffset(60);
-			TimeCallBack::obj().CheckTimeOut();
+			SysTime::Obj().AddTimerOffset(60);
+			TimeDriver::Obj().CheckTimeOut();
 			UNIT_ASSERT(2 == IncTimer_cnt1);
 
-			SysTime::obj().AddTimerOffset(60*5);
-			TimeCallBack::obj().CheckTimeOut();
+			SysTime::Obj().AddTimerOffset(60*5);
+			TimeDriver::Obj().CheckTimeOut();
 			UNIT_ASSERT(3 == IncTimer_cnt1);
 
-			SysTime::obj().AddTimerOffset(60 * 30);
-			TimeCallBack::obj().CheckTimeOut();
+			SysTime::Obj().AddTimerOffset(60 * 30);
+			TimeDriver::Obj().CheckTimeOut();
 			UNIT_ASSERT(4 == IncTimer_cnt1);
 
-			SysTime::obj().AddTimerOffset(60 * 30);
-			TimeCallBack::obj().CheckTimeOut();
-			SysTime::obj().AddTimerOffset(30);
-			TimeCallBack::obj().CheckTimeOut();
+			SysTime::Obj().AddTimerOffset(60 * 30);
+			TimeDriver::Obj().CheckTimeOut();
+			SysTime::Obj().AddTimerOffset(30);
+			TimeDriver::Obj().CheckTimeOut();
 			UNIT_ASSERT(5 == IncTimer_cnt1);
 
 
@@ -638,48 +638,48 @@ namespace
 
 		{//测试用户指定时间间隔
 			IncTimer timer;
-			SysTime::obj().SetTimeOffset(0);
-			TimeCallBack::obj().Clear();
+			SysTime::Obj().SetTimeOffset(0);
+			TimeDriver::Obj().Clear();
 			IncTimer_cnt1 = 0;
 
 			VecUint32 vi = { 2,5,60 * 4,60 *5 };
 			timer.Start(DefIncTimerCb, vi); 
 
-			SysTime::obj().AddTimerOffset(1);
-			TimeCallBack::obj().CheckTimeOut();
+			SysTime::Obj().AddTimerOffset(1);
+			TimeDriver::Obj().CheckTimeOut();
 			UNIT_ASSERT(0 == IncTimer_cnt1);
 
-			SysTime::obj().AddTimerOffset(vi[0]-1);
-			TimeCallBack::obj().CheckTimeOut();
+			SysTime::Obj().AddTimerOffset(vi[0]-1);
+			TimeDriver::Obj().CheckTimeOut();
 			UNIT_ASSERT(1 == IncTimer_cnt1);
 
-			SysTime::obj().AddTimerOffset(vi[1]);
-			TimeCallBack::obj().CheckTimeOut();
+			SysTime::Obj().AddTimerOffset(vi[1]);
+			TimeDriver::Obj().CheckTimeOut();
 			UNIT_ASSERT(2 == IncTimer_cnt1);
 
-			SysTime::obj().AddTimerOffset(vi[2]);
-			TimeCallBack::obj().CheckTimeOut();
+			SysTime::Obj().AddTimerOffset(vi[2]);
+			TimeDriver::Obj().CheckTimeOut();
 			UNIT_ASSERT(3 == IncTimer_cnt1);
 
-			SysTime::obj().AddTimerOffset(vi[3]);
-			TimeCallBack::obj().CheckTimeOut();
+			SysTime::Obj().AddTimerOffset(vi[3]);
+			TimeDriver::Obj().CheckTimeOut();
 			UNIT_ASSERT(4 == IncTimer_cnt1);
 
-			SysTime::obj().AddTimerOffset(vi[3]);
-			TimeCallBack::obj().CheckTimeOut();
-			SysTime::obj().AddTimerOffset(1);
-			TimeCallBack::obj().CheckTimeOut();
+			SysTime::Obj().AddTimerOffset(vi[3]);
+			TimeDriver::Obj().CheckTimeOut();
+			SysTime::Obj().AddTimerOffset(1);
+			TimeDriver::Obj().CheckTimeOut();
 			UNIT_ASSERT(5 == IncTimer_cnt1);
 
 
 			//test stop 
 			UNIT_ASSERT(timer.Stop());
 			UNIT_ASSERT(!timer.Stop());
-			SysTime::obj().AddTimerOffset(vi[3]);
-			TimeCallBack::obj().CheckTimeOut();
+			SysTime::Obj().AddTimerOffset(vi[3]);
+			TimeDriver::Obj().CheckTimeOut();
 			UNIT_ASSERT(5 == IncTimer_cnt1);
-			SysTime::obj().AddTimerOffset(vi[3]);
-			TimeCallBack::obj().CheckTimeOut();
+			SysTime::Obj().AddTimerOffset(vi[3]);
+			TimeDriver::Obj().CheckTimeOut();
 			UNIT_ASSERT(5 == IncTimer_cnt1);
 
 		}
@@ -690,8 +690,8 @@ namespace
 UNITTEST(timer)
 {
 	string s;
-	SysTime::obj().TimeToTimeStr(1472688000, s);
-	SysTime::obj().TimeToTimeStr(1470467234, s);
+	SysTime::Obj().TimeToTimeStr(1472688000, s);
+	SysTime::Obj().TimeToTimeStr(1470467234, s);
 	// time=    1472688000   cur=   1470467234
     test1();
     test2();

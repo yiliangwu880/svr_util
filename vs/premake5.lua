@@ -15,6 +15,7 @@ WorkSpaceInit ("svr_util")
 Project "src"
 	includedirs { 
 		"../include/",
+		"../include/time/",
 	}
 
 	SrcPath { 

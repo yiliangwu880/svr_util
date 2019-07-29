@@ -9,7 +9,10 @@
 #include <sys/types.h>
 #include <signal.h>
 #include "log_def.h"
+#include "time/su_timer.h"
 
+using namespace std;
+using namespace su;
 
 file_lock::file_lock(const std::string& file_name)
 :m_fd(-1)
@@ -77,7 +80,7 @@ bool file_lock::lock()
 	if (lock_result < 0)
 	{
 		// lockf F_TEST failure.
-		L_ERROR("base -> dispatch_events daemon failure!F_TEST lock_result = %d", lock_result);
+		//L_ERROR("base -> dispatch_events daemon failure!F_TEST lock_result = %d", lock_result);
 		return false;
 	}
 	lock_result = lockf(m_fd, F_LOCK, 0);
@@ -112,7 +115,7 @@ void SingleProgress::CheckSingle(const std::string &single_file_name)
 	static file_lock m_file_lock(single_file_name);
 	if (!m_file_lock.lock())
 	{
-		L_DEBUG("progress aleady run!");
+		L_DEBUG("progress %s aleady run!", single_file_name.c_str());
 		exit(1);
 	}
 	sighandler_t old_cb = signal(SIGUSR1, SingleProgress::catch_signal);
@@ -142,5 +145,35 @@ void SingleProgress::catch_signal(int sig_type)
 	if (nullptr != SingleProgress::Obj().m_old_cb)
 	{
 		SingleProgress::Obj().m_old_cb(sig_type);
+	}
+}
+
+
+void SPCheckArg::CheckMainArg(const char *pname, int argc, char* argv[], ExitProccessCB cb)
+{
+	L_COND(pname);
+	L_COND(argc);
+	if (argc >=2 && argv[1] == string("stop"))
+	{
+		SingleProgress::Obj().StopSingle(pname);
+		exit(1);
+	}
+	SingleProgress::Obj().CheckSingle(pname);
+	m_cb = cb;
+	auto f = std::bind(&SPCheckArg::CheckStopProccess, this);
+	m_tm.StartTimer(1, f, true);
+}
+
+void SPCheckArg::CheckStopProccess()
+{
+	//L_DEBUG("on CheckStopProccess");
+	if (SingleProgress::Obj().IsExit())
+	{
+		if (m_cb)
+		{
+			m_cb();
+		}
+		L_DEBUG("==============end proccess===========");
+		exit(1);
 	}
 }

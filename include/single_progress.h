@@ -9,12 +9,12 @@ example:
 启动进程：
 void main()
 {
-	SingleProgress::Instance().CheckSingle("my_name");
+	SingleProgress::Obj().CheckSingle("my_name");
 	.... //设置timer一些代码
 }
 void OnTimer()
 {
-	if (SingleProgress::Instance().IsExit())
+	if (SingleProgress::Obj().IsExit())
 	{
 		...//处理结束
 		exit(1);
@@ -24,7 +24,7 @@ void OnTimer()
 结束进程， 通常启动另一个进程，停掉指定进程：
 void main()
 {
-	SingleProgress::Instance().StopSingle("my_name");
+	SingleProgress::Obj().StopSingle("my_name");
 
 }	
 */
@@ -32,6 +32,8 @@ void main()
 #pragma once
 #include <string>
 #include <signal.h>
+#include <functional>
+#include "time/su_timer.h"
 
 class file_lock
 {
@@ -68,7 +70,7 @@ public:
 	void StopSingle(const std::string &single_file_name);
 	//return true表示进程是退出状态。 由用户代码执行退出操作。
 	//建议再timer里面不断检查这个状态，根据状态实现退出进程。
-	//为什么要建议Timer定时检查if(SingleProgress::Instance().IsExit()) ？
+	//为什么要建议Timer定时检查if(SingleProgress::Obj().IsExit()) ？
 	//因为信号中断函数会中断执行的主线程，中断函数里面修改非局部变量，容易变量冲突，BUG难查。
 	bool IsExit(){ return m_is_exit; };
 
@@ -78,5 +80,33 @@ private:
 private:
 	bool m_is_exit;
 	sighandler_t m_old_cb;
+};
+
+
+typedef std::function<void(void)> ExitProccessCB;
+//更高层应用 SingleProgress，合适不需要其他参数启动的进程
+class SPCheckArg
+{
+	SPCheckArg()
+		:m_cb(nullptr)
+	{}
+public:
+	static SPCheckArg &Obj()
+	{
+		static SPCheckArg d;
+		return d;
+	}
+	//启动进程 带参数 stop 就是关闭，其他就是启动
+	//@para const char *pname, 进程名
+	//@para int argc, char* argv[], main函数传入的参数
+	//@para ExitProccessCB c, 如果关闭进程前，需要处理逻辑，传入回调函数执行。
+	void CheckMainArg(const char *pname, int argc, char* argv[], ExitProccessCB cb = nullptr);
+
+private:
+	void CheckStopProccess();
+
+private:
+	ExitProccessCB m_cb; 
+	su::Timer m_tm;
 };
 

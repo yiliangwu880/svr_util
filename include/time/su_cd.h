@@ -7,8 +7,8 @@ author: YiliangWu
 
 #include <assert.h>
 #include <time.h>
-#include "typedef.h"
-#include "cnt_typedef.h"
+#include "../typedef.h"
+#include "../cnt_typedef.h"
 
 namespace su
 {
