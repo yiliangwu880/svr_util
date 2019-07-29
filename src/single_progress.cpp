@@ -149,31 +149,33 @@ void SingleProgress::catch_signal(int sig_type)
 }
 
 
-void SPCheckArg::CheckMainArg(const char *pname, int argc, char* argv[], ExitProccessCB cb)
+void SPCheckArg::Stop(const char *pname)
 {
 	L_COND(pname);
-	L_COND(argc);
-	if (argc >=2 && argv[1] == string("stop"))
-	{
-		SingleProgress::Obj().StopSingle(pname);
-		exit(1);
-	}
+	SingleProgress::Obj().StopSingle(pname);
+	exit(1);
+}
+
+
+void SPCheckArg::Start(const char *pname, ExitProccessCB cb)
+{
+	L_COND(pname);
 	SingleProgress::Obj().CheckSingle(pname);
 	m_cb = cb;
 	auto f = std::bind(&SPCheckArg::CheckStopProccess, this);
-	m_tm.StartTimer(1, f, true);
+	m_tm.StartTimer(1, f, true); 
 }
 
 void SPCheckArg::CheckStopProccess()
 {
-	//L_DEBUG("on CheckStopProccess");
-	if (SingleProgress::Obj().IsExit())
+	if (!SingleProgress::Obj().IsExit())
 	{
-		if (m_cb)
-		{
-			m_cb();
-		}
-		L_DEBUG("==============end proccess===========");
-		exit(1);
+		return;
 	}
+	if (m_cb)
+	{
+		m_cb();
+	}
+	L_DEBUG("==============end proccess===========");
+	exit(1);
 }

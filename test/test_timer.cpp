@@ -17,6 +17,7 @@ namespace
 	//测试SysTime偏移
 	void test1()
 	{
+		TimeDriver::Obj().Clear();
 		//这代码测试出错，如果低概率相差一秒就正常。
 		SysTime::Obj().SetTimeOffset(0);
 		SysTime::Obj().Refresh();
@@ -41,7 +42,7 @@ namespace
 	}
 	void test2()
 	{
-
+		TimeDriver::Obj().Clear();
 		SysTime::Obj().SetTimeOffset(0);
 		// g_timer_cb.setTimer(1, TimeCBFun2, 1, (void*)2);
 		{

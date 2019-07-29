@@ -17,9 +17,9 @@ namespace su
 {
     using namespace std;
 
-	bool TimeDriver::NewTimer(Timer *pTimer, uint32 interval, bool is_loop)
+	bool TimeDriver::NewTimer(Timer *pTimer, uint32 interval_sec, bool is_loop)
 	{
-		if (0 == interval)
+		if (0 == interval_sec)
 		{
 			return false;
 		}
@@ -34,7 +34,7 @@ namespace su
 		}
 
 		time_t sec = SysTime::Obj().Sec();
-		time_t key = sec + interval;
+		time_t key = sec + interval_sec;
 		if (key < sec)//时间太大溢出，好几千年都不过期，没意义。
 		{
 			L_ERROR("timer interval is over load!!");
@@ -43,7 +43,7 @@ namespace su
 
 		inner::CtrlData d;
 		d.start_sec = sec;
-		d.interval = interval;
+		d.interval_sec = interval_sec;
 		d.is_loop = is_loop;
 		d.pTimer = pTimer;
 
@@ -79,9 +79,13 @@ namespace su
 		return ret;
 	}
 
+	TimeDriver::~TimeDriver()
+	{
+		Clear(); //不掉用，进程关闭的时候就崩溃。因为可能 TimeDriver 先释放，接着timer释放就找不到有效对象了。
+	}
+
 	void TimeDriver::CheckTimeOut()
 	{
-		SysTime::Obj().Refresh();
 		time_t sec = SysTime::Obj().Sec();
         VecData vec_timeout;
 
@@ -104,8 +108,8 @@ namespace su
 			const inner::CtrlData &d = *it;
             if (it->is_loop)
             {
-                it->start_sec += it->interval;
-                m_time2data.insert(make_pair(it->start_sec+it->interval, *it));
+                it->start_sec += it->interval_sec;
+                m_time2data.insert(make_pair(it->start_sec+it->interval_sec, *it));
             }
             else
 			{
@@ -153,15 +157,15 @@ namespace su
 		m_cb();
 	}
 
-	bool Timer::StartTimer(uint32 interval, void *para, bool is_loop)
+	bool Timer::StartTimer(uint32 interval_sec, void *para, bool is_loop)
 	{
 		auto f = std::bind(&Timer::OnTimer, this, para);
-		return StartTimer(interval, f, is_loop);
+		return StartTimer(interval_sec, f, is_loop);
 	}
 
-	bool Timer::StartTimer(uint32 interval, const TimerCB &cb, bool is_loop)
+	bool Timer::StartTimer(uint32 interval_sec, const TimerCB &cb, bool is_loop)
 	{
-		if (0 == interval)
+		if (0 == interval_sec)
 		{
 			return false;
 		}
@@ -170,7 +174,7 @@ namespace su
 			//L_ERROR("state error, repeated start timer");
 			return false;
 		}
-		bool ret = TimeDriver::Obj().NewTimer(this, interval, is_loop);
+		bool ret = TimeDriver::Obj().NewTimer(this, interval_sec, is_loop);
 		if (!ret)
 		{
 			//L_ERROR("AttachTimer fail");

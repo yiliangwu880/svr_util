@@ -84,7 +84,7 @@ private:
 
 
 typedef std::function<void(void)> ExitProccessCB;
-//更高层应用 SingleProgress，合适不需要其他参数启动的进程
+//更高层应用 SingleProgress
 class SPCheckArg
 {
 	SPCheckArg()
@@ -96,12 +96,13 @@ public:
 		static SPCheckArg d;
 		return d;
 	}
-	//启动进程 带参数 stop 就是关闭，其他就是启动
+	//@fun 启动进程
 	//@para const char *pname, 进程名
-	//@para int argc, char* argv[], main函数传入的参数
 	//@para ExitProccessCB c, 如果关闭进程前，需要处理逻辑，传入回调函数执行。
-	void CheckMainArg(const char *pname, int argc, char* argv[], ExitProccessCB cb = nullptr);
-
+	void Start(const char *pname, ExitProccessCB cb);
+	//@fun 关闭进程
+	//@para const char *pname, 进程名
+	void Stop(const char *pname);
 private:
 	void CheckStopProccess();
 
