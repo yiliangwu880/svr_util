@@ -9,6 +9,8 @@ author: YiliangWu
 #include <list>
 #include <set>
 #include "singleton.h"
+#include "typedef.h"
+#include "cnt_typedef.h"
 
 
 class SuMgr : public Singleton<SuMgr>
