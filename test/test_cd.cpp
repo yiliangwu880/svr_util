@@ -31,7 +31,7 @@ void currentTime()
 	time(&long_time); 
 	tm   tmNow;
 	localtime_r(&long_time, &tmNow);
-	//printf("%d��%d��%d��   %dʱ%d��%d�� ��%d",tmNow.tm_year,   tmNow.tm_mon   +   1,    tmNow.tm_mday,   tmNow.tm_hour,   tmNow.tm_min,   tmNow.tm_sec
+	//printf("%d年%d月%d日   %d时%d分%d秒 周%d",tmNow.tm_year,   tmNow.tm_mon   +   1,    tmNow.tm_mday,   tmNow.tm_hour,   tmNow.tm_min,   tmNow.tm_sec
 	//	, tmNow.tm_wday
 	//	);     
 
@@ -46,7 +46,7 @@ void currentTime()
 void testCurCycleNum()
 {
 	{	
-		//1970,1,4�� 0ʱ0��0�� 
+		//1970,1,4， 0时0分0秒 
 		CurCycleNum week1(3600*24*7, 3600*24*0);
 		tm tmNow ;
 		tmNow.tm_sec = 0;
@@ -88,7 +88,7 @@ void testCurCycleNum()
 		UNIT_ASSERT(ret==2);
 	}
 	{	
-		//1970,1,4�� 0ʱ0��0�� �����ڷֽ�Ϊ��һ+10��
+		//1970,1,4， 0时0分0秒 ，周期分界为周一+10秒
 		CurCycleNum week1(3600*24*7, 3600*24*1+10);
 		tm tmNow ;
 		tmNow.tm_sec = 0;
@@ -127,7 +127,7 @@ void testCurCycleNum()
 		UNIT_ASSERT(ret==2);
 	}
 	{	
-		//2014,7,x��  �����ڷֽ�Ϊ��һ+10��
+		//2014,7,x，  ，周期分界为周一+10秒
 		CurCycleNum week1(3600*24*7, 3600*24*1+10);
 		tm tmNow ;
 		tmNow.tm_sec = 0;
@@ -167,7 +167,7 @@ void testCurCycleNum()
 	}
 	
 	{	
-		//2014,7,x��  �����ڷֽ�Ϊ��һ+10��
+		//2014,7,x，  ，周期分界为周一+10秒
 		CurCycleNum week1(3600*24,0);
 		tm tmNow ;
 		tmNow.tm_sec = 0;
@@ -303,7 +303,7 @@ void waitUtill1()
 }
 void waitUtill2()
 {
-		UNUSED(waitUtill2);
+	UNUSED(waitUtill2);
 	for (;;)//wait untill 2sec period over
 	{
 		time_t t;
@@ -473,7 +473,7 @@ void testNormalCdBase2()
 }
 void testTimertt()
 {
-    //�͸��ʣ���ϵͳ1��ֽ�����������ͻ�ͨ����
+    //低概率，在系统1秒分界点跑这个代码就会通不过
 	TimerCnt obj;
     SysTime::Obj().SetTimeOffset(0);
 
@@ -500,7 +500,7 @@ void testTimertt()
 }
 
 void testPeriodCnt()
-{//�ܵ͸���ʱ��᲻�ԣ����Գ���
+{//很低概率时间会不对，测试出错
 	SysTime::Obj().SetTimeOffset(0);
 	PeriodCnt obj(2,1);
 	PeriodCnt obj2(2,1);
@@ -529,9 +529,9 @@ void testPeriodCnt()
 
 
 
-        {//1������
+        {//1个重置
             SysTime::Obj().SetTimeOffset(0);
-            SysTime::Obj().SetTimeByStr("2016-01-31-0-0-0");//����0ʱ
+            SysTime::Obj().SetTimeByStr("2016-01-31-0-0-0");//周日0时
        
 
             VecInt64 vec_limit;
@@ -546,19 +546,19 @@ void testPeriodCnt()
             UNIT_ASSERT(start == obj.GetCurCycleNum());
             UNIT_ASSERT("2016-02-06 00-00-00" == SysTime::Obj().GetTimeStr());
             UNIT_ASSERT(6 == SysTime::Obj().CurTm().tm_wday);
-			SysTime::Obj().AddTimerOffset(3600*24*1); //����һ��
+			SysTime::Obj().AddTimerOffset(3600*24*1); //流逝一日
 			UNIT_ASSERT(0 == SysTime::Obj().CurTm().tm_wday);
 			UNIT_ASSERT(start+1 == obj.GetCurCycleNum());
-			SysTime::Obj().AddTimerOffset(3600*24*7); //����һ��
+			SysTime::Obj().AddTimerOffset(3600*24*7); //流逝一周
 			UNIT_ASSERT(0 == SysTime::Obj().CurTm().tm_wday);
 			UNIT_ASSERT(start+2 == obj.GetCurCycleNum());
         }
-        {//2������
+        {//2个重置
             SysTime::Obj().SetTimeOffset(0);
-            SysTime::Obj().SetTimeByStr("2016-01-31-0-0-0");//����0ʱ
+            SysTime::Obj().SetTimeByStr("2016-01-31-0-0-0");//周日0时
             VecInt64 vec_limit;
-            vec_limit.push_back(3600*24*0);//����
-            vec_limit.push_back(3600*24*1);//��һ
+            vec_limit.push_back(3600*24*0);//周日
+            vec_limit.push_back(3600*24*1);//周一
 			CycleMoreReset obj(3600*24*7, vec_limit);
 			time_t start = obj.GetCurCycleNum();
 
@@ -568,25 +568,25 @@ void testPeriodCnt()
 			UNIT_ASSERT(start+1 == obj.GetCurCycleNum());
             UNIT_ASSERT("2016-02-06 00-00-00" == SysTime::Obj().GetTimeStr());
             UNIT_ASSERT(6 == SysTime::Obj().CurTm().tm_wday);
-			SysTime::Obj().AddTimerOffset(3600*24*1); //����һ��
+			SysTime::Obj().AddTimerOffset(3600*24*1); //流逝一周
 			UNIT_ASSERT(start+2 == obj.GetCurCycleNum());
 
 			SysTime::Obj().AddTimerOffset(3600*24*1); 
-			UNIT_ASSERT(1 == SysTime::Obj().CurTm().tm_wday);//��һ
+			UNIT_ASSERT(1 == SysTime::Obj().CurTm().tm_wday);//周一
 			UNIT_ASSERT(start+3 == obj.GetCurCycleNum());
 
 			SysTime::Obj().AddTimerOffset(3600*24*7); 
-			UNIT_ASSERT(1 == SysTime::Obj().CurTm().tm_wday);//��һ
+			UNIT_ASSERT(1 == SysTime::Obj().CurTm().tm_wday);//周一
 			UNIT_ASSERT(start+5 == obj.GetCurCycleNum());
 
         }
-        {//3������
+        {//3个重置
             SysTime::Obj().SetTimeOffset(0);
-            SysTime::Obj().SetTimeByStr("2016-01-31-0-0-0");//����0ʱ
+            SysTime::Obj().SetTimeByStr("2016-01-31-0-0-0");//周日0时
             VecInt64 vec_limit;
-			vec_limit.push_back(3600*24*3);//����
-			vec_limit.push_back(3600*24*0);//����
-            vec_limit.push_back(3600*24*1);//��һ
+			vec_limit.push_back(3600*24*3);//周三
+			vec_limit.push_back(3600*24*0);//周日
+            vec_limit.push_back(3600*24*1);//周一
 			CycleMoreReset obj(3600*24*7, vec_limit);
 			time_t start = obj.GetCurCycleNum();
 
@@ -596,21 +596,21 @@ void testPeriodCnt()
 			UNIT_ASSERT(start+2 == obj.GetCurCycleNum());
 			UNIT_ASSERT("2016-02-06 00-00-00" == SysTime::Obj().GetTimeStr());
 			UNIT_ASSERT(6 == SysTime::Obj().CurTm().tm_wday);
-			SysTime::Obj().AddTimerOffset(3600*24*1); //����һ��
+			SysTime::Obj().AddTimerOffset(3600*24*1); //流逝一周
 			UNIT_ASSERT(start+3 == obj.GetCurCycleNum());
 
 			SysTime::Obj().AddTimerOffset(3600*24*1); 
-			UNIT_ASSERT(1 == SysTime::Obj().CurTm().tm_wday);//��һ
+			UNIT_ASSERT(1 == SysTime::Obj().CurTm().tm_wday);//周一
 			UNIT_ASSERT(start+4 == obj.GetCurCycleNum());
 			SysTime::Obj().AddTimerOffset(3600*24*1); 
-			UNIT_ASSERT(2 == SysTime::Obj().CurTm().tm_wday);//�ܶ�
+			UNIT_ASSERT(2 == SysTime::Obj().CurTm().tm_wday);//周二
 			UNIT_ASSERT(start+4 == obj.GetCurCycleNum());
 			SysTime::Obj().AddTimerOffset(3600*24*1); 
-			UNIT_ASSERT(3== SysTime::Obj().CurTm().tm_wday);//����
+			UNIT_ASSERT(3== SysTime::Obj().CurTm().tm_wday);//周三
 			UNIT_ASSERT(start+5 == obj.GetCurCycleNum());
 
 			SysTime::Obj().AddTimerOffset(3600*24*7); 
-			UNIT_ASSERT(3 == SysTime::Obj().CurTm().tm_wday);//����
+			UNIT_ASSERT(3 == SysTime::Obj().CurTm().tm_wday);//周三
 			UNIT_ASSERT(start+8 == obj.GetCurCycleNum());
         }
 	}
