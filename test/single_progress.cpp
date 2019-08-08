@@ -2,6 +2,7 @@
 
 */
 
+#include "su_include.h"
 #include "single_progress.h"
 #include "unit_test.h"
 #include <sys/syscall.h>
@@ -45,4 +46,5 @@ namespace
 UNITTEST(test_signal_follow)//中断处理原理，证明中断信号会中断并使用主线程
 {
 	//test_signal_follow();
+	UNUSED(test_signal_follow);
 }

@@ -2,6 +2,7 @@
 #include "../include/log_file.h"
 #include "../src/log_def.h"
 #include "unit_test.h"
+#include "su_include.h"
 
 using namespace std;
 using namespace su;
@@ -32,4 +33,5 @@ namespace
 UNITTEST(testLogFile)
 {
 		//t1();
+	UNUSED(t1);
 }

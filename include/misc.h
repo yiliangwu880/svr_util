@@ -12,7 +12,9 @@ author: YiliangWu
 #include <vector>
 #include <list>
 #include <set>
-//#include <boost/foreach.hpp>
+#include "typedef.h"
+
+#define UNUSED(x) (void)(x)
 
 namespace su
 {

@@ -2,9 +2,10 @@
 brief:支持多线程访问消息队列
 */
 
-
+#include "su_include.h"
 #include "BacktraceInfo.h"
 #include "unit_test.h"
+#include "misc.h"
 
 using namespace std;
 
@@ -25,6 +26,7 @@ namespace
 UNITTEST(testBacktrace)
 {
 	//test();
+	UNUSED(test);
 }
 
 
