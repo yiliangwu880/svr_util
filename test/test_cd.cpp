@@ -31,7 +31,7 @@ void currentTime()
 	time(&long_time); 
 	tm   tmNow;
 	localtime_r(&long_time, &tmNow);
-	//printf("%dÄê%dÔÂ%dÈÕ   %dÊ±%d·Ö%dÃë ÖÜ%d",tmNow.tm_year,   tmNow.tm_mon   +   1,    tmNow.tm_mday,   tmNow.tm_hour,   tmNow.tm_min,   tmNow.tm_sec
+	//printf("%dï¿½ï¿½%dï¿½ï¿½%dï¿½ï¿½   %dÊ±%dï¿½ï¿½%dï¿½ï¿½ ï¿½ï¿½%d",tmNow.tm_year,   tmNow.tm_mon   +   1,    tmNow.tm_mday,   tmNow.tm_hour,   tmNow.tm_min,   tmNow.tm_sec
 	//	, tmNow.tm_wday
 	//	);     
 
@@ -46,7 +46,7 @@ void currentTime()
 void testCurCycleNum()
 {
 	{	
-		//1970,1,4£¬ 0Ê±0·Ö0Ãë 
+		//1970,1,4ï¿½ï¿½ 0Ê±0ï¿½ï¿½0ï¿½ï¿½ 
 		CurCycleNum week1(3600*24*7, 3600*24*0);
 		tm tmNow ;
 		tmNow.tm_sec = 0;
@@ -88,7 +88,7 @@ void testCurCycleNum()
 		UNIT_ASSERT(ret==2);
 	}
 	{	
-		//1970,1,4£¬ 0Ê±0·Ö0Ãë £¬ÖÜÆÚ·Ö½çÎªÖÜÒ»+10Ãë
+		//1970,1,4ï¿½ï¿½ 0Ê±0ï¿½ï¿½0ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ú·Ö½ï¿½Îªï¿½ï¿½Ò»+10ï¿½ï¿½
 		CurCycleNum week1(3600*24*7, 3600*24*1+10);
 		tm tmNow ;
 		tmNow.tm_sec = 0;
@@ -127,7 +127,7 @@ void testCurCycleNum()
 		UNIT_ASSERT(ret==2);
 	}
 	{	
-		//2014,7,x£¬  £¬ÖÜÆÚ·Ö½çÎªÖÜÒ»+10Ãë
+		//2014,7,xï¿½ï¿½  ï¿½ï¿½ï¿½ï¿½ï¿½Ú·Ö½ï¿½Îªï¿½ï¿½Ò»+10ï¿½ï¿½
 		CurCycleNum week1(3600*24*7, 3600*24*1+10);
 		tm tmNow ;
 		tmNow.tm_sec = 0;
@@ -167,7 +167,7 @@ void testCurCycleNum()
 	}
 	
 	{	
-		//2014,7,x£¬  £¬ÖÜÆÚ·Ö½çÎªÖÜÒ»+10Ãë
+		//2014,7,xï¿½ï¿½  ï¿½ï¿½ï¿½ï¿½ï¿½Ú·Ö½ï¿½Îªï¿½ï¿½Ò»+10ï¿½ï¿½
 		CurCycleNum week1(3600*24,0);
 		tm tmNow ;
 		tmNow.tm_sec = 0;
@@ -289,6 +289,7 @@ void testPeriodAccumulate()
 
 void waitUtill1()
 {
+	UNUSED(waitUtill1);
 	for (;;)//wait untill 1sec period over
 	{
 		time_t t;
@@ -302,6 +303,7 @@ void waitUtill1()
 }
 void waitUtill2()
 {
+		UNUSED(waitUtill2);
 	for (;;)//wait untill 2sec period over
 	{
 		time_t t;
@@ -471,7 +473,7 @@ void testNormalCdBase2()
 }
 void testTimertt()
 {
-    //µÍ¸ÅÂÊ£¬ÔÚÏµÍ³1Ãë·Ö½çµãÅÜÕâ¸ö´úÂë¾Í»áÍ¨²»¹ý
+    //ï¿½Í¸ï¿½ï¿½Ê£ï¿½ï¿½ï¿½ÏµÍ³1ï¿½ï¿½Ö½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í»ï¿½Í¨ï¿½ï¿½ï¿½ï¿½
 	TimerCnt obj;
     SysTime::Obj().SetTimeOffset(0);
 
@@ -498,7 +500,7 @@ void testTimertt()
 }
 
 void testPeriodCnt()
-{//ºÜµÍ¸ÅÂÊÊ±¼ä»á²»¶Ô£¬²âÊÔ³ö´í
+{//ï¿½ÜµÍ¸ï¿½ï¿½ï¿½Ê±ï¿½ï¿½á²»ï¿½Ô£ï¿½ï¿½ï¿½ï¿½Ô³ï¿½ï¿½ï¿½
 	SysTime::Obj().SetTimeOffset(0);
 	PeriodCnt obj(2,1);
 	PeriodCnt obj2(2,1);
@@ -527,9 +529,9 @@ void testPeriodCnt()
 
 
 
-        {//1¸öÖØÖÃ
+        {//1ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             SysTime::Obj().SetTimeOffset(0);
-            SysTime::Obj().SetTimeByStr("2016-01-31-0-0-0");//ÖÜÈÕ0Ê±
+            SysTime::Obj().SetTimeByStr("2016-01-31-0-0-0");//ï¿½ï¿½ï¿½ï¿½0Ê±
        
 
             VecInt64 vec_limit;
@@ -544,19 +546,19 @@ void testPeriodCnt()
             UNIT_ASSERT(start == obj.GetCurCycleNum());
             UNIT_ASSERT("2016-02-06 00-00-00" == SysTime::Obj().GetTimeStr());
             UNIT_ASSERT(6 == SysTime::Obj().CurTm().tm_wday);
-			SysTime::Obj().AddTimerOffset(3600*24*1); //Á÷ÊÅÒ»ÈÕ
+			SysTime::Obj().AddTimerOffset(3600*24*1); //ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½
 			UNIT_ASSERT(0 == SysTime::Obj().CurTm().tm_wday);
 			UNIT_ASSERT(start+1 == obj.GetCurCycleNum());
-			SysTime::Obj().AddTimerOffset(3600*24*7); //Á÷ÊÅÒ»ÖÜ
+			SysTime::Obj().AddTimerOffset(3600*24*7); //ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½
 			UNIT_ASSERT(0 == SysTime::Obj().CurTm().tm_wday);
 			UNIT_ASSERT(start+2 == obj.GetCurCycleNum());
         }
-        {//2¸öÖØÖÃ
+        {//2ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             SysTime::Obj().SetTimeOffset(0);
-            SysTime::Obj().SetTimeByStr("2016-01-31-0-0-0");//ÖÜÈÕ0Ê±
+            SysTime::Obj().SetTimeByStr("2016-01-31-0-0-0");//ï¿½ï¿½ï¿½ï¿½0Ê±
             VecInt64 vec_limit;
-            vec_limit.push_back(3600*24*0);//ÖÜÈÕ
-            vec_limit.push_back(3600*24*1);//ÖÜÒ»
+            vec_limit.push_back(3600*24*0);//ï¿½ï¿½ï¿½ï¿½
+            vec_limit.push_back(3600*24*1);//ï¿½ï¿½Ò»
 			CycleMoreReset obj(3600*24*7, vec_limit);
 			time_t start = obj.GetCurCycleNum();
 
@@ -566,25 +568,25 @@ void testPeriodCnt()
 			UNIT_ASSERT(start+1 == obj.GetCurCycleNum());
             UNIT_ASSERT("2016-02-06 00-00-00" == SysTime::Obj().GetTimeStr());
             UNIT_ASSERT(6 == SysTime::Obj().CurTm().tm_wday);
-			SysTime::Obj().AddTimerOffset(3600*24*1); //Á÷ÊÅÒ»ÖÜ
+			SysTime::Obj().AddTimerOffset(3600*24*1); //ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½
 			UNIT_ASSERT(start+2 == obj.GetCurCycleNum());
 
 			SysTime::Obj().AddTimerOffset(3600*24*1); 
-			UNIT_ASSERT(1 == SysTime::Obj().CurTm().tm_wday);//ÖÜÒ»
+			UNIT_ASSERT(1 == SysTime::Obj().CurTm().tm_wday);//ï¿½ï¿½Ò»
 			UNIT_ASSERT(start+3 == obj.GetCurCycleNum());
 
 			SysTime::Obj().AddTimerOffset(3600*24*7); 
-			UNIT_ASSERT(1 == SysTime::Obj().CurTm().tm_wday);//ÖÜÒ»
+			UNIT_ASSERT(1 == SysTime::Obj().CurTm().tm_wday);//ï¿½ï¿½Ò»
 			UNIT_ASSERT(start+5 == obj.GetCurCycleNum());
 
         }
-        {//3¸öÖØÖÃ
+        {//3ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             SysTime::Obj().SetTimeOffset(0);
-            SysTime::Obj().SetTimeByStr("2016-01-31-0-0-0");//ÖÜÈÕ0Ê±
+            SysTime::Obj().SetTimeByStr("2016-01-31-0-0-0");//ï¿½ï¿½ï¿½ï¿½0Ê±
             VecInt64 vec_limit;
-			vec_limit.push_back(3600*24*3);//ÖÜÈý
-			vec_limit.push_back(3600*24*0);//ÖÜÈÕ
-            vec_limit.push_back(3600*24*1);//ÖÜÒ»
+			vec_limit.push_back(3600*24*3);//ï¿½ï¿½ï¿½ï¿½
+			vec_limit.push_back(3600*24*0);//ï¿½ï¿½ï¿½ï¿½
+            vec_limit.push_back(3600*24*1);//ï¿½ï¿½Ò»
 			CycleMoreReset obj(3600*24*7, vec_limit);
 			time_t start = obj.GetCurCycleNum();
 
@@ -594,21 +596,21 @@ void testPeriodCnt()
 			UNIT_ASSERT(start+2 == obj.GetCurCycleNum());
 			UNIT_ASSERT("2016-02-06 00-00-00" == SysTime::Obj().GetTimeStr());
 			UNIT_ASSERT(6 == SysTime::Obj().CurTm().tm_wday);
-			SysTime::Obj().AddTimerOffset(3600*24*1); //Á÷ÊÅÒ»ÖÜ
+			SysTime::Obj().AddTimerOffset(3600*24*1); //ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½
 			UNIT_ASSERT(start+3 == obj.GetCurCycleNum());
 
 			SysTime::Obj().AddTimerOffset(3600*24*1); 
-			UNIT_ASSERT(1 == SysTime::Obj().CurTm().tm_wday);//ÖÜÒ»
+			UNIT_ASSERT(1 == SysTime::Obj().CurTm().tm_wday);//ï¿½ï¿½Ò»
 			UNIT_ASSERT(start+4 == obj.GetCurCycleNum());
 			SysTime::Obj().AddTimerOffset(3600*24*1); 
-			UNIT_ASSERT(2 == SysTime::Obj().CurTm().tm_wday);//ÖÜ¶þ
+			UNIT_ASSERT(2 == SysTime::Obj().CurTm().tm_wday);//ï¿½Ü¶ï¿½
 			UNIT_ASSERT(start+4 == obj.GetCurCycleNum());
 			SysTime::Obj().AddTimerOffset(3600*24*1); 
-			UNIT_ASSERT(3== SysTime::Obj().CurTm().tm_wday);//ÖÜÈý
+			UNIT_ASSERT(3== SysTime::Obj().CurTm().tm_wday);//ï¿½ï¿½ï¿½ï¿½
 			UNIT_ASSERT(start+5 == obj.GetCurCycleNum());
 
 			SysTime::Obj().AddTimerOffset(3600*24*7); 
-			UNIT_ASSERT(3 == SysTime::Obj().CurTm().tm_wday);//ÖÜÈý
+			UNIT_ASSERT(3 == SysTime::Obj().CurTm().tm_wday);//ï¿½ï¿½ï¿½ï¿½
 			UNIT_ASSERT(start+8 == obj.GetCurCycleNum());
         }
 	}
