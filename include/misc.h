@@ -2,9 +2,8 @@
 author: YiliangWu
 杂项：
 )id生成器
-)get array length
-)easy use placement new
-)vector fast remove an element. but change the remain elements order.
+)score guard
+
 */
 
 #pragma once
@@ -41,8 +40,48 @@ private:
 };
 
 
+//使用例子： SCOPE_GUARD(delete point;);
+// ScopeGuard sg([&] { exe; });
+//sg.Dismiss();
+class ScopeGuard
+{
+public:
+	explicit ScopeGuard(std::function<void()> onExitScope)
+		: onExitScope_(onExitScope)
+		, dismissed_(false)
+	{ }
 
-} //end namespace YiLiang
+	~ScopeGuard()
+	{
+		if (!dismissed_)
+		{
+			onExitScope_();
+		}
+	}
+
+	void Dismiss()
+	{
+		dismissed_ = true;
+	}
+
+private:
+	std::function<void()> onExitScope_;
+	bool dismissed_;
+
+private: // noncopyable
+	ScopeGuard(ScopeGuard const&);
+	ScopeGuard& operator=(ScopeGuard const&);
+};
+
+#define SCOPEGUARD_LINENAME_CAT(name, line) name##line
+#define SCOPEGUARD_LINENAME(name, line) SCOPEGUARD_LINENAME_CAT(name, line)
+
+#define ON_SCOPE_EXIT(callback) ScopeGuard SCOPEGUARD_LINENAME(EXIT, __LINE__)(callback)
+//最简化用法
+#define SCOPE_GUARD(exe)  ScopeGuard SCOPEGUARD_LINENAME(EXIT, __LINE__)([&] { exe; })
+
+
+} //end namespace su
 
 
 //end file
