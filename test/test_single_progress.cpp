@@ -13,7 +13,7 @@ namespace{
 	void testStart()
 	{
 		UNIT_INFO("testStart");
-		SPCheckArg::Obj().Start("test_single_pc", MyExitProccessCB);
+		SPMgr::Obj().Start("test_single_pc", MyExitProccessCB);
 
 	}
 }

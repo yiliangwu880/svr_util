@@ -1,7 +1,7 @@
 /*
 author: YiliangWu
-ÔÓÏî£º
-)idÉú³ÉÆ÷
+ï¿½ï¿½ï¿½î£º
+)idï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 )score guard
 
 */
@@ -13,15 +13,16 @@ author: YiliangWu
 #include <set>
 #include <time.h>
 #include "typedef.h"
+#include <functional>
 
 #define UNUSED(x) (void)(x)
 
 namespace su
 {
 
-//Î¨Ò»id  ¸ß32ÓÃtimestamp, µÍ32ÓÃ×ÔÔö¡£  1ÃëÄÚ£¬²úÉúÉÙÓÚ4ÒÚ£¬¾ÍÄÜ±£Ö¤Î¨Ò»
-//Ò»°ã¼¸ÐÐ´úÂë£¬ÖØ¸´ÅÜ4ÒÚ´Î£¬¶¼ÒªÊ®¼¸ÃëÁË¡£ ËùÒÔÊµ¼ÊÇé¿ö²»»áÖØ¸´
-//32Î»±íÊ¾Ê±¼ä´Á£¬¹»ÓÃÒ»°Ù¶àÄê²»ÖØ¸´¡£
+//Î¨Ò»id  ï¿½ï¿½32ï¿½ï¿½timestamp, ï¿½ï¿½32ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½  1ï¿½ï¿½ï¿½Ú£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½4ï¿½Ú£ï¿½ï¿½ï¿½ï¿½Ü±ï¿½Ö¤Î¨Ò»
+//Ò»ï¿½ã¼¸ï¿½Ð´ï¿½ï¿½ë£¬ï¿½Ø¸ï¿½ï¿½ï¿½4ï¿½Ú´Î£ï¿½ï¿½ï¿½ÒªÊ®ï¿½ï¿½ï¿½ï¿½ï¿½Ë¡ï¿½ ï¿½ï¿½ï¿½ï¿½Êµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø¸ï¿½
+//32Î»ï¿½ï¿½Ê¾Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½Ù¶ï¿½ï¿½ê²»ï¿½Ø¸ï¿½ï¿½ï¿½
 class IdCreater  
 {
 public:
@@ -40,7 +41,7 @@ private:
 };
 
 
-//Ê¹ÓÃÀý×Ó£º SCOPE_GUARD(delete point;);
+//Ê¹ï¿½ï¿½ï¿½ï¿½ï¿½Ó£ï¿½ SCOPE_GUARD(delete point;);
 // ScopeGuard sg([&] { exe; });
 //sg.Dismiss();
 class ScopeGuard
@@ -77,7 +78,7 @@ private: // noncopyable
 #define SCOPEGUARD_LINENAME(name, line) SCOPEGUARD_LINENAME_CAT(name, line)
 
 #define ON_SCOPE_EXIT(callback) ScopeGuard SCOPEGUARD_LINENAME(EXIT, __LINE__)(callback)
-//×î¼ò»¯ÓÃ·¨
+//ï¿½ï¿½ï¿½ï¿½Ã·ï¿½
 #define SCOPE_GUARD(exe)  ScopeGuard SCOPEGUARD_LINENAME(EXIT, __LINE__)([&] { exe; })
 
 
