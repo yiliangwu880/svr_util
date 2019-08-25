@@ -50,7 +50,7 @@ public:
 	static std::string& tostring(std::string& resultOUT, bool value);
 	template<typename ValueType>
 	static std::string& tostring(std::string& resultOUT, ValueType value);
-	//string to num ¿ÉÒÔÓÃatoi atollµÈ
+	//string to num å¯ä»¥ç”¨atoi atollç­‰
 
 	static std::string& append(std::string& str, const char* fmt, ...);
 	static std::string& append(std::string& str, const std::string& cat);
@@ -99,7 +99,7 @@ public:
 	static long int integer(const std::string& str);
 	static bool integer(const std::string& str, long int& valueOut);
 
-    //²»Ö§³Ö¶àÏß³Ì
+    //ä¸æ”¯æŒå¤šçº¿ç¨‹
     static const char *NumToStr(int num);
 
 	static std::string& repeat(const std::string& str, std::string::size_type times, std::string& resultOUT);

@@ -25,7 +25,7 @@ file_lock::~file_lock()
 	unlock();
 }
 
-//³¢ÊÔ¸ø ÎÄ¼şËøÓµÓĞ½ø³Ì·¢ĞÅºÅ
+//å°è¯•ç»™ æ–‡ä»¶é”æ‹¥æœ‰è¿›ç¨‹å‘ä¿¡å·
 int file_lock::kill(int sig)
 {
 	int fd = open(m_pid_file.c_str(), O_TRUNC | O_RDWR);
@@ -40,7 +40,7 @@ int file_lock::kill(int sig)
 	flock_data.l_start = 0;
 	flock_data.l_whence = SEEK_SET;
 	flock_data.l_len = 0;
-	//ÅĞ¶ÏÕû¸öÎÄ¼şÊÇ·ñÓĞĞ´Ëø£¨F_WRLCK£©
+	//åˆ¤æ–­æ•´ä¸ªæ–‡ä»¶æ˜¯å¦æœ‰å†™é”ï¼ˆF_WRLCKï¼‰
 	if (fcntl(fd, F_GETLK, reinterpret_cast<long>(&flock_data)) == -1)
 	{
 		L_ERROR("fcntl error, fd = %d, %d\n", fd, sig);
@@ -52,11 +52,11 @@ int file_lock::kill(int sig)
 		L_ERROR("file no lock");
 		return 0;
 	}
-	//×¢Òâ£¬Õâ¸ö¹ı³Ì²»ÊÇÔ­×Ó²Ù×÷£¬¹ı³ÌÓĞ¿ÉÄÜËø×´Ì¬±ä»¯~£¡
+	//æ³¨æ„ï¼Œè¿™ä¸ªè¿‡ç¨‹ä¸æ˜¯åŸå­æ“ä½œï¼Œè¿‡ç¨‹æœ‰å¯èƒ½é”çŠ¶æ€å˜åŒ–~ï¼
 
-	//Çé¿ö£ºÓĞËø£¬°ÑÏÖÓĞËøĞÅÏ¢ÒÑ¾­Ğ´µ½ flock_data
+	//æƒ…å†µï¼šæœ‰é”ï¼ŒæŠŠç°æœ‰é”ä¿¡æ¯å·²ç»å†™åˆ° flock_data
 	// if (::kill(lock.l_pid, sig) == -1)
-	// ÕâÀïÔİÊ±Ğ´ËÀ£¬Kill, unblockable (POSIX).
+	// è¿™é‡Œæš‚æ—¶å†™æ­»ï¼ŒKill, unblockable (POSIX).
 	if (::kill(flock_data.l_pid, sig) == -1)
 	{
 		L_ERROR("file_lock::kill ::kill(lock.l_pid, sig) == -1, pid = %d, sig = %d, errno = %s, %d", flock_data.l_pid, sig, strerror(errno), errno);
@@ -119,7 +119,7 @@ void SingleProgress::CheckSingle(const std::string &single_file_name)
 		exit(1);
 	}
 	sighandler_t old_cb = signal(SIGUSR1, SingleProgress::catch_signal);
-	//SIG_IGN ÆÁ±Î¸ÃĞÅºÅ        ¢Ú SIG_DFL »Ö¸´Ä¬ÈÏĞĞ
+	//SIG_IGN å±è”½è¯¥ä¿¡å·        â‘¡ SIG_DFL æ¢å¤é»˜è®¤è¡Œ
 	if ((old_cb != SIG_IGN)
 		&&
 		(old_cb != SIG_DFL)

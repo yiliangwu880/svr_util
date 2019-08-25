@@ -1,7 +1,7 @@
 /*
 author: YiliangWu
-ÔÓÏî£º
-)idÉú³ÉÆ÷
+æ‚é¡¹ï¼š
+)idç”Ÿæˆå™¨
 )score guard
 
 */
@@ -20,9 +20,9 @@ author: YiliangWu
 namespace su
 {
 
-//Î¨Ò»id  ¸ß32ÓÃtimestamp, µÍ32ÓÃ×ÔÔö¡£  1ÃëÄÚ£¬²úÉúÉÙÓÚ4ÒÚ£¬¾ÍÄÜ±£Ö¤Î¨Ò»
-//Ò»°ã¼¸ĞĞ´úÂë£¬ÖØ¸´ÅÜ4ÒÚ´Î£¬¶¼ÒªÊ®¼¸ÃëÁË¡£ ËùÒÔÊµ¼ÊÇé¿ö²»»áÖØ¸´
-//32Î»±íÊ¾Ê±¼ä´Á£¬¹»ÓÃÒ»°Ù¶àÄê²»ÖØ¸´¡£
+//å”¯ä¸€id  é«˜32ç”¨timestamp, ä½32ç”¨è‡ªå¢ã€‚  1ç§’å†…ï¼Œäº§ç”Ÿå°‘äº4äº¿ï¼Œå°±èƒ½ä¿è¯å”¯ä¸€
+//ä¸€èˆ¬å‡ è¡Œä»£ç ï¼Œé‡å¤è·‘4äº¿æ¬¡ï¼Œéƒ½è¦åå‡ ç§’äº†ã€‚ æ‰€ä»¥å®é™…æƒ…å†µä¸ä¼šé‡å¤
+//32ä½è¡¨ç¤ºæ—¶é—´æˆ³ï¼Œå¤Ÿç”¨ä¸€ç™¾å¤šå¹´ä¸é‡å¤ã€‚
 class IdCreater  
 {
 public:
@@ -41,7 +41,7 @@ private:
 };
 
 
-//Ê¹ÓÃÀı×Ó£º SCOPE_GUARD(delete point;);
+//ä½¿ç”¨ä¾‹å­ï¼š SCOPE_GUARD(delete point;);
 // ScopeGuard sg([&] { exe; });
 //sg.Dismiss();
 class ScopeGuard
@@ -78,7 +78,7 @@ private: // noncopyable
 #define SCOPEGUARD_LINENAME(name, line) SCOPEGUARD_LINENAME_CAT(name, line)
 
 #define ON_SCOPE_EXIT(callback) ScopeGuard SCOPEGUARD_LINENAME(EXIT, __LINE__)(callback)
-//×î¼ò»¯ÓÃ·¨
+//æœ€ç®€åŒ–ç”¨æ³•
 #define SCOPE_GUARD(exe)  ScopeGuard SCOPEGUARD_LINENAME(EXIT, __LINE__)([&] { exe; })
 
 

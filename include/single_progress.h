@@ -1,27 +1,27 @@
 /**
 author: yilaing.wu
 
-¹¦ÄÜ£ºÏŞÖÆ³ÌĞò½ø³ÌÊıÁ¿ÎªÒ»¡£ ĞÅºÅ½áÊø½ø³Ì.
-»áÔÚ³ÌĞòµ±Ç°Ä¿Â¼´´½¨ËøÎÄ¼ş£¬±ÈÈç my_name.lock
+åŠŸèƒ½ï¼šé™åˆ¶ç¨‹åºè¿›ç¨‹æ•°é‡ä¸ºä¸€ã€‚ ä¿¡å·ç»“æŸè¿›ç¨‹.
+ä¼šåœ¨ç¨‹åºå½“å‰ç›®å½•åˆ›å»ºé”æ–‡ä»¶ï¼Œæ¯”å¦‚ my_name.lock
 
 
 example:
-Æô¶¯½ø³Ì£º
+å¯åŠ¨è¿›ç¨‹ï¼š
 void main()
 {
 	SingleProgress::Obj().CheckSingle("my_name");
-	.... //ÉèÖÃtimerÒ»Ğ©´úÂë
+	.... //è®¾ç½®timerä¸€äº›ä»£ç 
 }
 void OnTimer()
 {
 	if (SingleProgress::Obj().IsExit())
 	{
-		...//´¦Àí½áÊø
+		...//å¤„ç†ç»“æŸ
 		exit(1);
 	}
 }
 
-½áÊø½ø³Ì£¬ Í¨³£Æô¶¯ÁíÒ»¸ö½ø³Ì£¬Í£µôÖ¸¶¨½ø³Ì£º
+ç»“æŸè¿›ç¨‹ï¼Œ é€šå¸¸å¯åŠ¨å¦ä¸€ä¸ªè¿›ç¨‹ï¼Œåœæ‰æŒ‡å®šè¿›ç¨‹ï¼š
 void main()
 {
 	SingleProgress::Obj().StopSingle("my_name");
@@ -41,7 +41,7 @@ public:
 	file_lock(const std::string& file_name);
 	~file_lock();
 
-	//para sig, SIGKILL µÈÖµ
+	//para sig, SIGKILL ç­‰å€¼
 	int kill(int sig);
 
 	//return true  locked file success;
@@ -64,14 +64,14 @@ public:
 		return d;
 	}
 
-	//¸ù¾İÎÄ¼şÃû£¬¼ì²éÈ·±£³ÌĞòÎ¨Ò»½ø³Ì£¬¶à´ÎÆô¶¯¾Í»á½áÊøºóÆô¶¯½ø³Ì
+	//æ ¹æ®æ–‡ä»¶åï¼Œæ£€æŸ¥ç¡®ä¿ç¨‹åºå”¯ä¸€è¿›ç¨‹ï¼Œå¤šæ¬¡å¯åŠ¨å°±ä¼šç»“æŸåå¯åŠ¨è¿›ç¨‹
 	void CheckSingle(const std::string &single_file_name);
-	//ÇëÇó½áÊøÎ¨Ò»½ø³Ì¡£
+	//è¯·æ±‚ç»“æŸå”¯ä¸€è¿›ç¨‹ã€‚
 	void StopSingle(const std::string &single_file_name);
-	//return true±íÊ¾½ø³ÌÊÇÍË³ö×´Ì¬¡£ ÓÉÓÃ»§´úÂëÖ´ĞĞÍË³ö²Ù×÷¡£
-	//½¨ÒéÔÙtimerÀïÃæ²»¶Ï¼ì²éÕâ¸ö×´Ì¬£¬¸ù¾İ×´Ì¬ÊµÏÖÍË³ö½ø³Ì¡£
-	//ÎªÊ²Ã´Òª½¨ÒéTimer¶¨Ê±¼ì²éif(SingleProgress::Obj().IsExit()) £¿
-	//ÒòÎªĞÅºÅÖĞ¶Ïº¯Êı»áÖĞ¶ÏÖ´ĞĞµÄÖ÷Ïß³Ì£¬ÖĞ¶Ïº¯ÊıÀïÃæĞŞ¸Ä·Ç¾Ö²¿±äÁ¿£¬ÈİÒ×±äÁ¿³åÍ»£¬BUGÄÑ²é¡£
+	//return trueè¡¨ç¤ºè¿›ç¨‹æ˜¯é€€å‡ºçŠ¶æ€ã€‚ ç”±ç”¨æˆ·ä»£ç æ‰§è¡Œé€€å‡ºæ“ä½œã€‚
+	//å»ºè®®å†timeré‡Œé¢ä¸æ–­æ£€æŸ¥è¿™ä¸ªçŠ¶æ€ï¼Œæ ¹æ®çŠ¶æ€å®ç°é€€å‡ºè¿›ç¨‹ã€‚
+	//ä¸ºä»€ä¹ˆè¦å»ºè®®Timerå®šæ—¶æ£€æŸ¥if(SingleProgress::Obj().IsExit()) ï¼Ÿ
+	//å› ä¸ºä¿¡å·ä¸­æ–­å‡½æ•°ä¼šä¸­æ–­æ‰§è¡Œçš„ä¸»çº¿ç¨‹ï¼Œä¸­æ–­å‡½æ•°é‡Œé¢ä¿®æ”¹éå±€éƒ¨å˜é‡ï¼Œå®¹æ˜“å˜é‡å†²çªï¼ŒBUGéš¾æŸ¥ã€‚
 	bool IsExit(){ return m_is_exit; };
 
 private:
@@ -84,7 +84,7 @@ private:
 
 
 typedef std::function<void(void)> ExitProccessCB;
-//¸ü¸ß²ãÓ¦ÓÃ SingleProgress
+//æ›´é«˜å±‚åº”ç”¨ SingleProgress
 class SPMgr
 {
 	SPMgr()
@@ -96,14 +96,14 @@ public:
 		static SPMgr d;
 		return d;
 	}
-	//Æô¶¯µ¥Àı½ø³Ì£¬ ¼ì²émain²ÎÊı£¬ ´ø"stop"²ÎÊı¾ÍÊÇÍ£Ö¹½ø³Ì¡£
+	//å¯åŠ¨å•ä¾‹è¿›ç¨‹ï¼Œ æ£€æŸ¥mainå‚æ•°ï¼Œ å¸¦"stop"å‚æ•°å°±æ˜¯åœæ­¢è¿›ç¨‹ã€‚
 	void Check(int argc, char* argv[], const char *pname, ExitProccessCB cb = nullptr);
-	//@fun Æô¶¯½ø³Ì
-	//@para const char *pname, ½ø³ÌÃû
-	//@para ExitProccessCB c, Èç¹û¹Ø±Õ½ø³ÌÇ°£¬ĞèÒª´¦ÀíÂß¼­£¬´«Èë»Øµ÷º¯ÊıÖ´ĞĞ¡£
+	//@fun å¯åŠ¨è¿›ç¨‹
+	//@para const char *pname, è¿›ç¨‹å
+	//@para ExitProccessCB c, å¦‚æœå…³é—­è¿›ç¨‹å‰ï¼Œéœ€è¦å¤„ç†é€»è¾‘ï¼Œä¼ å…¥å›è°ƒå‡½æ•°æ‰§è¡Œã€‚
 	void Start(const char *pname, ExitProccessCB cb);
-	//@fun ¹Ø±Õ½ø³Ì
-	//@para const char *pname, ½ø³ÌÃû
+	//@fun å…³é—­è¿›ç¨‹
+	//@para const char *pname, è¿›ç¨‹å
 	void Stop(const char *pname);
 private:
 	void CheckStopProccess();

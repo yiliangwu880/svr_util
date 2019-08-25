@@ -1,5 +1,5 @@
 /*
-Ê±¼äÏà¹Ø
+æ—¶é—´ç›¸å…³
 */
 
 #include "time/su_timestamp.h"
@@ -72,7 +72,7 @@ namespace su
 
 	int SysTime::GetMonthPeriodCnt() const
 	{
-		return GetMonthPeriodCnt(m_tm.tm_year-70, m_tm.tm_mon+1);//tm_year ×îĞ¡1970
+		return GetMonthPeriodCnt(m_tm.tm_year-70, m_tm.tm_mon+1);//tm_year æœ€å°1970
 	}
 
 	int SysTime::GetDayPeriodCnt() const
@@ -119,7 +119,7 @@ namespace su
         {
             return false;
         }
-        //strptime(pTime, "%Y-%m-%d %H-%M-%S", &tm_time); //¸ñÊ½»¯Êä³ö win32Ã»ÓĞÕâ¸öº¯Êı,¾ÍÓÃÉÏÃæ×Ô¼ºĞ´µÄ°É
+        //strptime(pTime, "%Y-%m-%d %H-%M-%S", &tm_time); //æ ¼å¼åŒ–è¾“å‡º win32æ²¡æœ‰è¿™ä¸ªå‡½æ•°,å°±ç”¨ä¸Šé¢è‡ªå·±å†™çš„å§
 
         ret_time = mktime(&tm_time);
 		if (ret_time  < 0)
@@ -184,7 +184,7 @@ namespace su
 		{
 			return false;
 		}
-        //È¡³öÄê
+        //å–å‡ºå¹´
         ret_tm.tm_year = atoi(pYear) - 1900;
         if (ret_tm.tm_year<0)
         {
@@ -258,7 +258,7 @@ namespace su
 			tm_t.tm_mon = tm_t.tm_mon%12;
 		}
 
-		//µ÷ÕûÔÂµÄÈÕÆÚ³¬µ±Ç°ÔÂ×î´óÖµ
+		//è°ƒæ•´æœˆçš„æ—¥æœŸè¶…å½“å‰æœˆæœ€å¤§å€¼
 		int max_day = GetDaysInMonth(tm_t.tm_year+1900, tm_t.tm_mon+1);
 		if (tm_t.tm_mday>max_day)
 		{
@@ -268,7 +268,7 @@ namespace su
         time_t ret_time = mktime( &tm_t );
         if (-1 == ret_time)
         {
-            printf("logic erro, mon=%d", tm_t.tm_mon);//ÎªÊ²Ã´Ê§°Ü£¿
+            printf("logic erro, mon=%d", tm_t.tm_mon);//ä¸ºä»€ä¹ˆå¤±è´¥ï¼Ÿ
             return;
         }
         m_offset = m_offset + (ret_time - m_sec);
@@ -284,7 +284,7 @@ namespace su
         time_t ret_time = mktime( &tm_t );
         if (-1 == ret_time)
         {
-            printf("logic erro, year=%d", tm_t.tm_year);//ÎªÊ²Ã´Ê§°Ü£¿
+            printf("logic erro, year=%d", tm_t.tm_year);//ä¸ºä»€ä¹ˆå¤±è´¥ï¼Ÿ
             return;
         }
         m_offset = m_offset + (ret_time - m_sec);
@@ -388,7 +388,7 @@ namespace su
         {
             time_t cur_sec = SysTime::Obj().Sec();
             assert(cur_sec>=m_pause);
-            m_start += ( cur_sec - m_pause ); //¼ÓÉÏÔİÍ£Ê±¼ä
+            m_start += ( cur_sec - m_pause ); //åŠ ä¸Šæš‚åœæ—¶é—´
             m_state = TIMER_S_RUN;
         }
     }
@@ -414,7 +414,7 @@ namespace su
             return SysTime::Obj().Sec() - m_start;
         }
         else if(TIMER_S_PAUSE == m_state )
-        { //ÔİÍ££¬ÏÈ»Ö¸´
+        { //æš‚åœï¼Œå…ˆæ¢å¤
             m_state = TIMER_S_NULL;
             return m_pause-m_start;
         }

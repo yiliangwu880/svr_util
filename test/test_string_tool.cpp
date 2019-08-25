@@ -81,7 +81,7 @@ namespace
 		StringTool::format(out, "%s", in.c_str());
 		UNIT_ASSERT(in == out);
 
-		//StringTool::format(out, "a%d%s", in.c_str()); //¶Î´íÎó SIGSEGV      11    
+		//StringTool::format(out, "a%d%s", in.c_str()); //æ®µé”™è¯¯ SIGSEGV      11    
 
 		{
 			string ret = StringTool::format("%s", in.c_str());
@@ -91,7 +91,7 @@ namespace
 			string ret = StringTool::format("a%sd", in.c_str());
 			UNIT_ASSERT(("a"+in+"d") == ret);
 		}
-		//Éú³É´ó³¤¶È
+		//ç”Ÿæˆå¤§é•¿åº¦
 		in.clear();
 		for (int i=0; i<10000*100; ++i)
 		{

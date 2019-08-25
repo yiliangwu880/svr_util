@@ -1,16 +1,16 @@
 /*
-	brief: ÄÖÖÓ£¬¶¨Ê±Æ÷
-	½¨ÒéÉÙÁ¿Ê¹ÓÃµ×²ãÌá¹©µÄ¶¨Ê±Æ÷. ÒòÎªapi¸ºÔğ£¬´óÁ¿Ê¹ÓÃÈİÒ×³ö´í£¬×ÊÔ´Ğ¹Â©ÄÑ¸ú×Ù¡£
-	Ğ´ÁË¸öÓ¦ÓÃ²ã¶¨Ê±Æ÷£¬Ê¹ÓÃ¼òµ¥£¬ÎÊÌâÈİÒ×¸ú×Ù¡£ ĞèÒªµ×²ãÒ»¸ö¶¨Ê±Æ÷»Øµ÷×öÇı¶¯£¬
+	brief: é—¹é’Ÿï¼Œå®šæ—¶å™¨
+	å»ºè®®å°‘é‡ä½¿ç”¨åº•å±‚æä¾›çš„å®šæ—¶å™¨. å› ä¸ºapiè´Ÿè´£ï¼Œå¤§é‡ä½¿ç”¨å®¹æ˜“å‡ºé”™ï¼Œèµ„æºæ³„æ¼éš¾è·Ÿè¸ªã€‚
+	å†™äº†ä¸ªåº”ç”¨å±‚å®šæ—¶å™¨ï¼Œä½¿ç”¨ç®€å•ï¼Œé—®é¢˜å®¹æ˜“è·Ÿè¸ªã€‚ éœ€è¦åº•å±‚ä¸€ä¸ªå®šæ—¶å™¨å›è°ƒåšé©±åŠ¨ï¼Œ
 
 etc:
-Çı¶¯timer,¶¨Ê±µ÷ÓÃ£º
+é©±åŠ¨timer,å®šæ—¶è°ƒç”¨ï¼š
 		TimeDriver::Obj().checkTimeOut();
-Ğéº¯ÊıÓÃ·¨£º
+è™šå‡½æ•°ç”¨æ³•ï¼š
 		class MyTimer : public Timer
 		{
 		public:
-			//timeout»á»Øµ÷º¯Êı. timeout»Øµ÷Ç°±äS_WAIT_START_TIMER ×´Ì¬
+			//timeoutä¼šå›è°ƒå‡½æ•°. timeoutå›è°ƒå‰å˜S_WAIT_START_TIMER çŠ¶æ€
 			virtual void OnTimer(void *para)
 			{
 				UNIT_ASSERT((void *)11 == para);
@@ -22,7 +22,7 @@ etc:
 			t1.StartTimer(1, (void *)11);
 		}
 
-std::bindÓÃ·¨£º
+std::bindç”¨æ³•ï¼š
 
 		void testFreeCb()
 		{
@@ -52,12 +52,12 @@ namespace su
 
 	namespace inner
 	{
-		//¶¨Ê±Æ÷¿ØÖÆÊı¾İ
+		//å®šæ—¶å™¨æ§åˆ¶æ•°æ®
 		struct CtrlData
 		{
 			time_t start_sec;
 			uint32 interval_sec;
-			bool is_loop;  //true±íÊ¾Ñ­»·¶¨Ê±Æ÷
+			bool is_loop;  //trueè¡¨ç¤ºå¾ªç¯å®šæ—¶å™¨
 			Timer *pTimer;
 			CtrlData()
 				:start_sec(0)
@@ -68,40 +68,40 @@ namespace su
 		};
 	}
 	/*
-		¶¨Ê±Æ÷£¬×¢²á»Øµ÷º¯Êı£¬timeoutµ÷ÓÃº¯Êı¡£
-        ×¢Òâ£º¶¨Ê±Æ÷²»ºÏÊÊÉèÖÃÌ«¶à£¬¾­ÑéÖ¤Ã÷ºÜ¶àÎÊÌâµÄ¡£
+		å®šæ—¶å™¨ï¼Œæ³¨å†Œå›è°ƒå‡½æ•°ï¼Œtimeoutè°ƒç”¨å‡½æ•°ã€‚
+        æ³¨æ„ï¼šå®šæ—¶å™¨ä¸åˆé€‚è®¾ç½®å¤ªå¤šï¼Œç»éªŒè¯æ˜å¾ˆå¤šé—®é¢˜çš„ã€‚
 	*/
 	class TimeDriver : public Singleton<TimeDriver>
 	{
 		friend class Timer;
         typedef std::vector<inner::CtrlData> VecData;
-		typedef std::multimap<time_t, inner::CtrlData> TimeMapData;   //µ½ÆÚ¾ø¶ÔÊ±¼ä map Êı¾İ   ĞèÒªÓÅ»¯£¬Æµ·±Ôö¼ÓÉ¾³ı»áÓĞÄÚ´æËéÆ¬
+		typedef std::multimap<time_t, inner::CtrlData> TimeMapData;   //åˆ°æœŸç»å¯¹æ—¶é—´ map æ•°æ®   éœ€è¦ä¼˜åŒ–ï¼Œé¢‘ç¹å¢åŠ åˆ é™¤ä¼šæœ‰å†…å­˜ç¢ç‰‡
 
 
 	public:
 		~TimeDriver();
-        //¼ì²âtimeoutÊÂ¼ş£¬Ö´ĞĞ»Øµ÷¡££¨Ò»°ãÑ­»·µ÷ÓÃÕâ¸öº¯Êı£©
+        //æ£€æµ‹timeoutäº‹ä»¶ï¼Œæ‰§è¡Œå›è°ƒã€‚ï¼ˆä¸€èˆ¬å¾ªç¯è°ƒç”¨è¿™ä¸ªå‡½æ•°ï¼‰
 		void CheckTimeOut();
 
-        //ÇåËùÓĞ¶¨Ê±ÊÂ¼ş
+        //æ¸…æ‰€æœ‰å®šæ—¶äº‹ä»¶
 		void Clear();
 
-        //»ñÈ¡µÈ´ıµ½ÆÚµÄ¶¨Ê±Æ÷ÊıÁ¿
+        //è·å–ç­‰å¾…åˆ°æœŸçš„å®šæ—¶å™¨æ•°é‡
         uint32 GetTimeNum();
 
     private:
-		//Éæ¼°Ö¸Õë½Ó¿ÚË½ÓĞ»¯£¬·À¾ı×Ó·¸´í.
+		//æ¶‰åŠæŒ‡é’ˆæ¥å£ç§æœ‰åŒ–ï¼Œé˜²å›å­çŠ¯é”™.
 		bool NewTimer(Timer *pTimer, uint32 interval_sec, bool is_loop= false);
-		bool DelTimer(Timer *pTimer); //deattach and stop timer, ÀïÃæ±£Ö¤TimerÖ¸ÕëÉ¾µô£¬²»»áÒ°µô
+		bool DelTimer(Timer *pTimer); //deattach and stop timer, é‡Œé¢ä¿è¯TimeræŒ‡é’ˆåˆ æ‰ï¼Œä¸ä¼šé‡æ‰
 
 
 	private:
-        static const uint32 MAX_TIMER_NUMBER = 1000; //Ò»°ã½ø³Ì¶¨Ê±Æ÷³¬1000¾ÍÊÇÉè¼Æ²»ºÃ¡£
+        static const uint32 MAX_TIMER_NUMBER = 1000; //ä¸€èˆ¬è¿›ç¨‹å®šæ—¶å™¨è¶…1000å°±æ˜¯è®¾è®¡ä¸å¥½ã€‚
 		TimeMapData m_time2data;
 	};
 
 	typedef std::function<void(void)> TimerCB;
-	//ÀïÃæ×ö´´½¨£¬Ïú»Ù¶¨Ê±Æ÷£¬±£Ö¤²»Ğ¹Â¶×ÊÔ´, ²»»á»Øµ÷²»´æÔÚµÄTimer
+	//é‡Œé¢åšåˆ›å»ºï¼Œé”€æ¯å®šæ—¶å™¨ï¼Œä¿è¯ä¸æ³„éœ²èµ„æº, ä¸ä¼šå›è°ƒä¸å­˜åœ¨çš„Timer
 	class Timer
 	{
 		friend class TimeDriver;
@@ -109,17 +109,17 @@ namespace su
 		Timer();
 		virtual ~Timer();
 
-		//timeout»á»Øµ÷º¯Êı. timeout»Øµ÷Ç°±äS_WAIT_START_TIMER ×´Ì¬
-		virtual void OnTimer(void *para) {}; //´«Í³·½Ê½ÖØĞ´ÊµÏÖ
+		//timeoutä¼šå›è°ƒå‡½æ•°. timeoutå›è°ƒå‰å˜S_WAIT_START_TIMER çŠ¶æ€
+		virtual void OnTimer(void *para) {}; //ä¼ ç»Ÿæ–¹å¼é‡å†™å®ç°
 
-		//fun Æô¶¯timer,µ½Ê±»Øµ÷ Timer::OnTimer
-		//para is_loop true±íÊ¾Ñ­»·¶¨Ê±Æ÷
-		//return, true³É¹¦¿ªÊ¼¶¨Ê±Æ÷£¬false ÒÑ¾­¿ªÊ¼ÁË£¬²»ĞèÒªÉè¶¨(¿ÉÒÔÏÈstop,ÔÙstart)
+		//fun å¯åŠ¨timer,åˆ°æ—¶å›è°ƒ Timer::OnTimer
+		//para is_loop trueè¡¨ç¤ºå¾ªç¯å®šæ—¶å™¨
+		//return, trueæˆåŠŸå¼€å§‹å®šæ—¶å™¨ï¼Œfalse å·²ç»å¼€å§‹äº†ï¼Œä¸éœ€è¦è®¾å®š(å¯ä»¥å…ˆstop,å†start)
 		bool StartTimer(uint32 interval_sec, void *para = nullptr, bool is_loop = false);
-		//@para const TimerCB &cb,  ÓÃstd::bind°ó¶¨µÄº¯Êı
+		//@para const TimerCB &cb,  ç”¨std::bindç»‘å®šçš„å‡½æ•°
 		bool StartTimer(uint32 interval_sec, const TimerCB &cb, bool is_loop = false);
-		//Í£Ö¹ÕıÔÚ½øĞĞµÄ¶¨Ê±Æ÷£¬
-		//return, false ²»ĞèÒªÍ£Ö¹. true ³É¹¦²Ù×÷ÁËÍ£Ö¹
+		//åœæ­¢æ­£åœ¨è¿›è¡Œçš„å®šæ—¶å™¨ï¼Œ
+		//return, false ä¸éœ€è¦åœæ­¢. true æˆåŠŸæ“ä½œäº†åœæ­¢
 		bool StopTimer();
 
 	private:
@@ -132,25 +132,25 @@ namespace su
 			S_WAIT_TIME_OUT,
 		};
 		State m_state;
-		TimerCB m_cb; //ÓÃstd::bind·½Ê½°ó¶¨µÄ»Øµ÷º¯Êı
+		TimerCB m_cb; //ç”¨std::bindæ–¹å¼ç»‘å®šçš„å›è°ƒå‡½æ•°
 	};
 	
 
 	typedef std::function<bool(void)> IncTimerCB;
-	//µİÔö¶¨Ê±Æ÷£¬Í¨³£¶ÏÏßÖØÁ¬ĞèÒªÓÃ¡£
+	//é€’å¢å®šæ—¶å™¨ï¼Œé€šå¸¸æ–­çº¿é‡è¿éœ€è¦ç”¨ã€‚
 	class IncTimer
 	{
 	public:
 		IncTimer()
 			:m_vi_idx(0)
 		{}
-		//Æô¶¯¶¨Ê±Æ÷£¬°´ÕÕ¼ä¸ôÁĞ±í Öğ´ÎµİÔö¼ä¸ô¡£×îºóÒ»¸ö¼ä¸ô×öÑ­»·¶¨Ê±¡£
-		//Ö±ÖÁ»Øµ÷º¯Êı·µ»Øtrue»òÕßµ÷ÓÃStop()£¬²Å½áÊø¶¨Ê±Æ÷¡£
-		//@para const TimerCB &cb,  ÓÃstd::bind°ó¶¨µÄº¯Êı
-		//@para VecUint32 vec_interval, ¼ä¸ôÁĞ±í
-		//@return ·Ç·¨²ÎÊı¾Í·µ»Øfalse,ÖØ¸´Start·µ»Øfalse
+		//å¯åŠ¨å®šæ—¶å™¨ï¼ŒæŒ‰ç…§é—´éš”åˆ—è¡¨ é€æ¬¡é€’å¢é—´éš”ã€‚æœ€åä¸€ä¸ªé—´éš”åšå¾ªç¯å®šæ—¶ã€‚
+		//ç›´è‡³å›è°ƒå‡½æ•°è¿”å›trueæˆ–è€…è°ƒç”¨Stop()ï¼Œæ‰ç»“æŸå®šæ—¶å™¨ã€‚
+		//@para const TimerCB &cb,  ç”¨std::bindç»‘å®šçš„å‡½æ•°
+		//@para VecUint32 vec_interval, é—´éš”åˆ—è¡¨
+		//@return éæ³•å‚æ•°å°±è¿”å›false,é‡å¤Startè¿”å›false
 		bool Start(const IncTimerCB &cb, const VecUint32 &vec_interval);
-		//È±Ê¡Ê±¼ä¼ä¸ôÁĞ±í£º 10,60,60*5,60*30
+		//ç¼ºçœæ—¶é—´é—´éš”åˆ—è¡¨ï¼š 10,60,60*5,60*30
 		bool Start(const IncTimerCB &cb);
 		bool Stop();
 
@@ -159,7 +159,7 @@ namespace su
 	private:
 		Timer m_timer;
 		IncTimerCB m_cb;
-		VecUint32 m_vi; //vec_interval Ê±¼ä¼ä¸ô
+		VecUint32 m_vi; //vec_interval æ—¶é—´é—´éš”
 		uint32 m_vi_idx;
 	};
 

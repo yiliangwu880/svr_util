@@ -38,13 +38,13 @@ namespace
 			ret = s.insert(c1.CreateId()).second;
 			UNIT_ASSERT(ret);
 			ret = s.insert(c2.CreateId()).second;
-			UNIT_ASSERT(ret==false); //·Ç³£µÍ¸ÅÂÊ£¬ÔÙÃëÊ±¼ä±ß½çÔËÐÐ»áÊ§°Ü.
+			UNIT_ASSERT(ret==false); //éžå¸¸ä½Žæ¦‚çŽ‡ï¼Œå†ç§’æ—¶é—´è¾¹ç•Œè¿è¡Œä¼šå¤±è´¥.
 
 			uint64 id1 = c1.CreateId();
 			uint64 id2 = c1.CreateId();
 
 			//UNIT_INFO("%lld %lld", (id1 & 0xffffffff), (id2 & 0xffffffff));
-			ret = ((id1 & 0xffffffff) == (id2 & 0xffffffff));//·Ç³£µÍ¸ÅÂÊ£¬ÔÙÃëÊ±¼ä±ß½çÔËÐÐ»áÊ§°Ü.
+			ret = ((id1 & 0xffffffff) == (id2 & 0xffffffff));//éžå¸¸ä½Žæ¦‚çŽ‡ï¼Œå†ç§’æ—¶é—´è¾¹ç•Œè¿è¡Œä¼šå¤±è´¥.
 			UNIT_ASSERT(!ret);
 			ret = ((id1 >> 32)==(id2 >> 32));
 			UNIT_ASSERT(ret);

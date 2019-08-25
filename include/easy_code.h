@@ -1,6 +1,6 @@
 /*
 author: YiliangWu
-fun: ¼ò»¯´úÂë
+fun: ç®€åŒ–ä»£ç 
 
 */
 
@@ -12,9 +12,9 @@ fun: ¼ò»¯´úÂë
 
 namespace su
 {
-	//¼ò»¯µü´úÆ÷£¬Ñ­»·Ğ´·¨¡£Ï°¹ßÁË¼ò»¯Ğ´·¨£¬BUGÉÙ¡£
-	//for(const MfAddr &addr : vec_mf_addr) ÕâÖÖÓ¦¸Ã¸üºÃ
-	//¿¼ÂÇÉ¾µô FOR_IT FOR_IT_CONST
+	//ç®€åŒ–è¿­ä»£å™¨ï¼Œå¾ªç¯å†™æ³•ã€‚ä¹ æƒ¯äº†ç®€åŒ–å†™æ³•ï¼ŒBUGå°‘ã€‚
+	//for(const MfAddr &addr : vec_mf_addr) è¿™ç§åº”è¯¥æ›´å¥½
+	//è€ƒè™‘åˆ æ‰ FOR_IT FOR_IT_CONST
 #define FOR_IT(ctn)\
     for(auto it=(ctn).begin(); it!=(ctn).end(); ++it)
 
@@ -30,23 +30,23 @@ namespace su
 #define FOR_ARRAY_REVERSE(a)\
 	for(unsigned int i=ArrayLen(a); i<ArrayLen(a); --i)
 
-	//½ûÖ¹Àà¸³Öµ£¬¸´ÖÆ
+	//ç¦æ­¢ç±»èµ‹å€¼ï¼Œå¤åˆ¶
 #define DISNABLE_COPY_AND_ASSIGN(TypeName) \
     private:\
 	TypeName(const TypeName&); \
 	void operator=(const TypeName&)
 
 //////////////////////////////////////////////////////////////////////////
-//»ñÈ¡Ô­ÉúÊı×é³¤¶È
+//è·å–åŸç”Ÿæ•°ç»„é•¿åº¦
 //template<typename Array>
 //inline size_t ArrayLen(const Array &array)
 //{
 //	return sizeof(array)/sizeof(array[0]);
 //}
-//ÓĞĞ©ĞèÒª³£Á¿µÄµØ·½²»ÄÜº¯ÊıÀàĞÍ£¬ÏÈÓÃÕâ¸ö½â¾ö
+//æœ‰äº›éœ€è¦å¸¸é‡çš„åœ°æ–¹ä¸èƒ½å‡½æ•°ç±»å‹ï¼Œå…ˆç”¨è¿™ä¸ªè§£å†³
 #define ConstArrayLen(array) (sizeof(array)/sizeof((array)[0]))
 
-//ÁíÒ»ÖÖÓÃ·¨,ÕâÖÖ¿ÉÄÜ¸üºÃ£¬´ıÑéÖ¤
+//å¦ä¸€ç§ç”¨æ³•,è¿™ç§å¯èƒ½æ›´å¥½ï¼Œå¾…éªŒè¯
 template<typename T, std::size_t N> 
 constexpr std::size_t ArrayLen(T(&)[N])
 { // constexpr
@@ -77,7 +77,7 @@ inline void destructInPlace(T* p)
 
 //////////////////////////////////////////////////////////////////////////
 
-//Ğ´´óÊı×ÖÓÃÕâ¸ö£¬²»ÈİÒ×Ğ©´í
+//å†™å¤§æ•°å­—ç”¨è¿™ä¸ªï¼Œä¸å®¹æ˜“äº›é”™
 const unsigned int NUM_1W = 10000;
 const unsigned int NUM_10W = 10 * NUM_1W;
 const unsigned int NUM_100W = 100 * NUM_1W;

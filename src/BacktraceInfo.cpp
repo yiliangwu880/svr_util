@@ -3,7 +3,7 @@
 *@author derekyu
 *@date 2009-11-30
 *@version 1.0
-*@brief BacktraceInfoµÄÊµÏÖÎÄ¼ş
+*@brief BacktraceInfoçš„å®ç°æ–‡ä»¶
 *
 *	
 */
@@ -22,7 +22,7 @@ using namespace std;
 
 	namespace
 	{
-		//½âÎö mangling ×Ö·û´®
+		//è§£æ mangling å­—ç¬¦ä¸²
 		string demangle(const char* symbol)
 		{
 			size_t size;
@@ -57,7 +57,7 @@ using namespace std;
 
 	const char* CBacktraceInfo::GetBacktrackInfo()
 	{
-		//»ñÈ¡backtrack ×Ö·û´®
+		//è·å–backtrack å­—ç¬¦ä¸²
 		void* addr_buffer[MAX_BACKTRACE_SYMBOLS_NUMBER];
 		int addr_buffer_num = backtrace(addr_buffer, ConstArrayLen(addr_buffer));
 		if (addr_buffer_num <= 0)
@@ -65,7 +65,7 @@ using namespace std;
 			return "NO BACKTRACE.";
 		}
 
-		char **bt_str = backtrace_symbols(addr_buffer, addr_buffer_num); //ÀïÃæÓÃmallocÉú³É·µ»ØÖµ
+		char **bt_str = backtrace_symbols(addr_buffer, addr_buffer_num); //é‡Œé¢ç”¨mallocç”Ÿæˆè¿”å›å€¼
 		if (bt_str == NULL)
 		{
 			addr_buffer_num = 0;
@@ -90,8 +90,8 @@ using namespace std;
 
 
 
-	//signal º¯ÊıÓÃ·¨²Î¿¼http://www.kernel.org/doc/man-pages/online/pages/man2/signal.2.html
-	//backtrace £¬backtrace_symbolsº¯ÊıÓÃ·¨²Î¿¼ http://www.kernel.org/doc/man-pages/online/pages/man3/backtrace.3.html
+	//signal å‡½æ•°ç”¨æ³•å‚è€ƒhttp://www.kernel.org/doc/man-pages/online/pages/man2/signal.2.html
+	//backtrace ï¼Œbacktrace_symbolså‡½æ•°ç”¨æ³•å‚è€ƒ http://www.kernel.org/doc/man-pages/online/pages/man3/backtrace.3.html
 	void CBacktraceInfo::WidebrightSegvHandler(int signum)
 	{
 		std::string s = GetBacktrackInfo();

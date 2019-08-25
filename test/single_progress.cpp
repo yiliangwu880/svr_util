@@ -43,7 +43,7 @@ namespace
 
 }
 
-UNITTEST(test_signal_follow)//中断处理原理，证明中断信号会中断并使用主线程
+UNITTEST(test_signal_follow)//涓柇澶勭悊鍘熺悊锛岃瘉鏄庝腑鏂俊鍙蜂細涓柇骞朵娇鐢ㄤ富绾跨▼
 {
 	//test_signal_follow();
 	UNUSED(test_signal_follow);

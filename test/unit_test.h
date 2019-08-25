@@ -1,8 +1,8 @@
 /*
-¼òµ¥µÄµ¥Ôª²âÊÔ¹¦ÄÜ¡£
-	 Óï·¨¼ò½à
-	 ½á¹ûÏÔÊ¾ÔÚ±ê×¼Êä³ö£¬¿ÉÒÔÑ¡Ôñ½ÓÈë×Ô¼ºµÄÈÕÖ¾ÊµÏÖ¡£
-	 ´íÎóÒì³£´¦Àí
+ç®€å•çš„å•å…ƒæµ‹è¯•åŠŸèƒ½ã€‚
+	 è¯­æ³•ç®€æ´
+	 ç»“æœæ˜¾ç¤ºåœ¨æ ‡å‡†è¾“å‡ºï¼Œå¯ä»¥é€‰æ‹©æ¥å…¥è‡ªå·±çš„æ—¥å¿—å®ç°ã€‚
+	 é”™è¯¯å¼‚å¸¸å¤„ç†
 
 excamples:
 
@@ -33,7 +33,7 @@ public:
 	const char *m_unit_name = "";
 };
 
-//@para va_list vp, vp²»ĞèÒª»Øµ÷ÀïÃæÊÍ·Å
+//@para va_list vp, vpä¸éœ€è¦å›è°ƒé‡Œé¢é‡Šæ”¾
 typedef void (UnitTestPrintf)(bool is_error, const char * file, int line, const char *fun, const char * pattern, va_list vp);
 class UnitTestMgr
 {
@@ -68,7 +68,7 @@ private:
 				}\
 			}while(0)                                                   
 
-//Ö»³öÈÕÖ¾£¬²»Òì³£
+//åªå‡ºæ—¥å¿—ï¼Œä¸å¼‚å¸¸
 #define UNIT_CHECK(expression) do{  \
 				if(!(expression))                                                              \
 				{\

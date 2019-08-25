@@ -37,7 +37,7 @@ namespace
         time_t real_sec = SysTime::Obj().Sec();
         UNIT_ASSERT(0 != real_sec);
 
-        //²âÊÔµ÷ÊÔÊ±¼ä
+        //æµ‹è¯•è°ƒè¯•æ—¶é—´
         ///////////////////////////////////
         SysTime::Obj().AddTimerOffset(0);
         const char *p1 = NULL;
@@ -79,10 +79,10 @@ namespace
         UNIT_ASSERT(31==SysTime::Obj().GetDaysInMonth());
         UNIT_ASSERT(SysTime::Obj().SetTimeByStr("2100-09-01 00-00-00"));
         UNIT_ASSERT(30==SysTime::Obj().GetDaysInMonth());
-        UNIT_ASSERT(SysTime::Obj().SetTimeByStr("2100-12-41 00-00-00"));//¹ÊÒâĞ´41ÈÕ£¬ÀïÃæ»áµ÷Õû
+        UNIT_ASSERT(SysTime::Obj().SetTimeByStr("2100-12-41 00-00-00"));//æ•…æ„å†™41æ—¥ï¼Œé‡Œé¢ä¼šè°ƒæ•´
         UNIT_ASSERT(31==SysTime::Obj().GetDaysInMonth());
 
-        //²âÊÔgetMonthPeriodCnt
+        //æµ‹è¯•getMonthPeriodCnt
         UNIT_ASSERT(SysTime::Obj().SetTimeByStr("1970-01-01 08-00-00"));
         UNIT_ASSERT(1 == SysTime::Obj().GetMonthPeriodCnt());
         UNIT_ASSERT(SysTime::Obj().SetTimeByStr("1970-01-31 23-59-59"));;
@@ -92,7 +92,7 @@ namespace
         UNIT_ASSERT(SysTime::Obj().SetTimeByStr("2015-12-22 00-00-00"));
         UNIT_ASSERT(552 == SysTime::Obj().GetMonthPeriodCnt());
 
-        //²âÊÔgetDayPeriodCnt
+        //æµ‹è¯•getDayPeriodCnt
         UNIT_ASSERT(SysTime::Obj().SetTimeByStr("1970-01-01 08-00-00"));
         UNIT_ASSERT(0 == SysTime::Obj().GetDayPeriodCnt());
         UNIT_ASSERT(SysTime::Obj().SetTimeByStr("1970-01-04 00-00-00"));
@@ -172,7 +172,7 @@ namespace
 		time_t real_sec = SysTime::Obj().Sec();
 		UNIT_ASSERT(0 != real_sec);
 
-		//²âÊÔµ÷ÊÔÊ±¼ä
+		//æµ‹è¯•è°ƒè¯•æ—¶é—´
 		///////////////////////////////////
 		SysTime::Obj().AddTimerOffset(0);
 		const char *p1 = NULL;
@@ -242,7 +242,7 @@ namespace
 		time_t real_sec = SysTime::Obj().Sec();
 		UNIT_ASSERT(0 != real_sec);
 
-		//²âÊÔµ÷ÊÔÊ±¼ä
+		//æµ‹è¯•è°ƒè¯•æ—¶é—´
 		///////////////////////////////////
 		SysTime::Obj().AddTimerOffset(0);
 		const char *p1 = NULL;

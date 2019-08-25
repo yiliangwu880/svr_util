@@ -14,11 +14,11 @@ using namespace su;
 using namespace su;
 namespace
 {
-	//²âÊÔSysTimeÆ«ÒÆ
+	//æµ‹è¯•SysTimeåç§»
 	void test1()
 	{
 		TimeDriver::Obj().Clear();
-		//Õâ´úÂë²âÊÔ³ö´í£¬Èç¹ûµÍ¸ÅÂÊÏà²îÒ»Ãë¾ÍÕı³£¡£
+		//è¿™ä»£ç æµ‹è¯•å‡ºé”™ï¼Œå¦‚æœä½æ¦‚ç‡ç›¸å·®ä¸€ç§’å°±æ­£å¸¸ã€‚
 		SysTime::Obj().SetTimeOffset(0);
 		SysTime::Obj().Refresh();
 		time_t a = SysTime::Obj().Sec();
@@ -59,7 +59,7 @@ namespace
 
 	}
 
-	//²âÊÔ»Øµ÷ÀïÃæÓÃtimer½Ó¿Ú
+	//æµ‹è¯•å›è°ƒé‡Œé¢ç”¨timeræ¥å£
 	static uint32 s_cnt_3 = 0;
 	//   static uint32 s_t3_id = 0;
 	void TimeCBFun3(uint32 para1, void *para2)
@@ -128,7 +128,7 @@ namespace
 		UNIT_ASSERT(0 == TimeDriver::Obj().GetTimeNum());
 	}
 
-	//loop timer»Øµ÷ÀïÃæÄÜÉ¾³ıtimer
+	//loop timerå›è°ƒé‡Œé¢èƒ½åˆ é™¤timer
 	static uint32 s_cnt_5 = 0;
 	void TimeCBFun5(uint32 para1, void *para2)
 	{
@@ -186,7 +186,7 @@ namespace
 	}
 
 
-	//²âÊÔclear()
+	//æµ‹è¯•clear()
 	static uint32 s_cnt_6 = 0;
 	void TimeCBFun6(uint32 para1, void *para2)
 	{
@@ -229,7 +229,7 @@ namespace
 		UNIT_ASSERT(2 == s_cnt_6);
 	}
 
-	//²âÊÔtimer_id»ØÊÕ  //²âÊÔ»Øµ÷µ÷ÓÃ½Ó¿Ú setTimer //²âÊÔ»Øµ÷µ÷ÓÃ½Ó¿Ú setLoopTimer
+	//æµ‹è¯•timer_idå›æ”¶  //æµ‹è¯•å›è°ƒè°ƒç”¨æ¥å£ setTimer //æµ‹è¯•å›è°ƒè°ƒç”¨æ¥å£ setLoopTimer
 	static uint32 s_cnt_7 = 0;
 	void TimeCBFun7(uint32 para1, void *para2)
 	{
@@ -305,7 +305,7 @@ namespace
 		UNIT_ASSERT(5 == s_cnt_7);
 	}
 
-	//²âÊÔ»Øµ÷µ÷ÓÃ½Ó¿Ú delTimer
+	//æµ‹è¯•å›è°ƒè°ƒç”¨æ¥å£ delTimer
 	namespace
 	{
 		vector< Timer> all_tm_t8(5);
@@ -345,7 +345,7 @@ namespace
 		UNIT_ASSERT(2 == s_cnt_8);
 	}
 
-	//²âÊÔ»Øµ÷µ÷ÓÃ½Ó¿Ú clear();
+	//æµ‹è¯•å›è°ƒè°ƒç”¨æ¥å£ clear();
 	static uint32 s_cnt_9 = 0;
 	void TimeCBFun9(uint32 para1, void *para2)
 	{
@@ -373,7 +373,7 @@ namespace
 		UNIT_ASSERT(0 == TimeDriver::Obj().GetTimeNum());
 	}
 
-	//²âÊÔÊıÁ¿Òç³ö
+	//æµ‹è¯•æ•°é‡æº¢å‡º
 	static uint32 s_cnt_10 = 0;
 	void TimeCBFun10(uint32 para1, void *para2)
 	{
@@ -412,7 +412,7 @@ namespace
 		class MyTimer : public Timer
 		{
 		public:
-			//timeout»á»Øµ÷º¯Êı. timeout»Øµ÷Ç°±äS_WAIT_START_TIMER ×´Ì¬
+			//timeoutä¼šå›è°ƒå‡½æ•°. timeoutå›è°ƒå‰å˜S_WAIT_START_TIMER çŠ¶æ€
 			virtual void OnTimer(void *para) 
 			{
 				stop_cnt++;
@@ -459,7 +459,7 @@ namespace
 		SysTime::Obj().SetTimeOffset(0);
 		TimeDriver::Obj().Clear();
 		bool r = false;
-		{//²âÊÔTimeDriver::Obj().clear()
+		{//æµ‹è¯•TimeDriver::Obj().clear()
 			Timer t1, t2;
 			t1.StartTimer(1, nullptr);
 			t2.StartTimer(1, testFreeCb);
@@ -480,7 +480,7 @@ namespace
 
 			UNIT_ASSERT(2 == TimeDriver::Obj().GetTimeNum());
 		}
-		//²âÊÔ¾Ö²¿timer×Ô¶¯ÊÍ·Å
+		//æµ‹è¯•å±€éƒ¨timerè‡ªåŠ¨é‡Šæ”¾
 		UNIT_ASSERT(0 == TimeDriver::Obj().GetTimeNum());//free t1, t2
 		{
 			Timer *t1=new Timer();
@@ -570,7 +570,7 @@ namespace
 			UNIT_ASSERT(2 == IncTimer_cnt1);
 
 		}
-		//²âÊÔ»Øµ÷·µ»Øtrue½áÊø
+		//æµ‹è¯•å›è°ƒè¿”å›trueç»“æŸ
 		{
 			IncTimer timer;
 			SysTime::Obj().SetTimeOffset(0);
@@ -586,7 +586,7 @@ namespace
 			TimeDriver::Obj().CheckTimeOut();
 			UNIT_ASSERT(1 == IncTimer_cnt1);
 
-			//timerÍ£ÁË
+			//timeråœäº†
 			SysTime::Obj().AddTimerOffset(vi[1]);
 			TimeDriver::Obj().CheckTimeOut();
 			UNIT_ASSERT(1 == IncTimer_cnt1);
@@ -637,7 +637,7 @@ namespace
 
 		}
 
-		{//²âÊÔÓÃ»§Ö¸¶¨Ê±¼ä¼ä¸ô
+		{//æµ‹è¯•ç”¨æˆ·æŒ‡å®šæ—¶é—´é—´éš”
 			IncTimer timer;
 			SysTime::Obj().SetTimeOffset(0);
 			TimeDriver::Obj().Clear();

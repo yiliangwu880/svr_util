@@ -1,5 +1,5 @@
 /*
-Ê±¼äÏà¹Ø
+æ—¶é—´ç›¸å…³
 */
 
 #include "time/su_timer.h"
@@ -35,7 +35,7 @@ namespace su
 
 		time_t sec = SysTime::Obj().Sec();
 		time_t key = sec + interval_sec;
-		if (key < sec)//Ê±¼äÌ«´óÒç³ö£¬ºÃ¼¸Ç§Äê¶¼²»¹ýÆÚ£¬Ã»ÒâÒå¡£
+		if (key < sec)//æ—¶é—´å¤ªå¤§æº¢å‡ºï¼Œå¥½å‡ åƒå¹´éƒ½ä¸è¿‡æœŸï¼Œæ²¡æ„ä¹‰ã€‚
 		{
 			L_ERROR("timer interval is over load!!");
 			return 0;
@@ -81,7 +81,7 @@ namespace su
 
 	TimeDriver::~TimeDriver()
 	{
-		Clear(); //²»µôÓÃ£¬½ø³Ì¹Ø±ÕµÄÊ±ºò¾Í±ÀÀ£¡£ÒòÎª¿ÉÄÜ TimeDriver ÏÈÊÍ·Å£¬½Ó×ÅtimerÊÍ·Å¾ÍÕÒ²»µ½ÓÐÐ§¶ÔÏóÁË¡£
+		Clear(); //ä¸æŽ‰ç”¨ï¼Œè¿›ç¨‹å…³é—­çš„æ—¶å€™å°±å´©æºƒã€‚å› ä¸ºå¯èƒ½ TimeDriver å…ˆé‡Šæ”¾ï¼ŒæŽ¥ç€timeré‡Šæ”¾å°±æ‰¾ä¸åˆ°æœ‰æ•ˆå¯¹è±¡äº†ã€‚
 	}
 
 	void TimeDriver::CheckTimeOut()
@@ -102,7 +102,7 @@ namespace su
 				m_time2data.erase(it++);
 			}
 		}
-        //ÖØÉèÑ­»·µÄtimer
+        //é‡è®¾å¾ªçŽ¯çš„timer
         FOR_IT(vec_timeout)
 		{
 			const inner::CtrlData &d = *it;
@@ -118,7 +118,7 @@ namespace su
             }
         }
 
-        //±£Ö¤×îºóµ÷ÓÃ£¬·ÀÖ¹»Øµ÷µÄÊ±ºò£¬µ÷ÓÃ½Ó¿Ú¸Ä±ä¶ÔÏó×´Ì¬¡£
+        //ä¿è¯æœ€åŽè°ƒç”¨ï¼Œé˜²æ­¢å›žè°ƒçš„æ—¶å€™ï¼Œè°ƒç”¨æŽ¥å£æ”¹å˜å¯¹è±¡çŠ¶æ€ã€‚
 		FOR_IT_CONST(vec_timeout)
         {
 			const inner::CtrlData &d = *it;
@@ -149,7 +149,7 @@ namespace su
 
 	Timer::~Timer()
 	{
-		StopTimer();//ÀïÃæ±£Ö¤TimerÖ¸ÕëÉ¾µô£¬²»»áÒ°µô
+		StopTimer();//é‡Œé¢ä¿è¯TimeræŒ‡é’ˆåˆ æŽ‰ï¼Œä¸ä¼šé‡ŽæŽ‰
 	}
 
 	void Timer::OnTimerCB()
@@ -191,7 +191,7 @@ namespace su
 		{
 			return false;
 		}
-		TimeDriver::Obj().DelTimer(this);//ÀïÃæ±£Ö¤TimerÖ¸ÕëÉ¾µô£¬²»»áÒ°µô
+		TimeDriver::Obj().DelTimer(this);//é‡Œé¢ä¿è¯TimeræŒ‡é’ˆåˆ æŽ‰ï¼Œä¸ä¼šé‡ŽæŽ‰
 
 		m_state = S_WAIT_START_TIMER;
 		return true;
@@ -216,7 +216,7 @@ namespace su
 		{
 			return false;
 		}
-		//³É¹¦²Å¸Ä±ä¶ÔÏó×´Ì¬
+		//æˆåŠŸæ‰æ”¹å˜å¯¹è±¡çŠ¶æ€
 		m_cb = cb;
 		m_vi_idx = 0;
 		m_vi = vec_interval;
@@ -241,7 +241,7 @@ namespace su
 		{
 			return;
 		}
-		//¼ÌÐøµÝÔö¶¨Ê±Æ÷
+		//ç»§ç»­é€’å¢žå®šæ—¶å™¨
 		m_vi_idx++;
 		if (m_vi_idx>(m_vi.size()-1))
 		{

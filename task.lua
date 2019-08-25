@@ -1,8 +1,8 @@
 
-SingleProgress ¼Ó¸üÈİÒ×¸´ÓÃ²ã¡£
+SingleProgress åŠ æ›´å®¹æ˜“å¤ç”¨å±‚ã€‚
 
 fun()
 
 
-	//for(const MfAddr &addr : vec_mf_addr) ÕâÖÖÓ¦¸Ã¸üºÃ
-	//¿¼ÂÇÉ¾µô FOR_IT FOR_IT_CONST
+	//for(const MfAddr &addr : vec_mf_addr) è¿™ç§åº”è¯¥æ›´å¥½
+	//è€ƒè™‘åˆ æ‰ FOR_IT FOR_IT_CONST

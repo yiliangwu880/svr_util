@@ -10,7 +10,7 @@ brief:
 
 namespace su 
 {
-	//³£ÓÃÈİÆ÷ÀàĞÍ¼òĞ´
+	//å¸¸ç”¨å®¹å™¨ç±»å‹ç®€å†™
 typedef std::map<uint32, uint32>			Uint32_2_Uint32;
 typedef std::map<int32, int32>				Int32_2_Int32;
 typedef std::map<std::string, std::string>  Str2Str;

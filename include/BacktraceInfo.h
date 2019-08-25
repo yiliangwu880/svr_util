@@ -1,16 +1,16 @@
 /**
-*@brief ½ø³Ì±ÀÀ££¬Êä³ö¶ÑÕ»ÈÕÖ¾
-* Í¨¹ıº¯Êı
+*@brief è¿›ç¨‹å´©æºƒï¼Œè¾“å‡ºå †æ ˆæ—¥å¿—
+* é€šè¿‡å‡½æ•°
 int backtrace (void **buffer, int size);
 char **backtrace_symbols (void *const *buffer, int size);
-*	»ñÈ¡¶ÑÕ»ĞÅÏ¢
+*	è·å–å †æ ˆä¿¡æ¯
 
-±àÒëÁ´½ÓÑ¡ÏîĞèÒª¼Ó -rdynamic
+ç¼–è¯‘é“¾æ¥é€‰é¡¹éœ€è¦åŠ  -rdynamic
 
-²é¿´ÈÕÖ¾Ê±£¬¿ÉÒÔÓÃc++filt¹¤¾ß½âÎöĞÅÏ¢£¬ÀıÈç£º
+æŸ¥çœ‹æ—¥å¿—æ—¶ï¼Œå¯ä»¥ç”¨c++filtå·¥å…·è§£æä¿¡æ¯ï¼Œä¾‹å¦‚ï¼š
 c++filt _Z18print_stack_framesi
 
-²é¿´µØÖ·µÄÎÄ¼şÎ»ÖÃ£¬ÀıÈç£º
+æŸ¥çœ‹åœ°å€çš„æ–‡ä»¶ä½ç½®ï¼Œä¾‹å¦‚ï¼š
 addr2line -e ./zonesvr 0xbd0f18
 */
 
@@ -30,12 +30,12 @@ addr2line -e ./zonesvr 0xbd0f18
 		}
 		CBacktraceInfo();
 		/**
-		*»ñÈ¡ËùÓĞ¶ÑÕ»ĞÅÏ¢
-		*@return ÓÃ×Ö·û´®ÃèÊöµÄ¶ÑÕ»ĞÅÏ¢, ²»»á·µ»ØNULL
+		*è·å–æ‰€æœ‰å †æ ˆä¿¡æ¯
+		*@return ç”¨å­—ç¬¦ä¸²æè¿°çš„å †æ ˆä¿¡æ¯, ä¸ä¼šè¿”å›NULL
 		*/
 		const char* GetBacktrackInfo();
 
-		//mainº¯Êıµ÷ÓÃ×¢²á£¬ËÀ»ú¾Í»áµ±Ç°Ä¿Â¼Êä³ö¶ÑÕ»ÈÕÖ¾ÎÄ¼ş£¨hangup_log.log£©¡£
+		//mainå‡½æ•°è°ƒç”¨æ³¨å†Œï¼Œæ­»æœºå°±ä¼šå½“å‰ç›®å½•è¾“å‡ºå †æ ˆæ—¥å¿—æ–‡ä»¶ï¼ˆhangup_log.logï¼‰ã€‚
 		void RegHangUpHandler();
 
 	private:
@@ -43,7 +43,7 @@ addr2line -e ./zonesvr 0xbd0f18
 		static void s_WidebrightSegvHandler(int signum);
 
 	private:
-		const static int MAX_BACKTRACE_SYMBOLS_NUMBER = 50; //!<×î¶à´òÓ¡µÄ¶ÑÕ»²ã´ÎÊı
+		const static int MAX_BACKTRACE_SYMBOLS_NUMBER = 50; //!<æœ€å¤šæ‰“å°çš„å †æ ˆå±‚æ¬¡æ•°
 		sig_t s_old_SIGABRT;
 		sig_t s_old_SIGSEGV;
 		sig_t s_old_SIGFPE;
