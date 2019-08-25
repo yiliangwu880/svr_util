@@ -85,17 +85,19 @@ private:
 
 typedef std::function<void(void)> ExitProccessCB;
 //更高层应用 SingleProgress
-class SPCheckArg
+class SPMgr
 {
-	SPCheckArg()
+	SPMgr()
 		:m_cb(nullptr)
 	{}
 public:
-	static SPCheckArg &Obj()
+	static SPMgr &Obj()
 	{
-		static SPCheckArg d;
+		static SPMgr d;
 		return d;
 	}
+	//启动单例进程， 检查main参数， 带"stop"参数就是停止进程。
+	void Check(int argc, char* argv[], const char *pname, ExitProccessCB cb = nullptr);
 	//@fun 启动进程
 	//@para const char *pname, 进程名
 	//@para ExitProccessCB c, 如果关闭进程前，需要处理逻辑，传入回调函数执行。

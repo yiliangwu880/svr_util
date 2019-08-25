@@ -40,10 +40,6 @@ protected:
 	~Singleton() {}
 
 public:
-	//static T& instance()
- //   {
- //       return Obj();
-	//}
 	static T& Obj()
 	{
 		static T t;

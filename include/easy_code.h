@@ -13,6 +13,8 @@ fun: 简化代码
 namespace su
 {
 	//简化迭代器，循环写法。习惯了简化写法，BUG少。
+	//for(const MfAddr &addr : vec_mf_addr) 这种应该更好
+	//考虑删掉 FOR_IT FOR_IT_CONST
 #define FOR_IT(ctn)\
     for(auto it=(ctn).begin(); it!=(ctn).end(); ++it)
 
