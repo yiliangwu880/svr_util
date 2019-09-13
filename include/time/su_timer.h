@@ -74,8 +74,8 @@ namespace su
 	class TimeDriver : public Singleton<TimeDriver>
 	{
 		friend class Timer;
-        typedef std::vector<inner::CtrlData> VecData;
-		typedef std::multimap<time_t, inner::CtrlData> TimeMapData;   //到期绝对时间 map 数据   需要优化，频繁增加删除会有内存碎片
+        using VecData = std::vector<inner::CtrlData>;
+		using TimeMapData = std::multimap<time_t, inner::CtrlData>;   //到期绝对时间 map 数据   需要优化，频繁增加删除会有内存碎片
 
 
 	public:
@@ -100,7 +100,7 @@ namespace su
 		TimeMapData m_time2data;
 	};
 
-	typedef std::function<void(void)> TimerCB;
+	using TimerCB = std::function<void(void)>;
 	//里面做创建，销毁定时器，保证不泄露资源, 不会回调不存在的Timer
 	class Timer
 	{
@@ -136,7 +136,7 @@ namespace su
 	};
 	
 
-	typedef std::function<bool(void)> IncTimerCB;
+	using IncTimerCB = std::function<bool(void)>;
 	//递增定时器，通常断线重连需要用。
 	class IncTimer
 	{

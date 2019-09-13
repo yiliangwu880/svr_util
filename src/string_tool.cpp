@@ -154,8 +154,6 @@ void StringTool::split(const std::string& src_str, const std::string& separator,
 
 void StringTool::split(const std::string& str, const VecStr& separatorList, VecStr& out, size_t max_out_size)
 {
-    typedef VecStr container;
-
     out.clear();
     if(max_out_size == 0) 
         return;
@@ -170,7 +168,7 @@ void StringTool::split(const std::string& str, const VecStr& separatorList, VecS
     std::string::size_type begin = 0;
     for(std::string::size_type i = 0; i < str.size(); i++)
     {
-        for(container::const_iterator it = splitSeparatorList.begin(); it != splitSeparatorList.end(); ++it)
+        for(VecStr::const_iterator it = splitSeparatorList.begin(); it != splitSeparatorList.end(); ++it)
         {
             if(it->compare(0, it->size(), str, i, it->size()) == 0)
             {

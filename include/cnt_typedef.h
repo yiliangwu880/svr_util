@@ -11,21 +11,19 @@ brief:
 namespace su 
 {
 	//常用容器类型简写
-typedef std::map<uint32, uint32>			Uint32_2_Uint32;
-typedef std::map<int32, int32>				Int32_2_Int32;
-typedef std::map<std::string, std::string>  Str2Str;
-
-typedef std::set<uint32>					SetUint32;
-typedef std::set<uint64>					SetUint64;
-typedef std::set<std::string>				SetStr;
-
-typedef std::vector<std::string>	VecStr;
-typedef std::vector<uint8>			VecUint8;
-typedef std::vector<uint16>			VecUint16;
-typedef std::vector<int32>			VecInt32;
-typedef std::vector<int>			VecInt;
-typedef std::vector<uint32>			VecUint32;
-typedef std::vector<uint64>			VecUint64;
-typedef std::vector<int64>			VecInt64;
+using Uint32_2_Uint32 = std::map<uint32, uint32>			;
+using Int32_2_Int32   = std::map<int32, int32>				;
+using Str2Str         = std::map<std::string, std::string>	;
+using SetUint32       = std::set<uint32>					;
+using SetUint64       = std::set<uint64>					;
+using SetStr          = std::set<std::string>				;
+using VecStr          = std::vector<std::string>			;
+using VecUint8        = std::vector<uint8>					;
+using VecUint16       = std::vector<uint16>					;
+using VecInt32        = std::vector<int32>					;
+using VecInt          = std::vector<int>					;
+using VecUint32       = std::vector<uint32>					;
+using VecUint64       = std::vector<uint64>					;
+using VecInt64        = std::vector<int64>					;
 
 }

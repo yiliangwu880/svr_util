@@ -434,11 +434,9 @@ void testNormalCdBase()
 
 void testNormalCdBase2()
 {
-	typedef CdDefault SysCD;
-
     {
         SysTime::Obj().SetTimeOffset(0);
-		SysCD obj(2);
+		CdDefault obj(2);
 
 		UNIT_ASSERT(!obj.IsCD());
 		obj.StartCD();
@@ -456,7 +454,7 @@ void testNormalCdBase2()
 
     {
         SysTime::Obj().SetTimeOffset(0);
-		SysCD obj(2);
+		CdDefault obj(2);
 
 		UNIT_ASSERT(!obj.IsCD());
 		obj.StartCD();

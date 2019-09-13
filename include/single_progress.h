@@ -83,7 +83,7 @@ private:
 };
 
 
-typedef std::function<void(void)> ExitProccessCB;
+using ExitProccessCB = std::function<void(void)>;
 //更高层应用 SingleProgress
 class SPMgr
 {

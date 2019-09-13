@@ -21,7 +21,7 @@ addr2line -e ./zonesvr 0xbd0f18
 
 	class CBacktraceInfo
 	{
-		typedef void(*sig_t)(int);
+		using SigCb =void(*)(int);
 	public:
 		static CBacktraceInfo &Obj()
 		{
@@ -44,9 +44,9 @@ addr2line -e ./zonesvr 0xbd0f18
 
 	private:
 		const static int MAX_BACKTRACE_SYMBOLS_NUMBER = 50; //!<最多打印的堆栈层次数
-		sig_t s_old_SIGABRT;
-		sig_t s_old_SIGSEGV;
-		sig_t s_old_SIGFPE;
+		SigCb s_old_SIGABRT;
+		SigCb s_old_SIGSEGV;
+		SigCb s_old_SIGFPE;
 	};
 
 #define BT_STR()   CBacktraceInfo::GetBacktrackInfo()
