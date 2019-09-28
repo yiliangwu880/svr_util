@@ -1,7 +1,0 @@
-
-
-SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin/samples)
-
-ADD_SUBDIRECTORY(server_prj)
-ADD_SUBDIRECTORY(client_prj)
-

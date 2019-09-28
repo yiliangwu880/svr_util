@@ -5,6 +5,8 @@ name=value
 name = 3
 配置文件格式2：数组格式如下：(值不支持有,=字符)
 name:v0,v1,v2 ...
+
+注意： 发现win格式的文档会读取失败，待解决
 */
 #pragma once
 #include "typedef.h"
@@ -19,7 +21,8 @@ public:
 
     const char *GetStr(const char *name);
     int GetInt(const char *name);
-    uint64 GetUint64(const char *name);
+	uint64 GetUint64(const char *name);
+	double GetDouble(const char *name);
     void GetStrArray(const char *name, VecStr &vec_str);
     void GetIntArray(const char *name, VecInt &vec_int);
     //获取重复变量名，给警告，通常填错了。

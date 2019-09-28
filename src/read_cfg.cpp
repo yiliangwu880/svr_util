@@ -88,6 +88,21 @@ uint64 Config::GetUint64( const char *name )
     return num;
 }
 
+double Config::GetDouble(const char *name)
+{
+	Str2Str::const_iterator it = m_str_2_str.find(name);
+	if (it == m_str_2_str.end())
+	{
+		return 0;
+	}
+	double num = 0;
+
+	sscanf((it->second).c_str(), "%lf", &num);
+
+	return num;
+
+}
+
 void Config::GetIntArray( const char *name, VecInt &vec_int )
 {
     vec_int.clear();

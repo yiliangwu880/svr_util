@@ -1,4 +1,6 @@
 
+实现 守护进程 参考 man daemon
+
 #define DEBUG_ASSERT(pointer, info, ...)	\
 	if(!pointer)	\
 	{	\

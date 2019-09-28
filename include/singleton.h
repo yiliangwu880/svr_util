@@ -27,13 +27,8 @@ private:
 };
 
 
-template <typename T, bool INIT = true>
-class Singleton : private Noncopyable
-{
-};
-
 template <typename T>
-class Singleton<T,true> : private Noncopyable
+class Singleton : private Noncopyable
 {
 protected:
 	Singleton() {}
@@ -42,8 +37,26 @@ protected:
 public:
 	static T& Obj()
 	{
-		static T t;
-		return t;
+		if (!m_obj)
+			m_obj = new T;
+
+		return *m_obj;
 	}
+
+	static void Free()
+	{
+		if (m_obj)
+			delete m_obj;
+
+		m_obj = nullptr;
+	}
+
+private:
+	static T* m_obj;
+
 };
+
+template<class T>
+T* Singleton<T>::m_obj = nullptr;  //≥ı ºªØ
+
 

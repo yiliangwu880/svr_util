@@ -55,7 +55,7 @@ void DefaultLog::setStdOut(bool is_std_out)
 
 
 DefaultLog::DefaultLog(const char *fname)
-	:m_log_lv(LL_DEBUG)
+	:m_log_lv(LL_TRACE)
 	, m_file(NULL)
 	, m_is_std_out(true)
 {
@@ -101,7 +101,7 @@ void DefaultLog::Printf(LogLv lv, const char * file, int line, const char *fun, 
 	s.append(" ");
 	s.append(GetLogLevelStr(lv));
 	s.append(pattern);
-	if (lv <= m_log_lv)
+	//if (lv <= m_log_lv)
 	{
 		s.append("  --");
 		s.append(file);
@@ -147,7 +147,7 @@ const char * DefaultLog::GetLogLevelStr(LogLv lv) const
 	case LL_INFO:
 		return "[info]  ";
 		break;
-	case LL_ANY:
+	case LL_TRACE:
 		return "[any]   ";
 		break;
 	}
