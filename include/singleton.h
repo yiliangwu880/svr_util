@@ -1,10 +1,7 @@
-#pragma once
-
-#include <assert.h>
-
-
 /************************************************************************/
 /* 
+	注意：阻止不了用户创建多个对象。 比如 concreterClass a; 用户自己负责。
+
 Example:
 class concreterClass : public SingletonBase<concreterClass>
 {
@@ -14,6 +11,12 @@ concreterClass(){};
 };
 */
 /************************************************************************/
+#pragma once
+
+#include <assert.h>
+
+
+
 
 class Noncopyable
 {
@@ -32,7 +35,7 @@ class Singleton : private Noncopyable
 {
 protected:
 	Singleton() {}
-	~Singleton() {}
+	virtual ~Singleton() {}
 
 public:
 	static T& Obj()
