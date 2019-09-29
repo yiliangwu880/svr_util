@@ -7,6 +7,3 @@ rm -rf *
 cd ..
 sh build.sh
 
-cp test_build.sh ./Debug/bin/build.sh
-cp test_clearBuild.sh ./Debug/bin/clearBuild.sh
-cp test_cfg.txt ./Debug/bin/

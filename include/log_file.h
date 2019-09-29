@@ -40,6 +40,7 @@ class ILogPrinter
 {
 public:
 	virtual void Printf(LogLv lv, const char * file, int line, const char *fun, const char * pattern, va_list vp) = 0;
+	virtual void flush(){};
 	
 };
 
@@ -48,6 +49,7 @@ class DefaultLog : public ILogPrinter
 {
 public:
 	virtual void Printf(LogLv lv, const char * file, int line, const char *fun, const char * pattern, va_list vp) override;
+	virtual void flush() override;
 public:
 	//para:const char *fname, 文件路径名
 	explicit DefaultLog(const char *fname = "log.txt");
@@ -55,7 +57,6 @@ public:
 	void setShowLv(LogLv lv);
 	//print log in std out.
 	void setStdOut(bool is_std_out);
-	void flush();
 private:
 	const char * GetLogLevelStr(LogLv lv) const;
 
@@ -80,7 +81,7 @@ public:
 	void Printf(LogLv lv, const char * file, int line, const char *fun, const char * pattern, ...) ;
 	void Printf(LogLv lv, const char * file, int line, const char *fun, const char * pattern, va_list vp);
 	void PrintfCond(LogLv lv, const char * file, int line, const char *fun, const char * cond, const char * pattern="", ...) ;
-
+	void flush();
 
 private:
 	LogMgr();

@@ -36,6 +36,11 @@ void LogMgr::PrintfCond(LogLv lv, const char * file, int line, const char *fun, 
 	va_end(vp);
 }
 
+void LogMgr::flush()
+{
+	m_iprinter->flush();
+}
+
 LogMgr::LogMgr()
 	:m_log("log.txt")
 	, m_iprinter(nullptr)

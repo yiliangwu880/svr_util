@@ -13,7 +13,7 @@ vs浏览代码：
 
 
 目录结构：
-	Debug		             ==cmake编译目录
+	bin		             	 ==执行文件
 	include		             ==用户用的头文件
 	lib                      ==用户用的静态库
 	samples					 == 使用例子

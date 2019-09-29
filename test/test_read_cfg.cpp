@@ -15,7 +15,7 @@ namespace
 
 	void test1()
 	{
-        g_cfg.init("test_cfg.txt");
+        g_cfg.init("cfg.txt");
 
 		assert(string(g_cfg.GetStr("no")) == string(""));
         assert(string(g_cfg.GetStr("name1"))==string("string"));
