@@ -52,7 +52,7 @@ public:
 	virtual void flush() override;
 public:
 	//para:const char *fname, 文件路径名
-	explicit DefaultLog(const char *fname = "log.txt");
+	explicit DefaultLog(const char *fname = "svr_util_log.txt");
 	~DefaultLog();
 	void setShowLv(LogLv lv);
 	//print log in std out.
