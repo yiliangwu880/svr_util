@@ -16,13 +16,13 @@ void LogMgr::Printf(LogLv lv, const char * file, int line, const char *fun, cons
 {
 	va_list vp;
 	va_start(vp, pattern);
-	m_iprinter->Printf(lv, file, line, fun, pattern, vp);
+	GetILogPrinter().Printf(lv, file, line, fun, pattern, vp);
 	va_end(vp);
 }
 
 void LogMgr::Printf(LogLv lv, const char * file, int line, const char *fun, const char * pattern, va_list vp)
 {
-	m_iprinter->Printf(lv, file, line, fun, pattern, vp);
+	GetILogPrinter().Printf(lv, file, line, fun, pattern, vp);
 }
 
 
@@ -32,20 +32,28 @@ void LogMgr::PrintfCond(LogLv lv, const char * file, int line, const char *fun, 
 	fmt.append(pattern);
 	va_list vp;
 	va_start(vp, pattern);
-	m_iprinter->Printf(lv, file, line, fun, fmt.c_str(), vp);
+	GetILogPrinter().Printf(lv, file, line, fun, fmt.c_str(), vp);
 	va_end(vp);
 }
 
 void LogMgr::flush()
 {
-	m_iprinter->flush();
+	GetILogPrinter().flush();
 }
 
 LogMgr::LogMgr()
-	:m_log("log.txt")
-	, m_iprinter(nullptr)
+	:m_iprinter(nullptr)
 {
-	m_iprinter = &m_log;
+}
+
+su::ILogPrinter &LogMgr::GetILogPrinter()
+{
+	if (nullptr == m_iprinter)
+	{// 使用默认才创建s_log对象
+		static DefaultLog s_log;
+		m_iprinter = &s_log;
+	}
+	return *m_iprinter;
 }
 
 void DefaultLog::flush()

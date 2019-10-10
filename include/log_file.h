@@ -85,9 +85,8 @@ public:
 
 private:
 	LogMgr();
-
+	ILogPrinter &GetILogPrinter();
 private:
-	DefaultLog m_log;
 	ILogPrinter *m_iprinter;
 };
 
