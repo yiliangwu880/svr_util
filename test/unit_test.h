@@ -1,11 +1,12 @@
 /*
-version: 1.01
-ç®€å•çš„å•å…ƒæµ‹è¯•åŠŸèƒ½ã€‚
-	 è¯­æ³•ç®€æ´
-	 ç»“æœæ˜¾ç¤ºåœ¨æ ‡å‡†è¾“å‡ºï¼Œå¯ä»¥é€‰æ‹©æ¥å…¥è‡ªå·±çš„æ—¥å¿—å®ç°ã€‚
-	 é”™è¯¯å¼‚å¸¸å¤„ç†
+version: 1.02
+¼òµ¥µÄµ¥Ôª²âÊÔ¹¦ÄÜ¡£
+	 Óï·¨¼ò½à
+	 ½á¹ûÏÔÊ¾ÔÚ±ê×¼Êä³ö£¬¿ÉÒÔÑ¡Ôñ½ÓÈë×Ô¼ºµÄÈÕÖ¾ÊµÏÖ¡£
+	 ´íÎóÒì³£´¦Àí
+	 ²âÊÔÃûÎ¨Ò»£¬ÅÅĞò
 
-ä½¿ç”¨æ–¹æ³•ï¼šå¤åˆ¶unit_test.h *.cppæ–‡ä»¶åˆ°ä½ çš„å·¥ç¨‹ï¼Œç¼–è¯‘ä½¿ç”¨ã€‚
+Ê¹ÓÃ·½·¨£º¸´ÖÆunit_test.h *.cppÎÄ¼şµ½ÄãµÄ¹¤³Ì£¬±àÒëÊ¹ÓÃ¡£
 excamples:
 
 UNITTEST(t1)
@@ -23,8 +24,10 @@ UnitTestMgr::Obj().Start();
 */
 
 #pragma once
+
 #include <vector>
 #include <stdarg.h>
+#include <map>
 
 class IUnitTest
 {
@@ -35,7 +38,7 @@ public:
 	const char *m_unit_name = "";
 };
 
-//@para va_list vp, vpä¸éœ€è¦å›è°ƒé‡Œé¢é‡Šæ”¾
+//@para va_list vp, vp²»ĞèÒª»Øµ÷ÀïÃæÊÍ·Å
 using UnitTestPrintf = void (*)(bool is_error, const char * file, int line, const char *fun, const char * pattern, va_list vp);
 class UnitTestMgr
 {
@@ -55,7 +58,7 @@ private:
 	{}
 
 private:
-	std::vector<IUnitTest*> m_vecUnit;
+	std::map < std::string, IUnitTest* > m_name2unit;
 	UnitTestPrintf m_print;
 };
 
@@ -70,7 +73,7 @@ private:
 				}\
 			}while(0)                                                   
 
-//åªå‡ºæ—¥å¿—ï¼Œä¸å¼‚å¸¸
+//Ö»³öÈÕÖ¾£¬²»Òì³£
 #define UNIT_CHECK(expression) do{  \
 				if(!(expression))                                                              \
 				{\
