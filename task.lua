@@ -1,4 +1,4 @@
-
+参考 delay_handler.h ，写异步调用，保存上下文
 实现 守护进程 参考 man daemon
 
 #define DEBUG_ASSERT(pointer, info, ...)	\
