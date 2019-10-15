@@ -2,6 +2,7 @@
 #include "read_cfg.h"
 #include <fstream>
 #include "string_tool.h"
+#include <algorithm>
 
 using namespace std;
 namespace su
@@ -20,8 +21,24 @@ bool Config::init( const char *file_name )
     string buf;
     while(getline(file,buf))
     {
-        VecStr vec_str;
-        StringTool::split(buf, '=', vec_str);
+		VecStr vec_str;
+		{//del win file '\r'
+			auto it = std::find(buf.begin(), buf.end(), '\r');
+			if (it != buf.end())
+			{
+				string t(buf.begin(), it);
+				buf.assign(t);
+			}
+		}
+		{//del comment
+			auto it = std::find(buf.begin(), buf.end(), '#');
+			if (it != buf.end())
+			{
+				string t(buf.begin(), it);
+				buf.assign(t);
+			}
+		}
+		StringTool::split(buf, '=', vec_str);
         if (2 == vec_str.size())
         {
             StringTool::erase(vec_str[0], ' ');

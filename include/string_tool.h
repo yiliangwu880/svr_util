@@ -77,11 +77,11 @@ public:
 
 	static bool try_parse_int(const char* str, int* ret, char** end = NULL);
 
-	static void split(const std::string& str, std::string::value_type separator, VecStr& out, size_t max_out_size = 2000);
-	static void split(const std::string& str, const std::string& separator, VecStr& out, size_t max_out_size = 2000);
+	static void split(const std::string& str, std::string::value_type separator, VecStr& out, size_t max_out_size = 2000*200);
+	static void split(const std::string& str, const std::string& separator, VecStr& out, size_t max_out_size = 2000 * 200);
 
-	static void split(const std::string& str, const VecStr& separatorList, VecStr& out, size_t max_out_size = 2000);
-	static void split(const char* str, std::string::value_type separator, VecStr& out, size_t max_out_size = 2000);
+	static void split(const std::string& str, const VecStr& separatorList, VecStr& out, size_t max_out_size = 2000 * 200);
+	static void split(const char* str, std::string::value_type separator, VecStr& out, size_t max_out_size = 2000 * 200);
 	static void split_white_space(const std::string& str, VecStr& out, size_t resultLimit = (size_t)-1);
 	static bool split_fix_size(const std::string& str, std::string::size_type fix_size, VecStr& out);
 

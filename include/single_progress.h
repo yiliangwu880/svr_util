@@ -5,7 +5,16 @@ author: yilaing.wu
 会在程序当前目录创建锁文件，比如 my_name.lock
 
 
-example:
+example1:
+启动进程：例子 ./acc_svr
+结束进程: 命令参数例子： ./acc_svr stop
+int main(int argc, char* argv[])
+{
+	//start or stop proccess
+	SPMgr::Obj().Check(argc, argv, "acc_svr", OnExitProccess);
+}
+
+example2:
 启动进程：
 void main()
 {
