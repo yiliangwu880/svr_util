@@ -7,3 +7,4 @@
 #include "log_file.h"
 #include "easy_code.h"
 #include "string_tool.h"
+#include "singleton.h"
