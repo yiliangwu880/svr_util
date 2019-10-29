@@ -21,3 +21,9 @@ fun()
 
 	//for(const MfAddr &addr : vec_mf_addr) 这种应该更好
 	//考虑删掉 FOR_IT FOR_IT_CONST
+	
+定时器是项目的常见错误根源，写个管理定时器的类，待统计定时器信息。
+{
+	哪里定义。
+	当前运行有多少个定时器。
+}
