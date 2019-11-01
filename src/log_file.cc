@@ -136,6 +136,7 @@ void DefaultLog::Printf(LogLv lv, const char * file, int line, const char *fun, 
 	{
 		vfprintf(m_file, s.c_str(), vp);
 	}
+	flush();
 }
 
 const char * DefaultLog::GetLogLevelStr(LogLv lv) const

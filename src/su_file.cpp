@@ -1,21 +1,11 @@
 #include "su_file.h"
 #include "log_def.h"
+#include <fstream>
 
 using namespace su;
+using namespace std;
 
-bool SuMgr::Init()
-{
-	CBacktraceInfo::Obj().RegHangUpHandler();
-	return true;
-}
-
-void SuMgr::OnTimer()
-{
-	SysTime::Obj().Refresh();
-	TimeDriver::Obj().CheckTimeOut();
-}
-
-void su::Str2File(const std::string &file_name, const std::string &content)
+void su::File::Str2File(const std::string &file_name, const std::string &content)
 {
 	ofstream ofs(file_name, ios::ate | ios::out);
 	if (!ofs.is_open())
@@ -27,7 +17,7 @@ void su::Str2File(const std::string &file_name, const std::string &content)
 	ofs.close();
 }
 
-void su::File2Str(const std::string &file_name, std::string &content)
+void su::File::File2Str(const std::string &file_name, std::string &content)
 {
 	content.clear();
 	std::ifstream t(file_name);

@@ -15,8 +15,12 @@ author: YiliangWu
 
 namespace su
 {
-	static void Str2File(const std::string &file_name, const std::string &content);
-	static void File2Str(const std::string &file_name, std::string &content);
+	class File
+	{
+	public:
+		static void Str2File(const std::string &file_name, const std::string &content);
+		static void File2Str(const std::string &file_name, std::string &content);
+	};
 }
 
 //end file

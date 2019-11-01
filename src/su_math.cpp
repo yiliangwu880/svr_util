@@ -3,7 +3,7 @@
 
 namespace su
 {
-	void combine(uint32 total_num, int combine_num, std::vector<std::vector<int>> &all_result, int index = 0, int deep = 0, bool is_start)
+	void combine(uint32 total_num, int combine_num, std::vector<std::vector<int>> &all_result, int index , int deep, bool is_start)
 	{
 		static std::vector<int> result;
 		if (is_start == true)
