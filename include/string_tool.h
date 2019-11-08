@@ -99,9 +99,6 @@ public:
 	static long int integer(const std::string& str);
 	static bool integer(const std::string& str, long int& valueOut);
 
-    //不支持多线程
-    static const char *NumToStr(int num);
-
 	static std::string& repeat(const std::string& str, std::string::size_type times, std::string& resultOUT);
 	static std::string repeat(const std::string& str, std::string::size_type times);
 

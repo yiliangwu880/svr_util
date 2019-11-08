@@ -218,12 +218,6 @@ void StringTool::replace( std::string& str, char old_value, char new_value )
     }   
 }
 
-const char * StringTool::NumToStr( int num )
-{
-    static char buf[100];
-    snprintf(buf, sizeof(buf), "%d", num);
-    return buf;
-}
 
 void StringTool::tolower(std::string& str)
 {
