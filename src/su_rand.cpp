@@ -165,7 +165,7 @@ void PrimeRandom::Init(U16 maxNum)
 	}
 	if(maxNum > MAX_PRIME) 
 	{
-		maxNum = 1;  //Can't create the random more than 65497; Åª¸ö1£¬ÈÃËûÃ÷ÏÔÊ§°Ü£¬ÈİÒ×²é³öÎÊÌâ
+		maxNum = 1;  //Can't create the random more than 65497; å¼„ä¸ª1ï¼Œè®©ä»–æ˜æ˜¾å¤±è´¥ï¼Œå®¹æ˜“æŸ¥å‡ºé—®é¢˜
 	}
 	m_base = maxNum-1;
 
@@ -291,7 +291,7 @@ uint32 Random::RandUint32(uint32 min, uint32 max)
 
 uint32 Random::rand32()
 {
-    //È·±£ RAND_MAX == 0x7fff ²ÅÓĞĞ§
+    //ç¡®ä¿ RAND_MAX == 0x7fff æ‰æœ‰æ•ˆ
     return (::rand()<<17)|(::rand()<<2)|(::rand());
 }
 
@@ -302,7 +302,7 @@ int Random::RandInt(int min_num, int max_num)
 
     if(min_num > max_num)
     {
-        std::swap(min_num,max_num); //·´¹ıÀ´´¦Àí°É¡£
+        std::swap(min_num,max_num); //åè¿‡æ¥å¤„ç†å§ã€‚
     }
 
     if (min_num == max_num)
@@ -327,12 +327,12 @@ double Random::RandDecimal()
 	return (double)rand() / RAND_MAX;
 }
 
-// Éú³É[low, high]Ö®¼äµÄÎŞÖØ¸´µÄcnt¸öËæ»úÊı
+// ç”Ÿæˆ[low, high]ä¹‹é—´çš„æ— é‡å¤çš„cntä¸ªéšæœºæ•°
 bool Random::GetIntervalNoRepeatedRandNum(U16 low, U16 high, U16 cnt, U16 *num)
 {
     if(low > high)
     {
-        std::swap(low,high); //·´¹ıÀ´´¦Àí
+        std::swap(low,high); //åè¿‡æ¥å¤„ç†
     }
     const U16 iTotal = high - low + 1;
     if (cnt > iTotal)
@@ -352,7 +352,7 @@ bool Random::GetIntervalNoRepeatedRandNum(U16 low, U16 high, U16 cnt, U16 *num)
 
     for (i = 0; i < iTotal; i++)
     {
-        piTemp[i] = i + low; // Ëæ»úÊı¿ÉÄÜµÄÈ¡Öµ
+        piTemp[i] = i + low; // éšæœºæ•°å¯èƒ½çš„å–å€¼
     }
 
     for (j = 0; j < cnt; j++)
