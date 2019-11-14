@@ -1,0 +1,3 @@
+[submodule "external/log4cplus"]
+	path = external/log4cplus
+	url = https://github.com/yiliangwu880/log4cplus.git
