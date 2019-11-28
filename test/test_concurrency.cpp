@@ -43,20 +43,26 @@ namespace
 	void BlockExample()
 	{
 		BlockingReaderWriterQueue<int> q;
-
+		int read_cnt = 0;
+		const int MAX_NUM = 10;
 		std::thread reader([&]() {
-			int item;
-			for (int i = 0; i != 100; ++i) {
+			int item=1;
+			for (int i = 0; i != MAX_NUM; ++i) {
 				// Fully-blocking:
 				q.wait_dequeue(item);
 
+				//UNIT_INFO("wait_dequeue=%d", item);
 				// Blocking with timeout
 				if (q.wait_dequeue_timed(item, std::chrono::milliseconds(5)))
+				{
 					++i;
+				//	UNIT_INFO("wait_dequeue_timed=%d", item);
+				}
+				read_cnt = i;
 			}
 		});
 		std::thread writer([&]() {
-			for (int i = 0; i != 100; ++i) {
+			for (int i = 0; i != MAX_NUM; ++i) {
 				q.enqueue(i);
 				std::this_thread::sleep_for(std::chrono::milliseconds(10));
 			}
@@ -64,6 +70,7 @@ namespace
 		writer.join();
 		reader.join();
 
+		UNIT_INFO("read_cnt=%d", read_cnt);
 		UNIT_ASSERT(q.size_approx() == 0);
 	}
 }//end namespace
