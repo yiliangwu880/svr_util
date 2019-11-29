@@ -70,7 +70,7 @@ namespace
 		writer.join();
 		reader.join();
 
-		UNIT_INFO("read_cnt=%d", read_cnt);
+//		UNIT_INFO("read_cnt=%d", read_cnt);
 		UNIT_ASSERT(q.size_approx() == 0);
 	}
 }//end namespace
