@@ -6,7 +6,32 @@ author: yiliangwu880
 	订阅接口，任意类型
 	发布接口，任意类型。
 	channel 由 事件id,函数类型一起标识
- 
+
+适用:
+	游戏很多子系统，互相调用需要订阅发布事件来解耦。
+
+sample:
+	void AddMoney(Player &player, int num)
+	{
+		...
+	}
+
+	----------------------
+	RegEvent<1>(AddMoney);
+
+	----------------------
+	Player player;
+	TriggerEvent<1>(player, 10);
+
+	----------延时调用，可以参考-----
+	function<void(void)> postEvent = [&]()
+	{
+		TriggerEvent<1>(player, 10);
+	};
+
+	延时以后执行：
+	postEvent();
+
 */
 
 #pragma once
@@ -38,18 +63,15 @@ namespace su
 		void(1);
 	}
 
-	//发布
-	template<const int ID>
-	void TriggerEvent()
+	template<const int ID, class Fun>
+	void UnRegEvent(Fun fun)
 	{
-		using Fun = void(*)(void);
 		auto &ss = GetSubScribeSet<ID, Fun>();
-		for (auto &v : ss)
-		{
-			v();
-		}
+		ss.erase(fun);
+		void(1);
 	}
 
+	//发布
 	template<const int ID, class ... Agrs>
 	void TriggerEvent(Agrs&& ... agrs)
 	{

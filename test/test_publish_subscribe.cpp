@@ -126,6 +126,23 @@ namespace
 		RegEvent<E2>(cb1);
 		TriggerEvent<E2>();
 		UNIT_ASSERT(4 == g_cb1);
+		UnRegEvent<E2>(cb1);
+		TriggerEvent<E2>();
+		UNIT_ASSERT(4 == g_cb1);
+		TriggerEvent<E1>();
+		UNIT_ASSERT(5 == g_cb1);
+
+
+
+		function<void(void)> postEvent = []()
+		{
+			TriggerEvent<1>(1);
+		};
+		UNIT_ASSERT(1 == g_cb2);
+		postEvent();
+		UNIT_ASSERT(2 == g_cb2);
+
+
 
 	}
 

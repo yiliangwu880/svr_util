@@ -19,8 +19,6 @@ SCOPE_GUARD(delete point;);
 
 namespace su
 {
-
-
 	class ScopeGuard
 	{
 	private:
@@ -29,7 +27,7 @@ namespace su
 
 	public:
 		explicit ScopeGuard(std::function<void()> onExitScope)
-			: m_excute(onExitScope)
+			: m_excute(std::move(onExitScope))
 			, m_is_dismissed(false)
 		{ }
 
