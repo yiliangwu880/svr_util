@@ -106,12 +106,14 @@ public:
 		return d;
 	}
 	//启动单例进程， 检查main参数， 带"stop"参数就是停止进程。
+	//@pname 程序名称，用来区分同文件夹的程序
+	//@cb 接收关闭信号USR1回调， 比如： kill -USR1 2581
 	void Check(int argc, char* argv[], const char *pname, ExitProccessCB cb = nullptr);
 	//@fun 启动进程
 	//@para const char *pname, 进程名
 	//@para ExitProccessCB c, 如果关闭进程前，需要处理逻辑，传入回调函数执行。
 	void Start(const char *pname, ExitProccessCB cb);
-	//@fun 关闭进程
+	//@fun 临时进程调用，关闭正常进程用。
 	//@para const char *pname, 进程名
 	void Stop(const char *pname);
 private:

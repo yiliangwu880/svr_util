@@ -31,7 +31,7 @@ int file_lock::kill(int sig)
 	int fd = open(m_pid_file.c_str(), O_TRUNC | O_RDWR);
 	if (fd < 0)
 	{
-		L_ERROR("open fail fail, open fd = %d, %d\n", fd, sig);
+		L_ERROR("kill -%d fail. fd not exist\n", sig);
 		return -1;
 	}
 
@@ -49,7 +49,7 @@ int file_lock::kill(int sig)
 
 	if (flock_data.l_type == F_UNLCK)//case no lock
 	{
-		L_ERROR("file no lock");
+		L_ERROR("kill -%d fail。 fd not lock\n", sig);
 		return 0;
 	}
 	//注意，这个过程不是原子操作，过程有可能锁状态变化~！
