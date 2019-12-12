@@ -10,6 +10,7 @@ author: YiliangWu
 #include <set>
 #include <map>
 #include <utility>
+#include <algorithm>
 
 
 namespace su
