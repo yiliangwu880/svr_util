@@ -103,13 +103,12 @@ namespace su
 			}
 		}
         //重设循环的timer
-        FOR_IT(vec_timeout)
+        for(inner::CtrlData &d : vec_timeout)
 		{
-			const inner::CtrlData &d = *it;
-            if (it->is_loop)
+            if (d.is_loop)
             {
-                it->start_sec += it->interval_sec;
-                m_time2data.insert(make_pair(it->start_sec+it->interval_sec, *it));
+				d.start_sec += d.interval_sec;
+                m_time2data.insert(make_pair(d.start_sec+ d.interval_sec, d));
             }
             else
 			{
@@ -119,18 +118,17 @@ namespace su
         }
 
         //保证最后调用，防止回调的时候，调用接口改变对象状态。
-		FOR_IT_CONST(vec_timeout)
+		for(const inner::CtrlData &d : vec_timeout)
         {
-			const inner::CtrlData &d = *it;
 			d.pTimer->OnTimerCB();
         }
 	}
 
 	void TimeDriver::Clear()
 	{
-		FOR_IT_CONST(m_time2data)
+		for( auto &v: m_time2data)
 		{
-			const inner::CtrlData &d = it->second;
+			const inner::CtrlData &d = v.second;
 			d.pTimer->StopTimer();
 		}
 		m_time2data.clear();
@@ -203,9 +201,9 @@ namespace su
 		{
 			return false;
 		}
-		FOR_IT_CONST(vec_interval)
+		for(auto &v : vec_interval)
 		{
-			if (*it==0)
+			if (v==0)
 			{
 				return false;
 			}

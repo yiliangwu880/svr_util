@@ -49,34 +49,7 @@ namespace
 			ret = ((id1 >> 32)==(id2 >> 32));
 			UNIT_ASSERT(ret);
 		}
-		//test FOR_IT
-		{
-			vector<int> vec = { 1};
-			FOR_IT(vec)
-			{
-				UNIT_ASSERT(*it == 1);
-			}
-			const vector<int> &c_vec = vec;
-			FOR_IT(c_vec)
-			{
-				UNIT_ASSERT(*it == 1);
-			}
-			map<int, int> m = { 
-				make_pair(1,11)
-				//,make_pair(2,22)
-			};
-			FOR_IT(m)
-			{
-				UNIT_ASSERT(it->first == 1);
-				UNIT_ASSERT(it->second == 11);
-			}
-			const map<int, int> &cm = m;
-			FOR_IT(cm)
-			{
-				UNIT_ASSERT(it->first == 1);
-				UNIT_ASSERT(it->second == 11);
-			}
-		}
+
 	}
  
 

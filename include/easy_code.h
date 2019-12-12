@@ -12,30 +12,6 @@ fun: 简化代码
 
 namespace su
 {
-	//简化迭代器，循环写法。习惯了简化写法，BUG少。
-	//for(const MfAddr &addr : vec_mf_addr) 这种应该更好
-	//考虑删掉 FOR_IT FOR_IT_CONST
-#define FOR_IT(ctn)\
-    for(auto it=(ctn).begin(); it!=(ctn).end(); ++it)
-
-#define FOR_IT_CONST(ctn)\
-    for(auto it=(ctn).cbegin(); it!=(ctn).cend(); ++it)
-
-#define WHILE_NUM(num)\
-    for(unsigned int i=0; i<num; ++i)
-
-#define FOR_ARRAY(a)\
-	for(unsigned int i=0; i<ArrayLen(a); ++i)
-
-#define FOR_ARRAY_REVERSE(a)\
-	for(unsigned int i=ArrayLen(a); i<ArrayLen(a); --i)
-
-	//禁止类赋值，复制
-#define DISNABLE_COPY_AND_ASSIGN(TypeName) \
-    private:\
-	TypeName(const TypeName&); \
-	void operator=(const TypeName&)
-
 //////////////////////////////////////////////////////////////////////////
 //获取原生数组长度
 //template<typename Array>
