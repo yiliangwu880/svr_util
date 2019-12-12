@@ -5,20 +5,14 @@ author: yilaing.wu
 会在程序当前目录创建锁文件，比如 my_name.lock
 
 
-example1:
+example:
+//不建议用，依赖一个timer循环调用，不直观。 以后删掉
 启动进程：例子 ./acc_svr
 结束进程: 命令参数例子： ./acc_svr stop
 int main(int argc, char* argv[])
 {
 	//start or stop proccess
-	SPMgr::Obj().Check(argc, argv, "acc_svr", OnExitProccess);
-}
-
-example2:
-启动进程：
-void main()
-{
-	SingleProgress::Obj().CheckSingle("my_name");
+	SingleProgress::Obj().Check(argc, argv, "acc_svr");
 	.... //设置timer一些代码
 }
 void OnTimer()
@@ -30,12 +24,6 @@ void OnTimer()
 	}
 }
 
-结束进程， 通常启动另一个进程，停掉指定进程：
-void main()
-{
-	SingleProgress::Obj().StopSingle("my_name");
-
-}	
 */
 
 #pragma once
@@ -72,11 +60,15 @@ public:
 		static SingleProgress d;
 		return d;
 	}
+	//启动单例进程， 检查main参数， 带"stop"参数就是停止进程。
+	//@pname 程序名称，用来区分同文件夹的程序
+	//@cb 接收关闭信号USR1回调， 比如： kill -USR1 2581
+	void Check(int argc, char* argv[], const char *pname);
 
 	//根据文件名，检查确保程序唯一进程，多次启动就会结束后启动进程
-	void CheckSingle(const std::string &single_file_name);
+	void Check(const std::string &single_file_name);
 	//请求结束唯一进程。
-	void StopSingle(const std::string &single_file_name);
+	void Stop(const std::string &single_file_name);
 	//return true表示进程是退出状态。 由用户代码执行退出操作。
 	//建议再timer里面不断检查这个状态，根据状态实现退出进程。
 	//为什么要建议Timer定时检查if(SingleProgress::Obj().IsExit()) ？
@@ -92,35 +84,4 @@ private:
 };
 
 
-using ExitProccessCB = std::function<void(void)>;
-//更高层应用 SingleProgress
-class SPMgr
-{
-	SPMgr()
-		:m_cb(nullptr)
-	{}
-public:
-	static SPMgr &Obj()
-	{
-		static SPMgr d;
-		return d;
-	}
-	//启动单例进程， 检查main参数， 带"stop"参数就是停止进程。
-	//@pname 程序名称，用来区分同文件夹的程序
-	//@cb 接收关闭信号USR1回调， 比如： kill -USR1 2581
-	void Check(int argc, char* argv[], const char *pname, ExitProccessCB cb = nullptr);
-	//@fun 启动进程
-	//@para const char *pname, 进程名
-	//@para ExitProccessCB c, 如果关闭进程前，需要处理逻辑，传入回调函数执行。
-	void Start(const char *pname, ExitProccessCB cb);
-	//@fun 临时进程调用，关闭正常进程用。
-	//@para const char *pname, 进程名
-	void Stop(const char *pname);
-private:
-	void CheckStopProccess();
-
-private:
-	ExitProccessCB m_cb; 
-	su::Timer m_tm;
-};
 

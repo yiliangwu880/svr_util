@@ -31,7 +31,7 @@ int file_lock::kill(int sig)
 	int fd = open(m_pid_file.c_str(), O_TRUNC | O_RDWR);
 	if (fd < 0)
 	{
-		L_ERROR("kill -%d fail. fd not exist\n", sig);
+		L_ERROR("kill -%d fail. file %s not exist\n", sig, m_pid_file.c_str());
 		return -1;
 	}
 
@@ -110,12 +110,13 @@ SingleProgress::SingleProgress()
 }
 
 
-void SingleProgress::CheckSingle(const std::string &single_file_name)
+void SingleProgress::Check(const std::string &single_file_name)
 {
 	static file_lock m_file_lock(single_file_name);
 	if (!m_file_lock.lock())
 	{
 		L_DEBUG("progress %s aleady run!", single_file_name.c_str());
+		printf("progress %s aleady run!", single_file_name.c_str());
 		exit(1);
 	}
 	sighandler_t old_cb = signal(SIGUSR1, SingleProgress::catch_signal);
@@ -129,7 +130,18 @@ void SingleProgress::CheckSingle(const std::string &single_file_name)
 	}
 }
 
-void SingleProgress::StopSingle(const std::string &single_file_name)
+void SingleProgress::Check(int argc, char* argv[], const char *pname)
+{
+	if (argc == 2 && string("stop") == argv[1])
+	{
+		Stop(pname);
+		exit(1);
+		return;
+	}
+	Check(pname);
+}
+
+void SingleProgress::Stop(const std::string &single_file_name)
 {
 	static file_lock m_file_lock(single_file_name);
 	if (!m_file_lock.kill(SIGUSR1))
@@ -148,45 +160,3 @@ void SingleProgress::catch_signal(int sig_type)
 	}
 }
 
-
-void SPMgr::Stop(const char *pname)
-{
-	L_COND(pname);
-	SingleProgress::Obj().StopSingle(pname);
-	exit(1);
-}
-
-
-void SPMgr::Check(int argc, char* argv[], const char *pname, ExitProccessCB cb)
-{
-	//start or stop proccess
-	if (argc == 2 && string("stop") == argv[1])
-	{
-		SPMgr::Obj().Stop(pname);
-		return;
-	}
-	SPMgr::Obj().Start(pname, cb);
-}
-
-void SPMgr::Start(const char *pname, ExitProccessCB cb)
-{
-	L_COND(pname);
-	SingleProgress::Obj().CheckSingle(pname);
-	m_cb = cb;
-	auto f = std::bind(&SPMgr::CheckStopProccess, this);
-	m_tm.StartTimer(1, f, true); 
-}
-
-void SPMgr::CheckStopProccess()
-{
-	if (!SingleProgress::Obj().IsExit())
-	{
-		return;
-	}
-	if (m_cb)
-	{
-		m_cb();
-	}
-	L_DEBUG("==============end proccess===========");
-	exit(1);
-}

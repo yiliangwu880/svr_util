@@ -46,7 +46,15 @@ Project "samples"
 	}
 	
 
+Project "test_single_process"
+	includedirs { 
+		"../include/",
+		"base/",
+	}
 
+	SrcPath { 
+		"../test_single_process/**",  
+	}
 
     
     
