@@ -115,8 +115,8 @@ void SingleProgress::Check(const std::string &single_file_name)
 	static file_lock m_file_lock(single_file_name);
 	if (!m_file_lock.lock())
 	{
-		L_DEBUG("progress %s aleady run!", single_file_name.c_str());
-		printf("progress %s aleady run!", single_file_name.c_str());
+		L_DEBUG("======progress %s aleady run! exit cur progress======", single_file_name.c_str());
+		printf("======progress %s aleady run! exit cur progress======", single_file_name.c_str());
 		exit(1);
 	}
 	sighandler_t old_cb = signal(SIGUSR1, SingleProgress::catch_signal);

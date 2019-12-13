@@ -110,7 +110,7 @@ namespace su
 		virtual ~Timer();
 
 		//timeout会回调函数. timeout回调前变S_WAIT_START_TIMER 状态
-		virtual void OnTimer(void *para) {}; //传统方式重写实现
+		virtual void OnTimer(void *para) {}; //重写timeout实现
 
 		//fun 启动timer,到时回调 Timer::OnTimer
 		//para is_loop true表示循环定时器
