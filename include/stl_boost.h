@@ -103,9 +103,9 @@ namespace su
 	}
 
 	template <typename Map>
-	inline std::pair<typename Map::iterator, bool> MapInsert(Map &map, typename Map::key_type key, typename Map::mapped_type v)
+	inline bool MapInsert(Map &map, typename Map::key_type key, typename Map::mapped_type v)
 	{
-		return  map.insert(std::make_pair(key, v));
+		return  map.insert(std::make_pair(key, v)).second;
 	}
 
 
