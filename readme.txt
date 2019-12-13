@@ -20,6 +20,16 @@ vs浏览代码：
 	src						 ==源码
 	test					 ==测试用例
 	vs                       == vs浏览工具
+	
+	
+	
+详细功能说明：
+	以include目录分类：
+	
+	static_trick		怪异但好用的静态编程。
+	time				时间，定时器相关的功能。
+	BacktraceInfo.h		崩溃时堆栈日志
+	。。。
 
 
 

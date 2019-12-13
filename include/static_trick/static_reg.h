@@ -12,8 +12,8 @@ use example:
 REG_MAP_NAME_DECLARE(MapName2, string, int)
 
 //in any cpp file
-MAP_REG_DEFINE(MapName2, a, 1);
-MAP_REG_DEFINE(MapName2, abc, 2);
+MAP_REG_DEFINE_STR(MapName2, a, 1);
+MAP_REG_DEFINE_STR(MapName2, abc, 2);
 
 */
 #pragma once
@@ -47,18 +47,14 @@ private:\
 };
 
 
-#define SET_REG_LINENAME_CAT(name, line) name##line
-#define SET_REG_LINENAME(name, line) SET_REG_LINENAME_CAT(name, line) 
-
-
 //以下宏定义可以在不同文件里面调用，实现不同cpp文件写注册功能。
 //@SetClassName(单件注册类), 
 //@value(注册的值)
 #define SET_REG_DEFINE(SetClassName, value) \
-	namespace{SetClassName::RunReg SET_REG_LINENAME(s##value, __LINE__)(value);}
+	namespace{SetClassName::RunReg SetClassName_##value(value);}
 
 #define SET_REG_NAME_DEFINE(SetClassName, obj_name, parameter) \
-	namespace{SetClassName::RunReg s_##obj_name(parameter);}
+	namespace{SetClassName::RunReg SetClassName_##obj_name(parameter);}
 
 //------------------------------------map 静态注册----------------------------------------------
 //h文件定义唯一单件注册类 MAP
@@ -82,18 +78,17 @@ private:\
 	SetClassName(){};\
 };
 
-//多一层，避免__LINE__直接变化成字符串"__LINE__"
-#define MAG_REG_LINENAME_CAT(name, line) name##line
-#define MAG_REG_LINENAME(name, line) MAG_REG_LINENAME_CAT(name, line) 
 
 #define MAP_REG_NAME_DEFINE(SetClassName, obj_name, key, map_value) \
-	namespace{SetClassName::RunReg MAG_REG_LINENAME(obj_name, __LINE__)(make_pair(SetClassName::key_type(key), SetClassName::value_type::second_type(map_value)));}
+	namespace{SetClassName::RunReg SetClassName##obj_name(make_pair(SetClassName::key_type(key), SetClassName::value_type::second_type(map_value)));}
 
 //注册值，SetClassName(单件注册类), key(键值字符串，不用"") map_value(值)
-#define MAP_REG_DEFINE(SetClassName, key, map_value) \
+#define MAP_REG_DEFINE_STR(SetClassName, key, map_value) \
 	MAP_REG_NAME_DEFINE(SetClassName, key, #key, map_value)
 
-
+//注册值，SetClassName(单件注册类), key(键值, INT) map_value(值)
+#define MAP_REG_DEFINE(SetClassName, key, map_value) \
+	MAP_REG_NAME_DEFINE(SetClassName, key, key, map_value)
 
 
 

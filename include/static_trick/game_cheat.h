@@ -60,15 +60,15 @@ namespace su
 
 		//cmd 不需要""
 #define REG_PLAYER_DO_CMD_EX(cmd, fun)\
-	MAP_REG_DEFINE(StrMapCheatFun, cmd, fun) 
+	MAP_REG_DEFINE_STR(StrMapCheatFun, cmd, fun) 
 
 #define REG_DO_CMD_EX(cmd, fun)\
-	MAP_REG_DEFINE(StrMapCheatFun_DoCmdFun, cmd, fun) 
+	MAP_REG_DEFINE_STR(StrMapCheatFun_DoCmdFun, cmd, fun) 
 
 #define REG_PLAYER_DO_CMD(fun)\
-	MAP_REG_DEFINE(StrMapCheatFun, fun, fun) 
+	MAP_REG_DEFINE_STR(StrMapCheatFun, fun, fun) 
 
 #define REG_DO_CMD(fun)\
-	MAP_REG_DEFINE(StrMapCheatFun_DoCmdFun, fun, fun) 
+	MAP_REG_DEFINE_STR(StrMapCheatFun_DoCmdFun, fun, fun) 
 
 }
