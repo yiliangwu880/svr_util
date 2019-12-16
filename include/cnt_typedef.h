@@ -11,8 +11,7 @@ brief:
 namespace su 
 {
 	//常用容器类型简写
-using Uint32_2_Uint32 = std::map<uint32, uint32>			;
-using Int32_2_Int32   = std::map<int32, int32>				;
+
 using Str2Str         = std::map<std::string, std::string>	;
 using SetUint32       = std::set<uint32>					;
 using SetUint64       = std::set<uint64>					;
