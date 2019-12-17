@@ -20,6 +20,8 @@ public:
 	static const std::string WHITE_SPACE;
 	static const int DEFAULT_BUFFER_SIZE = 1024;
 public:
+	//任意字符串转可视的十六进制
+	static std::string BinaryToHex(const std::string &binaryStr);
 	static void format(std::string& resultOUT, const char* fmt, ...);
 	static std::string format(const char* fmt, ...); 
 	static std::string& vformat(std::string& resultOUT, const char *fmt, va_list argptr, int default_size = DEFAULT_BUFFER_SIZE);

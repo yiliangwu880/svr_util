@@ -6,6 +6,18 @@ namespace su
 {
 
 
+	std::string StringTool::BinaryToHex(const std::string &binaryStr)
+	{
+		string ret;
+		static const char *hex = "0123456789ABCDEF";
+		for (auto c : binaryStr)
+		{
+			ret.push_back(hex[(c >> 4) & 0xf]); //取二进制高四位
+			ret.push_back(hex[c & 0xf]);        //取二进制低四位
+		}
+		return ret;
+	}
+
 void StringTool::format(std::string& resultOUT, const char* fmt, ...)
 {
 	va_list vl;

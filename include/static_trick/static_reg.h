@@ -78,9 +78,12 @@ private:\
 	SetClassName(){};\
 };
 
-
+//static_cast有更强的编译期错误检查
 #define MAP_REG_NAME_DEFINE(SetClassName, obj_name, key, map_value) \
-	namespace{SetClassName::RunReg SetClassName##obj_name(make_pair(SetClassName::key_type(key), SetClassName::value_type::second_type(map_value)));}
+	namespace{SetClassName::RunReg SetClassName##obj_name(make_pair(\
+static_cast<SetClassName::key_type>(key),\
+static_cast<SetClassName::value_type::second_type>(map_value)\
+));}
 
 //注册值，SetClassName(单件注册类), key(键值字符串，不用"") map_value(值)
 #define MAP_REG_DEFINE_STR(SetClassName, key, map_value) \
