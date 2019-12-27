@@ -29,3 +29,30 @@ fun()
 }
 
 找个好的开源 scope guard
+
+
+
+
+
+实时排行榜：
+方法1：
+{	
+	mutimap<score, id>.  排序
+	vector 存ID, 名次查找ID
+	obj id:
+	{
+		score  . score查找map元素
+	}
+}
+方法2：
+{
+	obj
+	{
+		id
+		score
+	}
+	vector<obj>. 
+	名次查找ID
+	分数变化， 二分查找删除插入，并移动影响的元素。
+	
+}
