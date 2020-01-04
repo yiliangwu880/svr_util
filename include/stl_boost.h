@@ -108,6 +108,26 @@ namespace su
 		return  map.insert(std::make_pair(key, v)).second;
 	}
 
+	//迭代区间 [min,max) 里面的元素
+	template<class MapType, class Fun>
+	void MapRegion(const MapType &m,
+		typename MapType::value_type::first_type min, typename MapType::value_type::first_type max,
+		Fun each_fun
+	)
+	{
+		auto min_it = m.lower_bound(min);
+		if (min_it != m.end())
+		{
+		}
+		auto max_it = m.lower_bound(max);//find key if value>=key
+		if (max_it != m.end())
+		{
+		}
+		for (auto it = min_it; it != max_it; ++it)
+		{
+			each_fun(it);
+		}
+	}
 
 //////////////////////////////////////////////////////////////////////////
 
