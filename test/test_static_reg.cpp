@@ -13,6 +13,8 @@ brief: ¾²Ì¬×¢²áÊ¹ÓÃÀý×Ó
 using namespace std;
 using namespace su;
 
+namespace
+{
 
 	REG_SET_NAME_DECLARE(MyName, int)
 	SET_REG_DEFINE(MyName, 0);
@@ -33,6 +35,7 @@ using namespace su;
 
 
 
+}
 UNITTEST(test_static_reg)
 {
 

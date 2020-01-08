@@ -59,12 +59,13 @@ public:
 	void setStdOut(bool is_std_out);
 private:
 	const char * GetLogLevelStr(LogLv lv) const;
+	void OpenFile();
 
 private:
 	LogLv m_log_lv;
 	FILE *m_file;
 	bool m_is_std_out;
-	std::string m_prefix_name;
+	std::string m_file_name;
 };
 
 

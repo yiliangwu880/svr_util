@@ -3,12 +3,14 @@
 #include "time/su_timestamp.h"
 #include "BacktraceInfo.h"
 #include "stdlib.h"
+#include "su_rand.h"
 
 using namespace su;
 
 bool SuMgr::Init()
 {
-	srand((unsigned int)time(0));
+	//整个系统 需要初始化的模块都在这里初始化
+	Random::Init();
 	CBacktraceInfo::Obj().RegHangUpHandler();
 	return true;
 }

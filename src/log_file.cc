@@ -71,12 +71,9 @@ DefaultLog::DefaultLog(const char *fname)
 	:m_log_lv(LL_TRACE)
 	, m_file(NULL)
 	, m_is_std_out(true)
+	, m_file_name(fname)
 {
-	m_file = fopen(fname, "at");
-	if (NULL == m_file)
-	{
-		::printf("fail open file[%s]\n", fname);
-	}
+	OpenFile();
 }
 
 
@@ -174,5 +171,14 @@ const char * DefaultLog::GetLogLevelStr(LogLv lv) const
 }
 
 
+
+void DefaultLog::OpenFile()
+{
+	m_file = fopen(m_file_name.c_str(), "at");
+	if (NULL == m_file)
+	{
+		::printf("fail open file[%s]\n", m_file_name.c_str());
+	}
+}
 
  }

@@ -9,6 +9,7 @@ Author:         Yiliangwu
 #include "typedef.h"
 #include <vector>
 #include "easy_code.h"
+#include <random>
 
 typedef  unsigned short U16;
 /* ---------------------------------------------------------------------------
@@ -50,7 +51,7 @@ private:
 
 /************************************************************************/
 /* 
-规则：权重随机，比如[0]=10, [1]=90.随机1的几率是90%
+规则：权重随机，比如[0]=10, [1]=90, [2]=0. 随机1的几率是90% 不会随机2
 */
 /************************************************************************/
 class RandomWeight
@@ -67,16 +68,17 @@ public:
 	//@vecWeight 为随机权重数组
 	//return 索引，从0开始
 	static uint32 rand(const std::vector<uint32> &vecWeight);
-
 };
+
 
 struct Random
 {
-
+	static void Init();
 	//闭区间[min,max]内随机一个数
 	static uint32 RandUint32(uint32 min, uint32 max);
 	//闭区间[min,max]内随机一个数
 	static int RandInt(int min, int max);
+
 	//随机小数
 	static double RandDecimal();
 	static uint32 rand32();

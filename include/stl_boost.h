@@ -108,7 +108,7 @@ namespace su
 		return  map.insert(std::make_pair(key, v)).second;
 	}
 
-	//迭代区间 [min,max) 里面的元素
+	//迭代map,mutlmap区间 [min,max) 里面的元素
 	template<class MapType, class Fun>
 	void MapRegion(const MapType &m,
 		typename MapType::value_type::first_type min, typename MapType::value_type::first_type max,

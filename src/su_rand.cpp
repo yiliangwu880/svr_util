@@ -277,6 +277,12 @@ uint32 RandomWeight::rand( const std::vector<uint32> &vecWeight )
 
 
 
+
+void Random::Init()
+{
+	srand((unsigned int)time(0));
+}
+
 uint32 Random::RandUint32(uint32 min, uint32 max)
 {
     if(min == max)
@@ -311,11 +317,11 @@ int Random::RandInt(int min_num, int max_num)
     }
     else if (max_num <= RAND_MAX)
     {
-        i = rand() % (max_num - min_num + 1) + min_num;
+        i = ::rand() % (max_num - min_num + 1) + min_num;
     }
     else
     {
-        llTmp = (max_num + RAND_MAX - 1) * rand();
+        llTmp = (max_num + RAND_MAX - 1) * ::rand();
         i = (int)abs(llTmp % (max_num - min_num));
         i += min_num;
     }
@@ -324,7 +330,7 @@ int Random::RandInt(int min_num, int max_num)
 
 double Random::RandDecimal()
 {
-	return (double)rand() / RAND_MAX;
+	return (double)::rand() / RAND_MAX;
 }
 
 // 生成[low, high]之间的无重复的cnt个随机数
@@ -357,7 +363,7 @@ bool Random::GetIntervalNoRepeatedRandNum(U16 low, U16 high, U16 cnt, U16 *num)
 
     for (j = 0; j < cnt; j++)
     {
-        iIdx = rand() % iRange;
+        iIdx = ::rand() % iRange;
         num[j] = piTemp[iIdx];
         piTemp[iIdx] = piTemp[iRange - 1];
         iRange--;

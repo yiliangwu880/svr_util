@@ -113,6 +113,7 @@ void test()
 		double d = Random::RandDecimal();
 		UNIT_ASSERT(d < 1);
 	}
+
 }
 }//end namespace
 
