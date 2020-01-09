@@ -73,7 +73,11 @@ UNITTEST(exp_lvup)
 	UNIT_ASSERT(g_lv.GetLv() == 10);
 	UNIT_ASSERT(g_lv.GetExp() == 500);
 
-
-	//test 
+	//test reduce lv
+	g_lv.SetLv(0);
+	UNIT_ASSERT(g_lv.GetLv() == 0);
+	g_lv.AddExp(0);
+	UNIT_ASSERT(g_lv.GetLv() == 10);
+	UNIT_ASSERT(g_lv.GetExp() == 400);
 
 }
