@@ -54,12 +54,13 @@ namespace
 	}
 	REG_DO_CMD(doHandle1);
 
+	bool g_1 = false;
 	class MyClass
 	{
 	public:
 		static std::string doHandle1(const VecStr &vecStr)
 		{
-			UNIT_INFO("run doHandle1");
+			g_1 = true;
 			return "static";
 		}
 	};
@@ -69,7 +70,6 @@ namespace
 
 UNITTEST( test_game_cheat)
 {
-
 	test1();
-	UNIT_INFO("done");
+	UNIT_ASSERT(g_1);
 }

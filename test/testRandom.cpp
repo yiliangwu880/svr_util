@@ -124,5 +124,4 @@ UNITTEST(testRandom)
 	testRandomWeight();
 	testRandomBetween();
 	test();
-	UNIT_INFO("done");
 }

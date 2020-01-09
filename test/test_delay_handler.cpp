@@ -187,6 +187,5 @@ UNITTEST(test_delay_handler)
 	test1();
 	test2();
 	test3();
-	UNIT_INFO("---test_delay_handler end---");
 
 }
