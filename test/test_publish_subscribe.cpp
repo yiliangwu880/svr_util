@@ -14,44 +14,28 @@
 
 using namespace std;
 using namespace su;
+
+
+
+
+
 namespace
 {
-	void c1()
-	{
-	}
-	void c2(int i)
-	{
-	}
 
-	void c3(int i,int b)
-	{
-	}
-
-	void sample()
-	{
-		RegEvent<1>(c1);
-		RegEvent<1>(c2);
-		RegEvent<1>(c3);
-		TriggerEvent<1>();
-		TriggerEvent<1>(1);
-		TriggerEvent<1>(1, 2);
-
-	}	
 	void test1()
 	{
 		{
-			auto &s1 = inner::GetChannel<1, decltype(&c1)>();
-			auto &s2 = inner::GetChannel<1, void(*)()>();
+			auto &s1 = inner::GetChannel<1>();
+			auto &s2 = inner::GetChannel<1>();
 			auto ok = std::is_same<decltype(s1), decltype(s2)>::value;
 			UNIT_ASSERT(ok);
 			UNIT_ASSERT(&s1 == &s2);
 		}
 		{
-			auto &s1 = inner::GetChannel<1, decltype(&c1)>();
-			auto &s2 = inner::GetChannel<2, decltype(&c1)>();
+			auto &s1 = inner::GetChannel<1>();
+			auto &s2 = inner::GetChannel<2>();
 			auto ok = std::is_same<decltype(s1), decltype(s2)>::value;
-			UNIT_ASSERT(ok);
-			UNIT_ASSERT(&s1 != &s2);
+			UNIT_ASSERT(!ok);
 		}
 	}
 
@@ -89,61 +73,37 @@ namespace
 		RegEvent<1>(cb1);
 		TriggerEvent<1>();
 		UNIT_ASSERT(1 == g_cb1);
-		TriggerEvent<2>();
-		TriggerEvent<1>(3);
-		TriggerEvent<1>(3,4);
-		UNIT_ASSERT(1 == g_cb1);
-
-		RegEvent<1>(cb11);
+		int t1 = 3;
+		TriggerEvent<2>(t1);
 		TriggerEvent<1>();
 		UNIT_ASSERT(2 == g_cb1);
-		UNIT_ASSERT(1 == g_cb11);
+		UNIT_ASSERT(0 == g_cb2);
 
-		RegEvent<1>(cb2);
-		TriggerEvent<1>(1);
+		RegEvent<2>(cb2);
+		TriggerEvent<2>(1);
 		UNIT_ASSERT(1 == g_cb2);
-		RegEvent<1>(cb3);
-		TriggerEvent<1>(1, 1);
-		UNIT_ASSERT(1 == g_cb3);
-		TriggerEvent<1>(1, (int)'1');
-		UNIT_ASSERT(2 == g_cb3);
-		UNIT_ASSERT(2 == g_cb1);
-		RegEvent<1>(B::cb3);
-		TriggerEvent<1>(1, 1);
-		UNIT_ASSERT(1 == g_b_cb3);
-		UNIT_ASSERT(3 == g_cb3);
 
 
 		enum
 		{
-			E1=1000,
-			E2,
+			E1=1,
+			E2=2,
 		};
 
 		RegEvent<E1>(cb1);
 		TriggerEvent<E1>();
 		UNIT_ASSERT(3 == g_cb1);
-		RegEvent<E2>(cb1);
-		TriggerEvent<E2>();
-		UNIT_ASSERT(4 == g_cb1);
-		UnRegEvent<E2>(cb1);
-		TriggerEvent<E2>();
-		UNIT_ASSERT(4 == g_cb1);
-		TriggerEvent<E1>();
-		UNIT_ASSERT(5 == g_cb1);
-
-
+		RegEvent<E2>(cb2);
+		TriggerEvent<E2>(2);
+		UNIT_ASSERT(2 == g_cb2);
 
 		function<void(void)> postEvent = []()
 		{
-			TriggerEvent<1>(1);
+			TriggerEvent<1>();
 		};
-		UNIT_ASSERT(1 == g_cb2);
+		UNIT_ASSERT(3 == g_cb1);
 		postEvent();
-		UNIT_ASSERT(2 == g_cb2);
-
-
-
+		UNIT_ASSERT(4 == g_cb1);
 	}
 
 	bool g_cb12 = false;
@@ -211,12 +171,12 @@ namespace
 	void test_post_event()
 	{
 		//还不能用，参考吧。变量模板有问题
-		RegEvent<104>(PostHandle);
+		//RegEvent<104>(PostHandle);
 		//int i = 11;
-		PostTriggerEventExample<104>(1);
-		DoPostEvent();
+		//PostTriggerEventExample<104>(1);
+		//DoPostEvent();
 
-		UNIT_ASSERT(1 == g_post_num);
+	//	UNIT_ASSERT(1 == g_post_num);
 		//UNIT_ASSERT(1 == player.num);
 
 	}
@@ -227,8 +187,7 @@ namespace
 
 UNITTEST(publish_subscribe)
 {
-	//test_post_event();
-	sample();
+	test_post_event();
 	test1();
 	test2();
 	test3();

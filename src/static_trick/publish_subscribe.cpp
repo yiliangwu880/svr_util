@@ -15,13 +15,5 @@ void su::PostEvent::Do()
 	m_do_event->clear();
 }
 
-su::PostEvent & su::inner::GetGlobalPostEvent()
-{
-	static PostEvent obj;
-	return obj;
-}
 
-void su::DoPostEvent()
-{
-	inner::GetGlobalPostEvent().Do();
-}
+

@@ -1,4 +1,21 @@
 
+
+
+事件待完善：
+{
+	template<>
+	struct EVENT_ID_INFO<51> {
+		using Fun = void(*)(Player &player);
+	};
+	改成
+		template<>
+	struct EVENT_ID_INFO<51> {
+		using Fun = void(*)(Player &player);
+	};
+
+}
+
+
 mem_pool 加功能：
 {
 	宏定义可选：每个对象内存前面留uint32内存用来存放控制信息。 检查重复 delete 内存，高概率检查delete野地址(uint32存放特定控制信息，随机数字吧)。

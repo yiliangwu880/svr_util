@@ -15,6 +15,7 @@ author: yiliangwu880
 	游戏很多子系统，互相调用需要订阅发布事件来解耦。
 
 sample:
+	参考 sample函数，或者如下：
 	void OnAddMoney(Player &player, int num)
 	{
 		...
@@ -47,6 +48,8 @@ sample:
 
 #define CHECK_RECURSION_CALL //检查递归调用报错
 
+
+
 namespace su
 {
 	using PostEventFun = std::function<void(void)>;
@@ -62,6 +65,28 @@ namespace su
 		void Do();
 	};
 
+	template<const int ID>
+	struct EVENT_ID_INFO {
+		using Fun = int;
+	};
+
+	template<>
+	struct EVENT_ID_INFO<1> {
+		using Fun = void(*)();
+	};
+	template<>
+	struct EVENT_ID_INFO<2> {
+		using Fun = void(*)(int i);
+	};
+	template<>
+	struct EVENT_ID_INFO<11> {
+		using Fun = void(*)();
+	};
+	template<>
+	struct EVENT_ID_INFO<12> {
+		using Fun = void(*)();
+	};
+
 
 	template<class Fun>
 	struct SubScribeSet  
@@ -71,25 +96,26 @@ namespace su
 	};
 	namespace inner
 	{
+
+
 		//静态保存订阅 channel
 		//ID,Fun标识channel
-		template<const int ID, class Fun>
-		SubScribeSet<Fun> &GetChannel()
+		template<const int ID>
+		SubScribeSet<typename EVENT_ID_INFO<ID>::Fun> &GetChannel()
 		{
+			using Fun = typename EVENT_ID_INFO<ID>::Fun;
 			static SubScribeSet<Fun> s;
 			return s;
 		}
-		//返回全局 PostEvent 对象，管理所有channel 的post event
-		PostEvent &GetGlobalPostEvent();
 	}
 
 	//订阅
-	//订阅channel 由 ID, Fun类型一起标识。
+	//ID标识channel
 	//对应发布的channel 由 TriggerEvent的 ID，Agrs 一起标识。
-	template<const int ID, class Fun>
-	void RegEvent(Fun fun)
+	template<const int ID>
+	void RegEvent(typename EVENT_ID_INFO<ID>::Fun fun)
 	{
-		auto &ss = inner::GetChannel<ID, Fun>();
+		auto &ss = inner::GetChannel<ID>();
 		if (ss.m_is_triggering)
 		{
 			su::LogMgr::Obj().Printf(su::LL_ERROR, __FILE__, __LINE__, __FUNCTION__, "can't RegEvent when triggering");
@@ -99,22 +125,36 @@ namespace su
 		void(1);
 	}
 
-	template<const int ID, class Fun>
-	void UnRegEvent(Fun fun)
+
+	template<typename Sig>
+	struct get_;
+
+	template<typename R, typename... Args>
+	struct get_<R(*)(Args...)> {
+		static const size_t  value = sizeof...(Args);
+	};
+
+	template<typename Sig>
+	inline size_t FUN_PARA_SIZE(Sig) {
+		return get_<Sig>::value;
+	}
+
+
+	template<const int ID>
+	void UnRegEvent(typename EVENT_ID_INFO<ID>::Fun fun)
 	{
-		auto &ss = inner::GetChannel<ID, Fun>();
+		auto &ss = inner::GetChannel<ID>();
 		ss.m_funs.erase(fun);
 		void(1);
 	}
 
 	//发布
-	//ID,Fun标识channel， 
+	//ID标识channel， 
 	//有BUG，还不能用，只支持实参数为常量.原因待查
 	template<const int ID, class ... Agrs>
 	void TriggerEvent(Agrs&& ... agrs)
 	{
-		using Fun = void(*)(Agrs...);
-		auto &ss = inner::GetChannel<ID, Fun>();
+		auto &ss = inner::GetChannel<ID>();
 		if (ss.m_is_triggering) //触发回调过程，禁止插入触发，避免复杂调用流程。
 		{
 			su::LogMgr::Obj().Printf(su::LL_ERROR, __FILE__, __LINE__, __FUNCTION__, "can't recursion trigger");
@@ -129,34 +169,45 @@ namespace su
 		ss.m_is_triggering = false;
 	}
 
-	//用不了，参考这个思想吧。以后看能不能写出来。
-	template<const int ID, class ... Agrs>
-	void PostTriggerEventRefer(Agrs&& ... agrs)
+	//给用户参考用
+	//////////////////////////////////////////////////////////////////////////
+	namespace nouse
 	{
-		PostEvent &pe = inner::GetGlobalPostEvent();
-		const std::function<void(void)> &f = std::bind(TriggerEvent<ID>, std::forward<Agrs>(agrs)...);
-		pe.Add(f);
+		//用不了，参考这个思想吧。以后看能不能写出 一个参数可变的模板。
+		template<const int ID, class ... Agrs>
+		void PostTriggerEventRefer(Agrs&& ... agrs)
+		{
+		//	PostEvent &pe = inner::GetGlobalPostEvent();
+			const std::function<void(void)> &f = std::bind(TriggerEvent<ID>, std::forward<Agrs>(agrs)...);
+		//	pe.Add(f);
+		}
+		//参考用
+		template<const int ID, class T1>
+		void PostTriggerEventExample(T1 t1)
+		{
+			//PostEvent &pe = inner::GetGlobalPostEvent();
+			auto f = [&]() {
+				TriggerEvent<ID>(t1);
+			};
+			//pe.Add(f);
+		}
+		template<const int ID, class T1, class T2>
+		void PostTriggerEventExample(T1 t1, T2 t2)
+		{
+			//PostEvent &pe = inner::GetGlobalPostEvent();
+			auto f = [&]() {
+				TriggerEvent<ID>(t1, t2);
+			};
+			//pe.Add(f);
+		}
+
+		template<const int ID, class T1, class T2, class T3>
+		void PostTriggerEventExample(T1 t1, T2 t2, T3 t3)
+		{
+		}
 	}
-	//参考用
-	template<const int ID>
-	void PostTriggerEventExample(int i)
-	{
-		PostEvent &pe = inner::GetGlobalPostEvent();
-		auto f = [&]() {
-			TriggerEvent<ID>(i);
-		};
-		pe.Add(f);
-	}
-	template<const int ID>
-	void PostTriggerEventExampleVoid()
-	{
-		PostEvent &pe = inner::GetGlobalPostEvent();
-		auto f = [&]() {
-			TriggerEvent<ID>();
-		};
-		pe.Add(f);
-	}
-	void DoPostEvent();
+	//////////////////////////////////////////////////////////////////////////
+
 
 
 } //end namespace su
