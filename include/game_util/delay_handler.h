@@ -1,7 +1,9 @@
 /*
 author:yiliangwu880
 you can get more refer from https://github.com/yiliangwu880/CppUtility.git
-brief: 延时处理逻辑， 比如:处理离线玩家事件，缓存操作，等读取数据库成功后执行。
+brief: 延时处理逻辑， 
+比如:
+为了避免处理离线和在线玩家的相同功能写不同函数流程。统一入口处理。
 例子：
 	class MyOptMgr: public DelayOptMgr<MyTarget, uint64>
 	{
@@ -60,8 +62,10 @@ class  DelayOptMgr
 	bool m_is_opting = nullptr;				                            //true表示进入BaseDelayOptMgr::OptTarget运行中
 	Id2Vec m_id_2_vec;		                                            //id 2 vec, vec ==opt list
 public:
-	                                                                    //加一个操作.		(目标找到马上执行，不在就等调用  HandleTarget 再操作)
-	void AddOpt(ObjId target_id, OptFun opt);
+	//加一个操作.		(目标找到马上执行，不在就等调用  HandleTarget 再操作)
+	//注意：你传一些指针，引用进去延后调用，就需要注意是否会野指针。
+	void AddOpt(ObjId target_id, OptFun opt);	
+
 	                                                                    //对目标操作缓存操作
 	void OptTarget(ObjId target_id, Obj &target);
 
@@ -78,6 +82,7 @@ private:
 public:
 
 };
+
 
 template<class Obj, class ObjId, const uint32 MAX_OPT_NUM>
 void DelayOptMgr<Obj, ObjId, MAX_OPT_NUM>::OptTarget(ObjId target_id, Obj &target)

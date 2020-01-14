@@ -9,7 +9,7 @@ author: yiliangwu880
 	发布接口，任意类型
 	channel 由 事件id,函数类型一起标识
 	用户用起来代码很简洁
-	缺点:实现不太好理解
+	缺点:实现不太好理解, 不能完成复用，需要修改一些自定义代码：EVENT_ID_INFO
 
 适用:
 	游戏很多子系统，互相调用需要订阅发布事件来解耦。
@@ -111,7 +111,7 @@ namespace su
 
 	//订阅
 	//ID标识channel
-	//对应发布的channel 由 TriggerEvent的 ID，Agrs 一起标识。
+	//对应发布的channel 由 TriggerEvent的 ID，Args 一起标识。
 	template<const int ID>
 	void RegEvent(typename EVENT_ID_INFO<ID>::Fun fun)
 	{
@@ -151,8 +151,8 @@ namespace su
 	//发布
 	//ID标识channel， 
 	//有BUG，还不能用，只支持实参数为常量.原因待查
-	template<const int ID, class ... Agrs>
-	void TriggerEvent(Agrs&& ... agrs)
+	template<const int ID, class ... Args>
+	void TriggerEvent(Args&& ... args)
 	{
 		auto &ss = inner::GetChannel<ID>();
 		if (ss.m_is_triggering) //触发回调过程，禁止插入触发，避免复杂调用流程。
@@ -164,7 +164,7 @@ namespace su
 		for (const auto &v : ss.m_funs)
 		{
 			printf("s2\n");
-			v(std::forward<Agrs>(agrs)...);
+			v(std::forward<Args>(args)...);
 		}
 		ss.m_is_triggering = false;
 	}
@@ -174,11 +174,11 @@ namespace su
 	namespace nouse
 	{
 		//用不了，参考这个思想吧。以后看能不能写出 一个参数可变的模板。
-		template<const int ID, class ... Agrs>
-		void PostTriggerEventRefer(Agrs&& ... agrs)
+		template<const int ID, class ... Args>
+		void PostTriggerEventRefer(Args&& ... args)
 		{
 		//	PostEvent &pe = inner::GetGlobalPostEvent();
-			const std::function<void(void)> &f = std::bind(TriggerEvent<ID>, std::forward<Agrs>(agrs)...);
+			const std::function<void(void)> &f = std::bind(TriggerEvent<ID>, std::forward<Args>(args)...);
 		//	pe.Add(f);
 		}
 		//参考用

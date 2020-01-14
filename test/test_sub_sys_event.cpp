@@ -53,6 +53,8 @@ namespace
 		SubMode1 m_m1;
 		SubMode2 m_m2;
 		void f();
+
+		//PostTriggerEvent 这里比较遗憾，还找不到通用方法，需要定义所有模板特例
 		template<const int ID>
 		void PostTriggerEvent()
 		{
@@ -69,6 +71,16 @@ namespace
 			};
 			m_event.Add(f);
 		}
+
+		template<const int ID, class ... Args>
+		void Event(Args&& ... args)
+		{
+			::TriggerEvent<ID>(*this, std::forward<Args>(args)...);
+		}
+
+
+		
+
 
 	};
 
@@ -89,10 +101,10 @@ namespace
 
 	void Player::f()
 	{
-		TriggerEvent<51>(*this);
+		Event< 51>();
 		UNIT_ASSERT(m_m1.m_f == 1);
 		UNIT_ASSERT(m_m2.m_f == 1);
-		TriggerEvent<52>(*this, 3);
+		Event<52>(3);
 		UNIT_ASSERT(m_m2.m_f2 == 1);
 
 		PostTriggerEvent<51>();
@@ -105,14 +117,21 @@ namespace
 		UNIT_ASSERT(m_m2.m_f2 == 2);
 
 	}
+	struct Init
+	{
+		Init()
+		{
+			RegEvent<51>(SubMode1::f);
+			RegEvent<51>(SubMode2::f);
+			RegEvent<52>(SubMode2::f2);
+		}
+	} init;
 }
+
 
 UNITTEST(sub_sys_event)
 {
 
-	RegEvent<51>(SubMode1::f);
-	RegEvent<51>(SubMode2::f);
-	RegEvent<52>(SubMode2::f2);
 	Player player;
 	player.f();
 
