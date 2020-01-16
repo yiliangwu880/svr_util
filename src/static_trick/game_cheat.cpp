@@ -6,7 +6,7 @@ brief:游戏作弊码
 
 
 #include "static_trick/game_cheat.h"
-#include "string_tool.h"
+#include "str_util.h"
 #include "misc.h"
 
 
@@ -22,7 +22,7 @@ std::string GameCheat::DoCmd( GamePlayer *pPlayer, const char *pChar )
 	vec_split.push_back(".");
 	vec_split.push_back(" ");
 	vec_split.push_back(":");
-	StringTool::split(pChar, vec_split, vec_str );
+	StrUtil::split(pChar, vec_split, vec_str );
 	if (vec_str.empty())
 	{
 		return "no string";
@@ -46,7 +46,7 @@ std::string GameCheat::DoCmd(const char *pChar)
 	vec_split.push_back(".");
 	vec_split.push_back(" ");
 	vec_split.push_back(":");
-	StringTool::split(pChar, vec_split, vec_str);
+	StrUtil::split(pChar, vec_split, vec_str);
 	if (vec_str.empty())
 	{
 		return "no string";

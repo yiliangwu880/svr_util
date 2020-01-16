@@ -1,6 +1,6 @@
 #include "su_include.h"
 
-#include "string_tool.h"
+#include "str_util.h"
 #include <cassert>
 #include "unit_test.h"
 using namespace std;
@@ -11,32 +11,32 @@ namespace
 	{
         string src;
         VecStr out;
-        StringTool::split(src, " ", out);
+        StrUtil::split(src, " ", out);
         assert(out.empty());
 
         src = "a";
-        StringTool::split(src, " ", out);
+        StrUtil::split(src, " ", out);
         assert(1 == out.size());
         assert("a"==out[0]);
 
         src = "a ";
-        StringTool::split(src, " ", out);
+        StrUtil::split(src, " ", out);
         assert(1 == out.size());
         assert("a"==out[0]);
 
         src = " a ";
-        StringTool::split(src, " ", out);
+        StrUtil::split(src, " ", out);
         assert(1 == out.size());
         assert("a"==out[0]);
 
         src = " a b";
-        StringTool::split(src, " ", out);
+        StrUtil::split(src, " ", out);
         assert(2 == out.size());
         assert("a"==out[0]);
         assert("b"==out[1]);
 
         src = " a b";
-        StringTool::split(src, " ", out, 1);
+        StrUtil::split(src, " ", out, 1);
         assert(1 == out.size());
         assert("a"==out[0]);
 
@@ -45,30 +45,44 @@ namespace
     void test2()
     {
         string s = "abckkabc";
-        StringTool::replace(s, "", "1");
-        StringTool::replace(s, 'a', '1');
+        StrUtil::replace(s, "", "1");
+        StrUtil::replace(s, 'a', '1');
         assert(s == "1bckk1bc");
-        StringTool::replace(s, "1bc", "123");
+        StrUtil::replace(s, "1bc", "123");
         assert(s == "123kk123");
-        StringTool::erase(s, "1bc");
+        StrUtil::erase(s, "1bc");
         assert(s == "123kk123");
-        StringTool::erase(s, "123");
+        StrUtil::erase(s, "123");
         assert(s == "kk");
-        StringTool::erase(s, "");
+        StrUtil::erase(s, "");
         assert(s == "kk");
-        StringTool::erase(s, "1");
+        StrUtil::erase(s, "1");
         assert(s == "kk");
 
     }
 	void test3()
 	{
 		int i = 3;
-		string s = StringTool::NumToStr(i);
-		assert(s == "3");
-		s = StringTool::NumToStr(0.30f);
+		string s = StrNum::NumToStr(i);
+		UNIT_ASSERT(s == "3");
+		s = StrNum::NumToStr(0.30f);
 		uint64 bb = 6000009898983433555;
-		s = StringTool::NumToStr(bb);
-		assert(s == "6000009898983433555");
+		s = StrNum::NumToStr(bb);
+		UNIT_ASSERT(s == "6000009898983433555");
+		bool r = false;
+		s = StrNum::NumToStr(r);
+		UNIT_ASSERT(s == "false");
+		s = StrNum::NumToStr(!r);
+		UNIT_ASSERT(s == "true");
+		UNIT_ASSERT(StrNum::StrToNum<int>("34") == 34);
+		UNIT_ASSERT(StrNum::StrToNum<double>("34") == 34);
+		UNIT_ASSERT(StrNum::StrToNum<uint64>("6000009898983433555") == 6000009898983433555);
+		StrNum::StrToNum<float>("34", &r);
+		UNIT_ASSERT(r);
+		StrNum::StrToNum<float>("a34", &r);
+		UNIT_ASSERT(!r);
+
+
 	}
 	void test4()
 	{//StringTool::format
@@ -78,17 +92,17 @@ namespace
 
 		UNIT_ASSERT(in.length() == 5);
 
-		StringTool::format(out, "%s", in.c_str());
+		StrFormat::format(out, "%s", in.c_str());
 		UNIT_ASSERT(in == out);
 
 		//StringTool::format(out, "a%d%s", in.c_str()); //段错误 SIGSEGV      11    
 
 		{
-			string ret = StringTool::format("%s", in.c_str());
+			string ret = StrFormat::format("%s", in.c_str());
 			UNIT_ASSERT(in == ret);
 		}
 		{
-			string ret = StringTool::format("a%sd", in.c_str());
+			string ret = StrFormat::format("a%sd", in.c_str());
 			UNIT_ASSERT(("a"+in+"d") == ret);
 		}
 		//生成大长度
@@ -97,7 +111,7 @@ namespace
 		{
 			in.append("ab");
 		}
-		StringTool::format(out, "abc_%s_end", in.c_str());
+		StrFormat::format(out, "abc_%s_end", in.c_str());
 		correct = "abc_" + in + "_end";
 		UNIT_ASSERT(correct == out);
 	}

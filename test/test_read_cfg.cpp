@@ -3,7 +3,7 @@ brief: use example and test code
 */
 #include "read_cfg.h"
 #include <bitset>
-#include "string_tool.h"
+#include "str_util.h"
 #include <cassert>
 #include "unit_test.h"
 using namespace std;

@@ -6,5 +6,5 @@
 #include "misc.h"
 #include "log_file.h"
 #include "easy_code.h"
-#include "string_tool.h"
+#include "str_util.h"
 #include "singleton.h"

@@ -1,7 +1,7 @@
 
 #include "read_cfg.h"
 #include <fstream>
-#include "string_tool.h"
+#include "str_util.h"
 #include <algorithm>
 
 using namespace std;
@@ -38,10 +38,10 @@ bool Config::init( const char *file_name )
 				buf.assign(t);
 			}
 		}
-		StringTool::split(buf, '=', vec_str);
+		StrUtil::split(buf, '=', vec_str);
         if (2 == vec_str.size())
         {
-            StringTool::erase(vec_str[0], ' ');
+            StrUtil::erase(vec_str[0], ' ');
             Str2Str::const_iterator it=m_str_2_str.find(vec_str[0]);
             if (it!=m_str_2_str.end())
             {
@@ -50,10 +50,10 @@ bool Config::init( const char *file_name )
             m_str_2_str[vec_str[0]]=vec_str[1];
             continue;
         }
-        StringTool::split(buf, ':', vec_str);
+        StrUtil::split(buf, ':', vec_str);
         if (2 == vec_str.size())
         {
-            StringTool::erase(vec_str[0], ' ');
+            StrUtil::erase(vec_str[0], ' ');
             Str2Str::const_iterator it=m_str_2_array.find(vec_str[0]);
             if (it!=m_str_2_array.end())
             {
@@ -130,7 +130,7 @@ void Config::GetIntArray( const char *name, VecInt &vec_int )
     }
 
     VecStr vec_str;
-    StringTool::split(it->second, ',', vec_str);
+    StrUtil::split(it->second, ',', vec_str);
     for(VecStr::const_iterator it=vec_str.begin(); it!=vec_str.end(); ++it)
     {
         const string &s = *it;
@@ -148,7 +148,7 @@ void Config::GetStrArray( const char *name, VecStr &vec_str )
         return;
     }
 
-    StringTool::split(it->second, ',', vec_str);
+    StrUtil::split(it->second, ',', vec_str);
 }
 
 const VecStr & Config::GetRepeatName()

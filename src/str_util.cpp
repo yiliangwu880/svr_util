@@ -1,4 +1,4 @@
-#include "string_tool.h"
+#include "str_util.h"
 #include <algorithm>
 
 using namespace std;
@@ -6,7 +6,7 @@ namespace su
 {
 
 
-	std::string StringTool::BinaryToHex(const std::string &binaryStr)
+	std::string StrUtil::BinaryToHex(const std::string &binaryStr)
 	{
 		string ret;
 		static const char *hex = "0123456789ABCDEF";
@@ -18,7 +18,7 @@ namespace su
 		return ret;
 	}
 
-void StringTool::format(std::string& resultOUT, const char* fmt, ...)
+void StrFormat::format(std::string& resultOUT, const char* fmt, ...)
 {
 	va_list vl;
 	va_start(vl, fmt);
@@ -46,7 +46,7 @@ void StringTool::format(std::string& resultOUT, const char* fmt, ...)
 	va_end(vl);
 }
 
-std::string StringTool::format(const char* fmt, ...)
+std::string StrFormat::format(const char* fmt, ...)
 {
 	va_list vl;
 	va_start(vl, fmt);
@@ -79,7 +79,7 @@ std::string StringTool::format(const char* fmt, ...)
 
 
 
-void StringTool::unique(const VecStr& strList, VecStr& out)
+void StrUtil::unique(const VecStr& strList, VecStr& out)
 {
     out.clear();
     out.reserve(strList.size());
@@ -101,15 +101,15 @@ void StringTool::unique(const VecStr& strList, VecStr& out)
     }
 }
 
-void StringTool::unique(VecStr& strList)
+void StrUtil::unique(VecStr& strList)
 {
     VecStr result;
-    StringTool::unique(strList, result);
+    StrUtil::unique(strList, result);
     if(strList.size() != result.size())
         strList.assign(result.begin(), result.end());
 }
 
-void StringTool::split(const std::string& str, std::string::value_type separator,VecStr& resultOUT,size_t max_out_size)
+void StrUtil::split(const std::string& str, std::string::value_type separator,VecStr& resultOUT,size_t max_out_size)
 {
     resultOUT.clear();
     if(max_out_size == 0) 
@@ -135,7 +135,7 @@ void StringTool::split(const std::string& str, std::string::value_type separator
         resultOUT.pop_back();
 }
 
-void StringTool::split(const std::string& src_str, const std::string& separator, VecStr& out, size_t max_out_size)
+void StrUtil::split(const std::string& src_str, const std::string& separator, VecStr& out, size_t max_out_size)
 {
     out.clear();
     if(max_out_size == 0) 
@@ -164,13 +164,13 @@ void StringTool::split(const std::string& src_str, const std::string& separator,
         out.push_back(src_str.substr(begin));
 }
 
-void StringTool::split(const std::string& str, const VecStr& separatorList, VecStr& out, size_t max_out_size)
+void StrUtil::split(const std::string& str, const VecStr& separatorList, VecStr& out, size_t max_out_size)
 {
     out.clear();
     if(max_out_size == 0) 
         return;
     VecStr splitSeparatorList;
-    StringTool::unique(separatorList, splitSeparatorList);
+    StrUtil::unique(separatorList, splitSeparatorList);
     if(separatorList.empty())
     {
         out.push_back(str);
@@ -200,13 +200,13 @@ void StringTool::split(const std::string& str, const VecStr& separatorList, VecS
         out.push_back(str.substr(begin));
 }
 
-void StringTool::split(const char* str, std::string::value_type separator, VecStr& out, size_t max_out_size)
+void StrUtil::split(const char* str, std::string::value_type separator, VecStr& out, size_t max_out_size)
 {
     std::string temp = str;
-    StringTool::split(temp, separator, out, max_out_size);
+    StrUtil::split(temp, separator, out, max_out_size);
 }
 
-void StringTool::replace( std::string& str, const std::string& old_value, const std::string& new_value )
+void StrUtil::replace( std::string& str, const std::string& old_value, const std::string& new_value )
 {
     if (old_value.empty())
     {
@@ -220,7 +220,7 @@ void StringTool::replace( std::string& str, const std::string& old_value, const 
     }        
 }
 
-void StringTool::replace( std::string& str, char old_value, char new_value )
+void StrUtil::replace( std::string& str, char old_value, char new_value )
 {
     for(string::size_type   pos(0);   pos!=string::npos;   pos+=1)   
     {     
@@ -231,7 +231,7 @@ void StringTool::replace( std::string& str, char old_value, char new_value )
 }
 
 
-void StringTool::tolower(std::string& str)
+void StrUtil::tolower(std::string& str)
 {
 	std::transform(str.begin(), str.end(), str.begin(), ::tolower);
 }
