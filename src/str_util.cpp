@@ -78,37 +78,6 @@ std::string StrFormat::format(const char* fmt, ...)
 }
 
 
-
-void StrUtil::unique(const VecStr& strList, VecStr& out)
-{
-    out.clear();
-    out.reserve(strList.size());
-    for(VecStr::const_iterator it_from = strList.begin();
-        it_from != strList.end(); ++it_from)
-    {
-        bool repeat = false;
-        for(VecStr::const_iterator it_to = out.begin(); 
-            it_to != out.end(); ++it_to)
-        {
-            if(it_from->compare(*it_to) == 0)
-            {
-                repeat = true;
-                break;
-            }
-        }
-        if(!repeat)
-            out.push_back(*it_from);
-    }
-}
-
-void StrUtil::unique(VecStr& strList)
-{
-    VecStr result;
-    StrUtil::unique(strList, result);
-    if(strList.size() != result.size())
-        strList.assign(result.begin(), result.end());
-}
-
 void StrUtil::split(const std::string& str, std::string::value_type separator,VecStr& resultOUT,size_t max_out_size)
 {
     resultOUT.clear();
@@ -169,8 +138,6 @@ void StrUtil::split(const std::string& str, const VecStr& separatorList, VecStr&
     out.clear();
     if(max_out_size == 0) 
         return;
-    VecStr splitSeparatorList;
-    StrUtil::unique(separatorList, splitSeparatorList);
     if(separatorList.empty())
     {
         out.push_back(str);
@@ -180,7 +147,7 @@ void StrUtil::split(const std::string& str, const VecStr& separatorList, VecStr&
     std::string::size_type begin = 0;
     for(std::string::size_type i = 0; i < str.size(); i++)
     {
-        for(VecStr::const_iterator it = splitSeparatorList.begin(); it != splitSeparatorList.end(); ++it)
+        for(VecStr::const_iterator it = separatorList.begin(); it != separatorList.end(); ++it)
         {
             if(it->compare(0, it->size(), str, i, it->size()) == 0)
             {
