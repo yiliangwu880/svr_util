@@ -63,7 +63,7 @@ private:
 
 private:
 	LogLv m_log_lv;
-	FILE *m_file;
+	int m_fd = -1;
 	bool m_is_std_out;
 	std::string m_file_name;
 };

@@ -3,6 +3,8 @@
 #include <sstream>
 #include <stdio.h>
 #include <stdarg.h>
+#include <fcntl.h>
+#include <unistd.h>
 
 using namespace std;
 namespace su
@@ -58,7 +60,7 @@ su::ILogPrinter &LogMgr::GetILogPrinter()
 
 void DefaultLog::flush()
 {
-	fflush(m_file);
+
 }
 
 void DefaultLog::setStdOut(bool is_std_out)
@@ -69,7 +71,7 @@ void DefaultLog::setStdOut(bool is_std_out)
 
 DefaultLog::DefaultLog(const char *fname)
 	:m_log_lv(LL_TRACE)
-	, m_file(NULL)
+	, m_fd(-1)
 	, m_is_std_out(true)
 	, m_file_name(fname)
 {
@@ -85,9 +87,9 @@ void DefaultLog::setShowLv(LogLv lv)
 
 DefaultLog::~DefaultLog()
 {
-	if (NULL != m_file)
+	if (-1 != m_fd)
 	{
-		fclose(m_file);
+		close(m_fd);
 	}
 }
 
@@ -122,23 +124,35 @@ void DefaultLog::Printf(LogLv lv, const char * file, int line, const char *fun, 
 	}
 	s.append("\n");
 
+
+
+	bool is_exit = (access(m_file_name.c_str(), F_OK | W_OK) == 0);
+	if (!is_exit)
+	{
+		close(m_fd);
+		m_fd = -1;
+		OpenFile();
+	}
+
+
 	if (m_is_std_out)
 	{
 		char out_str[1000];
 		int r = vsnprintf(out_str, sizeof(out_str), s.c_str(), vp);
-		fputs(out_str, m_file); //用一次vfprintf，再用vprintf有时候有BUG， vp被 vfprintf修改了，原因未明
+		//用一次vfprintf，再用vprintf有时候有BUG， vp被 vfprintf修改了，原因未明
+		::write(m_fd, out_str, r);
 		::puts(out_str);		
 		if (r > (int)sizeof(out_str))
 		{
-			fprintf(m_file, "....[str too long,len=%d]\n", r);
+			dprintf(m_fd, "....[str too long,len=%d]\n", r);
 			::printf("....[str too long,len=%d]\n", r);
 		}
 	}
 	else
 	{
-		vfprintf(m_file, s.c_str(), vp);
+		vdprintf(m_fd, s.c_str(), vp);
 	}
-	flush();
+
 }
 
 const char * DefaultLog::GetLogLevelStr(LogLv lv) const
@@ -174,11 +188,13 @@ const char * DefaultLog::GetLogLevelStr(LogLv lv) const
 
 void DefaultLog::OpenFile()
 {
-	m_file = fopen(m_file_name.c_str(), "at");
-	if (NULL == m_file)
+	// 打开文件，不存在则创建
+	m_fd = open(m_file_name.c_str(), O_WRONLY | O_APPEND | O_CREAT, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+	if (m_fd < 0)
 	{
 		::printf("fail open file[%s]\n", m_file_name.c_str());
 	}
+
 }
 
  }
