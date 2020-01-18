@@ -1,95 +1,63 @@
 /*
+author:yiliangwu880
+you can get more refer from https://github.com/yiliangwu880/svr_util.git
+brief:
+	迷你日志。
 	写库时需要打印日志，同时给使用库的用户提供改变日志实现的选择。
-	日志宏在 log_def.h.  用来做库时，一般不给用户用log_def.h。 用户自己定义新的宏来定义新的实现
+	日志宏在 log_def.h.  供开发库用户使用。
+	使用库用户需要自己定义新的宏来定义新的实现。
+	代码无依赖，直接复制就轻易使用到你的项目。
 
-用户改变日志实现例子：
-class MyLog : public ILogPrinter
+
+
+使用库用户例子：
+void MyPrintf(LogLv lv, const char * file, int line, const char *fun, const char * pattern)
 {
-public:
-	virtual void Printf(LogLv lv, const char * file, int line, const char *fun, const char * pattern, va_list vp) override
-	{
-			...
-	}
+		...
+}
 
-};
-MyLog mylog;
 int main(int argc, char* argv[])
 {
-	LogMgr::Obj().SetLogPrinter(&mylog)
+	LogMgr::Obj().SetLogPrinter(&MyPrintf)
 }
-	
+
+开发库用户使用：
+	直接复制到你的库，改下命名空间， 参考log_def.h定义你的日志宏，就可以使用了。
+
 */
 #pragma once
 #include <string>
 
 namespace su
 {
-enum LogLv
-{
-    //优先级从高到底
-    LL_FATAL,
-    LL_ERROR,
-	LL_WARN,
-	LL_INFO,
-    LL_DEBUG,
-    LL_TRACE //追踪BUG用，频繁打印的时候用
-};
-
-//用户重定义打印log接口
-class ILogPrinter
-{
-public:
-	virtual void Printf(LogLv lv, const char * file, int line, const char *fun, const char * pattern, va_list vp) = 0;
-	virtual void flush(){};
-	
-};
-
-//缺省定义,打印到文件和标准输出
-class DefaultLog : public ILogPrinter
-{
-public:
-	virtual void Printf(LogLv lv, const char * file, int line, const char *fun, const char * pattern, va_list vp) override;
-	virtual void flush() override;
-public:
-	//para:const char *fname, 文件路径名
-	explicit DefaultLog(const char *fname = "svr_util_log.txt");
-	~DefaultLog();
-	void setShowLv(LogLv lv);
-	//print log in std out.
-	void setStdOut(bool is_std_out);
-private:
-	const char * GetLogLevelStr(LogLv lv) const;
-	void OpenFile();
-
-private:
-	LogLv m_log_lv;
-	int m_fd = -1;
-	bool m_is_std_out;
-	std::string m_file_name;
-};
-
-
-//单例
-class LogMgr
-{
-public:
-	static LogMgr &Obj()
+	enum LogLv
 	{
-		static LogMgr d;
-		return d;
-	}
-	void SetLogPrinter(ILogPrinter &iprinter); //改变日志实现
-	void Printf(LogLv lv, const char * file, int line, const char *fun, const char * pattern, ...) ;
-	void Printf(LogLv lv, const char * file, int line, const char *fun, const char * pattern, va_list vp);
-	void PrintfCond(LogLv lv, const char * file, int line, const char *fun, const char * cond, const char * pattern="", ...) ;
-	void flush();
+		//优先级从高到底
+		LL_FATAL,
+		LL_ERROR,
+		LL_WARN,
+		LL_INFO,
+		LL_DEBUG,
+		LL_TRACE //追踪BUG用，频繁打印的时候用
+	};
 
-private:
-	LogMgr();
-	ILogPrinter &GetILogPrinter();
-private:
-	ILogPrinter *m_iprinter;
-};
+	using PrintfCB = void(*)(LogLv lv, const char *file, int line, const char *fun, const char * pattern);
 
+	//日志管理单例
+	class LogMgr
+	{
+		PrintfCB m_cb = nullptr;
 
+	public:
+		static LogMgr &Obj();
+		void SetLogPrinter(PrintfCB cb); //改变日志实现
+		void Printf(LogLv lv, const char * file, int line, const char *fun, const char * pattern, ...);
+		void Printf(LogLv lv, const char * file, int line, const char *fun, const char * pattern, va_list vp);
+		void PrintfCond(LogLv lv, const char * file, int line, const char *fun, const char * cond, const char * pattern = "", ...);
+
+	private:
+		LogMgr() {};
+		PrintfCB &GetPrintfCB();
+		static void DefaultPrintf(LogLv lv, const char *file, int line, const char *fun, const char * pattern);
+	};
 }

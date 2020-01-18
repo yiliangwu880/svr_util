@@ -12,9 +12,14 @@ namespace
 {
 	bool f()
 	{
+
 		L_COND_F(1 == 1);
 		L_COND_F(1 == 2, "dd%d %s", 11, "a");
-		L_COND_R(1 == 2, false, "dd%d %s", 11, "a");
+		L_COND(1 == 2, false, "dd%d %s", 11, "a");
+		L_COND(1 == 2, false);
+		
+		COND(1 == 2, false);
+		COND_F(1 == 1);
 		return false;
 	}
 	void t1()
@@ -26,7 +31,9 @@ namespace
 		L_ERROR("ok!. this line print error is ok. t%02d%s", 1, "s");
 		L_FATAL("ok!. this line print error is ok. t%02d%s", 1, "s");
 
-		L_COND(1 == 2, "dd%d %s", 11, "a");
+		L_COND_V(1 == 2, "dd%d %s", 11, "a");
+
+		COND_V(1 == 2);
     }
 	//测试删除文件，会自动创建
 	void delLogfile()
@@ -44,4 +51,5 @@ UNITTEST(testLogFile)
 {
 	UNUSED(delLogfile);
 	UNUSED(t1);
+	//L_ASSERT(1 == 4);
 }
