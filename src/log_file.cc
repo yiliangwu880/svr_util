@@ -26,7 +26,7 @@ namespace su
 		void OpenFile();
 	};
 
-	su::LogMgr & LogMgr::Obj()
+	LogMgr & LogMgr::Obj()
 	{
 		static LogMgr d;
 		return d;
@@ -97,7 +97,7 @@ namespace su
 
 
 
-	su::PrintfCB &LogMgr::GetPrintfCB()
+	PrintfCB &LogMgr::GetPrintfCB()
 	{
 		if (nullptr == m_cb)
 		{

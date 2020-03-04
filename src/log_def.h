@@ -1,6 +1,5 @@
 /*
 	日志宏
-	新日志实现，只需要改 _LOG_PRINTER_ _LOG_COND_PRINTER_ 就可以了
 */
 #pragma once
 #include <string>
