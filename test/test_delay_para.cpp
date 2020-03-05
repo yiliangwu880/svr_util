@@ -2,7 +2,7 @@
 #include "less_use/delay_para.h"
 
 using namespace std;
-using namespace su;
+//using namespace su;
 //
 //namespace
 //{

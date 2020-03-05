@@ -1,5 +1,6 @@
 /*
-²Î¿¼ÓÃ°É£ºÒ»°ã´úÂëÉè¼Æ³É¼òµ¥µã¡£ ²»ÐèÒªÓÃÕâÖÖ£¬²»È»ÓÐµã¸´ÔÓ£¬¿ÉÔÄ¶ÁÐÔµÍ¡£
+»¹Ã»ÍêÉÆ!!!
+²Î¿¼ÓÃ°É£ºÒ»°ã´úÂëÉè¼Æ³É¼òµ¥µã¡£ ²»ÐèÒªÓÃÕâÖÖ£¬²»È»ÓÐµã¸´ÔÓ£¬¿ÉÔÄ¶ÁÐÔµÍ¡£ 
 Éè¼Æ¼òµ¥µã±ÈÈç£ºplayer ·¢ËÍÏûÏ¢Ç°£¬²ÎÊý±£´æÔÚplayer¶ÔÏóÀïÃæ£¬µÈ»Øµ÷µÄÊ±ºòÔÙÍ¨¹ýplayeridÈ¥È¡ÍêÊÂ¡£
 
 brief: ÑÓÊ±²ÎÊý¹ÜÀí£¬ ÓÃ»§¶¯Ì¬µ÷ÓÃ´´½¨³õÊ¼»¯£¬ ÑÓÊ±£¨ÊÕµ½ÍøÂçÏûÏ¢ºó£©£¬»ñÈ¡²ÎÊý£¬×Ô¶¯ÊÍ·Å¡£
@@ -36,7 +37,7 @@ brief: ÑÓÊ±²ÎÊý¹ÜÀí£¬ ÓÃ»§¶¯Ì¬µ÷ÓÃ´´½¨³õÊ¼»¯£¬ ÑÓÊ±£¨ÊÕµ½ÍøÂçÏûÏ¢ºó£©£¬»ñÈ¡²ÎÊý£
 */
 
 #pragma once
-#include "../utility/typedef.h"
+#include "typedef.h"
 #include <vector>
 #include <map>
 #include <utility>
@@ -69,16 +70,16 @@ public:
 		static DelayParaMgr obj;
 		return obj;
 	}
-
+	
 	MyData &Push()
 	{
 		m_id_seed++;
 
-		DelayPara d;
+		DelayData d;
 		d.id = m_id_seed;
-		time(&d.create_tm);
-		auto r = m_id_2_data.insert(std::make_pair(d.id, d));
-		return *(r.first);
+		time_t *t = (time_t *)(&d.create_tm);
+		time(t);
+		return m_id_2_data[d.id].d;
 	}
 
 	//Ê§°Ü·µ»Ønullptr
@@ -89,7 +90,7 @@ public:
 		{
 			return false;
 		}
-		data = it->second;
+		data = it->second.d;
 		m_id_2_data.erase(it);
 		return true;
 	}
@@ -101,9 +102,8 @@ public:
 		time(&cur);
 		for (auto it = m_id_2_data.begin(); it != m_id_2_data.end();)
 		{
-			if (cur - it->second. > m_time_out_sec)
+			if (cur - it->second.create_tm > m_time_out_sec)
 			{
-				delete it->first;
 				it = m_id_2_data.erase(it);
 			}
 			else
