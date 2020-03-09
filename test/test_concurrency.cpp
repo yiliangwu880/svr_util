@@ -262,5 +262,5 @@ UNITTEST(concurrency)
 	BlockExample();
 	TestSwapQueue1();
 	TestSwapQueue2();
-	exit(1);
+	//exit(1);
 }

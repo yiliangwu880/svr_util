@@ -10,7 +10,7 @@ brief:
 
 
 
-使用库用户例子：
+用户改写库日志实现例子：
 void MyPrintf(LogLv lv, const char * file, int line, const char *fun, const char * pattern)
 {
 		...
@@ -21,7 +21,7 @@ int main(int argc, char* argv[])
 	LogMgr::Obj().SetLogPrinter(&MyPrintf)
 }
 
-开发库用户使用：
+库用户使用：
 	直接复制到你的库，改下命名空间， 参考log_def.h定义你的日志宏，就可以使用了。
 
 */

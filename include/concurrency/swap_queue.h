@@ -36,6 +36,13 @@ if(have read all R) C=false
 
 class SwapQueue
 {
+	std::string m_queue_a;
+	std::string m_queue_b;
+	std::string *m_pread = nullptr;
+	std::string *m_pwrite = nullptr;
+	bool m_is_reading = false; //true表示可以读取R数据。false表示R无数据可读。
+	size_t m_read_pos=0;  //下次要读取 *m_pread的索引
+
 public:
 	SwapQueue();
 
@@ -57,12 +64,5 @@ public:
 	void peek(char *(&data), uint32 &len) {};
 	//丢弃部分可读数据
 	void drain(uint32 len) {};
-private:
-	std::string m_queue_a;
-	std::string m_queue_b;
-	std::string *m_pread = nullptr;
-	std::string *m_pwrite = nullptr;
-	bool m_is_reading = false; //true表示可以读取R数据。false表示R无数据可读。
-	size_t m_read_pos=0;  //下次要读取 *m_pread的索引
 };
 
