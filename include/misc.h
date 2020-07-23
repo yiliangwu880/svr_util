@@ -27,6 +27,12 @@ namespace su
 class IdCreater  
 {
 public:
+	IdCreater()
+	{
+		time_t sec;
+		time(&sec);
+		m_lAdapativeTime = (uint32)sec;
+	}
 	uint64 CreateId()
 	{
 		time_t sec;
@@ -36,9 +42,40 @@ public:
 		id = id | m_seed;
 		return id;
 	}
+	//更优化计算，参考用
+	//      *  自适应时间根据当前时间进行修正，初始为当前时间
+    //  *  若自适应时间滞后于当前时间，说明创建UID速度较慢，每次创建UID时修正靠近当前时间
+    // //  *  若创建UID速度较快，例如在一秒内循环序号已经循环一次了(少见情况)，自适应时间将会快于当前时间
+	uint64 CreateId()
+	{
+		
+		time_t iNowTime;
+		time(&iNowTime);
+		m_seed++;
 
+		if (iNowTime > m_lAdapativeTime)
+		{
+			m_lAdapativeTime++;
+		}
+
+		if (m_seed == 0) 
+		{
+			m_lAdapativeTime++;
+			if(m_lAdapativeTime > iNowTime)
+			{
+				//LOG_DBG_SEC("gid too fast, type:%d, time exceed:%ld", m_iType, m_lAdapativeTime- iNowTime);
+			}
+		}
+
+		uint64 id = m_lAdapativeTime << 32;
+		id = id | m_seed;
+
+
+		return id;
+	}
 private:
 	uint32 m_seed = 0;
+	uint32 m_lAdapativeTime = 0;
 };
 
 
