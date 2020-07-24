@@ -15,6 +15,14 @@ REG_MAP_NAME_DECLARE(MapName2, string, int)
 MAP_REG_DEFINE_STR(MapName2, a, 1);
 MAP_REG_DEFINE_STR(MapName2, abc, 2);
 
+
+
+静态运行使用例子：
+STATIC_RUN() //可以任意CPP文件定义
+{
+	... --your code
+}
+
 */
 #pragma once
 
@@ -94,4 +102,13 @@ static_cast<MapClassName::value_type::second_type>(map_value)\
 	MAP_REG_NAME_DEFINE(MapClassName, key, key, map_value)
 
 
+#define STATIC_RUN_CAT(name) \
+namespace {struct StaticRunReg##name\
+{\
+	StaticRunReg##name();\
+};\
+static StaticRunReg##name _StaticRunReg##name;}\
+StaticRunReg##name::StaticRunReg##name()
 
+#define STATIC_RUN_LINE(line) STATIC_RUN_CAT(line)  //多一层，避免__LINE__直接变化成字符串"__LINE__"
+#define STATIC_RUN() STATIC_RUN_LINE(__LINE__)
