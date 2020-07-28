@@ -1,6 +1,7 @@
 /*
 author:yiliangwu
 brief: 静态注册使用例子
+实际项目使用，参考下这里代码，自写一些自定义代码，会更好阅读。 比如写个单例，定义个注册宏就行了。
 特点:
 	注册可以写在cpp任意地方,免去到处翻代码文件添加声明或者定义
 	main函数后才保证初始化成功。
@@ -112,3 +113,37 @@ StaticRunReg##name::StaticRunReg##name()
 
 #define STATIC_RUN_LINE(line) STATIC_RUN_CAT(line)  //多一层，避免__LINE__直接变化成字符串"__LINE__"
 #define STATIC_RUN() STATIC_RUN_LINE(__LINE__)
+
+//------------------------------新实现,避免宏难阅读
+/*
+使用例子
+using StaticReg1 = StaticReg<int, int, 1>;
+namespace
+{ 
+	StaticReg1::RunReg kd141(22, 333);
+}
+void test()
+{
+	LOG( (StaticReg1::Obj()[22]));
+}
+*/
+
+template<class KeyType, class MapType, int Id>
+class StaticReg : public std::map<KeyType, MapType>
+{
+public:
+	static StaticReg &Obj()
+	{
+		static StaticReg d;
+		return d;
+	}
+	struct RunReg
+	{
+		RunReg(KeyType key, MapType value)
+		{
+			StaticReg::Obj().insert(std::make_pair(key, value));
+		};
+	};
+private:
+	StaticReg() {};
+};
