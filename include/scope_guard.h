@@ -26,7 +26,7 @@ namespace su
 		bool                  m_is_dismissed;
 
 	public:
-		explicit ScopeGuard(std::function<void()> onExitScope)
+		explicit ScopeGuard(std::function<void()> &&onExitScope)
 			: m_excute(std::move(onExitScope))
 			, m_is_dismissed(false)
 		{ }
@@ -52,7 +52,7 @@ namespace su
 #define SCOPEGUARD_LINENAME_CAT(name, line) name##line
 #define SCOPEGUARD_LINENAME(name, line) SCOPEGUARD_LINENAME_CAT(name, line) //多一层，避免__LINE__直接变化成字符串"__LINE__"
 
-	//最简化用法
+	//最简化用法。 注意upvalue全部是&,别用野对象。
 #define SCOPE_GUARD(exe)  ScopeGuard SCOPEGUARD_LINENAME(EXIT, __LINE__)([&] { exe; })
 
 
