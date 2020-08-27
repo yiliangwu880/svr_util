@@ -383,7 +383,7 @@ namespace
 	{
 		SysTime::Obj().SetTimeOffset(0);
 		TimeDriver::Obj().Clear();
-		UNIT_INFO("next line print [fatal] and [error] is ok.");
+		LogMgr::Obj().Enable(false);
 		//uint32 id_1st = 0;
 		vector< Timer> all_tm(NUM_1W);
 		for (uint32 i = 0; i < NUM_1W; ++i)
@@ -396,6 +396,7 @@ namespace
 				break;
 			}
 		}
+		LogMgr::Obj().Enable(true);
 		UNIT_ASSERT(1000 == TimeDriver::Obj().GetTimeNum());
 		//g_timer_cb.delTimer(id_1st);
 		all_tm[0].StopTimer();

@@ -17,8 +17,6 @@ using namespace su;
 
 
 
-
-
 namespace
 {
 
@@ -132,11 +130,11 @@ namespace
 		//test recursion trigger
 
 		RegEvent<11>(recursion_cb);
-		UNIT_INFO("======next line error is ok=======");
+		LogMgr::Obj().Enable(false);
 		TriggerEvent<11>();
 		TriggerEvent<12>();
 		RegEvent<12>(recursion_cb12_1);
-		UNIT_INFO("======next line error is ok=======");
+		LogMgr::Obj().Enable(true);
 		TriggerEvent<12>();
 
 		UNIT_ASSERT(!g_cb12);

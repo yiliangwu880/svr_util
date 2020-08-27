@@ -39,6 +39,10 @@ void UnitTestMgr::Reg(IUnitTest *p)
 
 void UnitTestMgr::Printf(bool is_error, const char * file, int line, const char *fun, const char * pattern, ...)
 {
+	if (!m_isEnable)
+	{
+		return;
+	}
 	if (m_print)
 	{
 		va_list vp;

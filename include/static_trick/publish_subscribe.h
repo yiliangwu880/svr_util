@@ -2,27 +2,31 @@
 author: yiliangwu880
 可以从 git@github.com:yiliangwu880/svr_util.git 获取更多的参考。
 发布订阅 ，publish/subscribe
-目前TriggerEvent 不能用，不能识别变量类型
-参考用，具体项目修改 TriggerEvent为更具体的变量类型。
+参考用，具体项目需要新增 多个 EVENT_ID_INFO 定义
 特点：泛型编程
-	订阅接口，任意类型
-	发布接口，任意类型
-	channel 由 事件id,函数类型一起标识
+	发布,订阅接口，任意类型  (接收事件函数参数为任意自定义类型)
+	channel 由 事件id标识
 	用户用起来代码很简洁
-	缺点:实现不太好理解, 不能完成复用，需要修改一些自定义代码：EVENT_ID_INFO  (描述待修改，定义EVENT_ID_INFO是必须的，统一定义事件的传递参数列表。)
+	缺点:实现不太好理解, 不能完成复用，需要修改一些自定义代码：EVENT_ID_INFO  
 
 适用:
-	游戏很多子系统，互相调用需要订阅发布事件来解耦。
+	游戏很多子系统，互相调用需要订阅发布事件来解耦。 
+	好处： 各子系统开发不用互相关注代码，都关注中介作用的事件管理系统就可以了。
 
-sample:
-	参考 sample函数，或者如下：
+code example:
+	
+	template<>
+	struct EVENT_ID_INFO<1> {
+		using Fun = void(*)(Player &player, int num);
+	};
+	----------------------
+
+	//注册事件1回调函数。 为什么放这里：优点，不用去跳别的地方写代码，提高些写代码效率。 缺点，浏览代码不好找到统一注册的地方（利用vs查找引用功能可以解决）。
+	STATIC_REG(RegEvent<1>(OnAddMoney);)
 	void OnAddMoney(Player &player, int num)
 	{
 		...
 	}
-
-	----------------------
-	RegEvent<1>(OnAddMoney); //注册事件1回调函数
 
 	----------------------
 	Player player;
@@ -44,15 +48,13 @@ sample:
 #include <set>
 #include "typedef.h"
 #include <functional>
+#include <tuple>
 #include "../log_file.h"
-
-#define CHECK_RECURSION_CALL //检查递归调用报错
-
-
 
 namespace su
 {
 	using PostEventFun = std::function<void(void)>;
+	//注意：延时调用容易引用了释放的对象。用户需要正确控制对象的生存期。
 	class PostEvent
 	{
 		std::vector<PostEventFun> m_eventA;
@@ -65,7 +67,8 @@ namespace su
 		void Do();
 	};
 
-	template<const int ID>
+	//定义事件ID 关联 接收函数参数列表
+	template<int ID>
 	struct EVENT_ID_INFO {
 		using Fun = int;
 	};
@@ -89,29 +92,24 @@ namespace su
 
 
 	template<class Fun>
-	struct SubScribeSet  
+	struct SubscribeSet  
 	{
-		std::set<Fun> m_funs; //订阅channel的回调
+		std::set<Fun> m_funs; //订阅channel的回调集合
 		bool m_is_triggering = false; //true表示触发回调中
 	};
-	namespace inner
+	namespace inner //外部不需要访问
 	{
-
-
-		//静态保存订阅 channel
-		//ID,Fun标识channel
-		template<const int ID>
-		SubScribeSet<typename EVENT_ID_INFO<ID>::Fun> &GetChannel()
+		//ID标识不同channel
+		template<int ID>
+		SubscribeSet<typename EVENT_ID_INFO<ID>::Fun> &GetChannel()
 		{
 			using Fun = typename EVENT_ID_INFO<ID>::Fun;
-			static SubScribeSet<Fun> s;
+			static SubscribeSet<Fun> s;
 			return s;
 		}
 	}
 
 	//订阅
-	//ID标识channel
-	//对应发布的channel 由 TriggerEvent的 ID，Args 一起标识。
 	template<const int ID>
 	void RegEvent(typename EVENT_ID_INFO<ID>::Fun fun)
 	{
@@ -122,21 +120,6 @@ namespace su
 			return;
 		}
 		ss.m_funs.insert(fun);
-		void(1);
-	}
-
-
-	template<typename Sig>
-	struct get_;
-
-	template<typename R, typename... Args>
-	struct get_<R(*)(Args...)> {
-		static const size_t  value = sizeof...(Args);
-	};
-
-	template<typename Sig>
-	inline size_t FUN_PARA_SIZE(Sig) {
-		return get_<Sig>::value;
 	}
 
 
@@ -144,14 +127,17 @@ namespace su
 	void UnRegEvent(typename EVENT_ID_INFO<ID>::Fun fun)
 	{
 		auto &ss = inner::GetChannel<ID>();
+		if (ss.m_is_triggering)
+		{
+			su::LogMgr::Obj().Printf(su::LL_ERROR, __FILE__, __LINE__, __FUNCTION__, "can't UnRegEvent when triggering");
+			return;
+		}
 		ss.m_funs.erase(fun);
-		void(1);
 	}
 
 	//发布
-	//ID标识channel， 
-	//有BUG，还不能用，只支持实参数为常量.原因待查
-	template<const int ID, class ... Args>
+	//ID标识channel， 非类型形参 只支持实参为常量
+	template<int ID, class ... Args>
 	void TriggerEvent(Args&& ... args)
 	{
 		auto &ss = inner::GetChannel<ID>();

@@ -1,19 +1,8 @@
 
 
 
-事件待完善：
-{
-	template<>
-	struct EVENT_ID_INFO<51> {
-		using Fun = void(*)(Player &player);
-	};
-	改成
-		template<>
-	struct EVENT_ID_INFO<51> {
-		using Fun = void(*)(Player &player);
-	};
-
-}
+# 加静态运行宏 static _run( i = 3)_
+   
 
 
 mem_pool 加功能：

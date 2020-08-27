@@ -42,6 +42,10 @@ public:
 using UnitTestPrintf = void (*)(bool is_error, const char * file, int line, const char *fun, const char * pattern, va_list vp);
 class UnitTestMgr
 {
+	std::map < std::string, IUnitTest* > m_name2unit;
+	UnitTestPrintf m_print = nullptr;
+	bool m_isEnable = true;
+
 public:
 	static UnitTestMgr &Obj()
 	{
@@ -51,15 +55,8 @@ public:
 	void Start(UnitTestPrintf printf= nullptr);
 	void Reg(IUnitTest *p);
 	void Printf(bool is_error, const char * file, int line, const char *pFun, const char * pattern, ...);
+	void Enable(bool isEnalbe) { m_isEnable = isEnalbe; } //fasle == isEnalbe表示不打日志
 
-private:
-	UnitTestMgr()
-		:m_print(nullptr)
-	{}
-
-private:
-	std::map < std::string, IUnitTest* > m_name2unit;
-	UnitTestPrintf m_print;
 };
 
 #define UNIT_ERROR(x, ...)  UnitTestMgr::Obj().Printf( true, __FILE__, __LINE__, __FUNCTION__, x, ##__VA_ARGS__);

@@ -43,6 +43,10 @@ namespace su
 		{
 			return;
 		}
+		if (!m_isEnable)
+		{
+			return;
+		}
 		PrintfCB cb = GetPrintfCB();
 		va_list vp;
 		va_start(vp, pattern);
@@ -66,6 +70,10 @@ namespace su
 	void LogMgr::Printf(LogLv lv, const char * file, int line, const char *fun, const char * pattern, va_list vp)
 	{
 		if (nullptr == pattern)
+		{
+			return;
+		}
+		if (!m_isEnable)
 		{
 			return;
 		}
@@ -96,6 +104,11 @@ namespace su
 	}
 
 
+
+	void LogMgr::Enable(bool isEnable)
+	{
+		m_isEnable = isEnable;
+	}
 
 	PrintfCB &LogMgr::GetPrintfCB()
 	{

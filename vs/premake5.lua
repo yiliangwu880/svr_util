@@ -25,6 +25,7 @@ Project "src"
 	files {"../*.sh",}
 	files {"../*.txt",}
 	files {"../*.lua",}
+	files {"../*.md",}
 	
 Project "test"
 	includedirs { 
