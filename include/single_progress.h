@@ -61,8 +61,7 @@ public:
 		return d;
 	}
 	//启动单例进程， 检查main参数， 带"stop"参数就是停止进程。
-	//@pname 程序名称，用来区分同文件夹的程序
-	//@cb 接收关闭信号USR1回调， 比如： kill -USR1 2581
+	//@pname 程序名称，用来区分同文件夹的不同名程序
 	void Check(int argc, char* argv[], const char *pname);
 
 	//根据文件名，检查确保程序唯一进程，多次启动就会结束后启动进程
@@ -70,6 +69,7 @@ public:
 	//请求结束唯一进程。
 	void Stop(const std::string &single_file_name);
 	//return true表示进程是退出状态。 由用户代码执行退出操作。
+	//注意：
 	//建议再timer里面不断检查这个状态，根据状态实现退出进程。
 	//为什么要建议Timer定时检查if(SingleProgress::Obj().IsExit()) ？
 	//因为信号中断函数会中断执行的主线程，中断函数里面修改非局部变量，容易变量冲突，BUG难查。
@@ -79,7 +79,7 @@ private:
 	static void catch_signal(int sig_type);
 
 private:
-	bool m_is_exit;
+	bool m_is_exit;//true表示已经收到退出信号，进入退出状态
 	sighandler_t m_old_cb;
 };
 

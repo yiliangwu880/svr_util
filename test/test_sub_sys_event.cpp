@@ -9,6 +9,7 @@ brief: ¾²Ì¬×¢²áÊ¹ÓÃÀý×Ó
 #include <map>
 #include <string>
 #include "stl_boost.h"
+#include "static_trick/static_reg.h"
 
 using namespace std;
 using namespace su;
@@ -117,13 +118,16 @@ namespace
 		UNIT_ASSERT(m_m2.m_f2 == 2);
 
 	}
+	STATIC_RUN(RegEvent<51>(SubMode1::f););
+	STATIC_RUN(RegEvent<51>(SubMode2::f););
+	STATIC_RUN(RegEvent<52>(SubMode2::f2););
 	struct Init
 	{
 		Init()
 		{
-			RegEvent<51>(SubMode1::f);
-			RegEvent<51>(SubMode2::f);
-			RegEvent<52>(SubMode2::f2);
+			//RegEvent<51>(SubMode1::f);
+			//RegEvent<51>(SubMode2::f);
+			//RegEvent<52>(SubMode2::f2);
 		}
 	} init;
 }

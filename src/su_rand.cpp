@@ -374,3 +374,19 @@ bool Random::GetIntervalNoRepeatedRandNum(U16 low, U16 high, U16 cnt, U16 *num)
 }
 
 
+double RandomC11::Double(double min, double max)
+{
+	if (min > max)
+	{
+		std::swap(min, max);
+	}
+	std::uniform_real_distribution<double> distribution(min, max);
+	return distribution(GetEgnine());
+
+}
+
+std::default_random_engine & RandomC11::GetEgnine()
+{
+	static std::default_random_engine engine(time(0));
+	return engine;
+}

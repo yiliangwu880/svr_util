@@ -1,6 +1,6 @@
 /*
 author:yiliangwu
-brief: 静态注册使用例子
+brief: 静态注册使用例子, 静态运行
 实际项目使用，参考下这里代码，自写一些自定义代码，会更好阅读。 比如写个单例，定义个注册宏就行了。
 特点:
 	注册可以写在cpp任意地方,免去到处翻代码文件添加声明或者定义
@@ -19,10 +19,8 @@ MAP_REG_DEFINE_STR(MapName2, abc, 2);
 
 
 静态运行使用例子：
-STATIC_RUN() //可以任意CPP文件定义
-{
-	... --your code
-}
+STATIC_RUN(int i=3;) //可以任意CPP文件定义 
+
 
 */
 #pragma once
@@ -103,16 +101,21 @@ static_cast<MapClassName::value_type::second_type>(map_value)\
 	MAP_REG_NAME_DEFINE(MapClassName, key, key, map_value)
 
 
-#define STATIC_RUN_CAT(name) \
-namespace {struct StaticRunReg##name\
-{\
-	StaticRunReg##name();\
-};\
-static StaticRunReg##name _StaticRunReg##name;}\
-StaticRunReg##name::StaticRunReg##name()
+#define STATIC_RUN_CAT(name, exe)\
+namespace {\
+	struct StaticRunReg##name\
+	{\
+		StaticRunReg##name()\
+		{\
+		 exe;\
+		}\
+	};\
+	static StaticRunReg##name _StaticRunReg##name;\
+}
 
-#define STATIC_RUN_LINE(line) STATIC_RUN_CAT(line)  //多一层，避免__LINE__直接变化成字符串"__LINE__"
-#define STATIC_RUN() STATIC_RUN_LINE(__LINE__)
+ //多一层，避免__LINE__直接变化成字符串"__LINE__"
+#define STATIC_RUN_LINE(line, exe) STATIC_RUN_CAT(line, exe)
+#define STATIC_RUN(exe) STATIC_RUN_LINE(__LINE__, exe)
 
 //------------------------------新实现,避免宏难阅读
 /*

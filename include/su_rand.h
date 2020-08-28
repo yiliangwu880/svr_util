@@ -70,13 +70,13 @@ public:
 	static uint32 rand(const std::vector<uint32> &vecWeight);
 };
 
-
+//建议不用这个，用 RandomC11
 struct Random
 {
 	static void Init();
-	//闭区间[min,max]内随机一个数
+	//返回 闭区间[min,max]内随机一个数
 	static uint32 RandUint32(uint32 min, uint32 max);
-	//闭区间[min,max]内随机一个数
+	//返回 闭区间[min,max]内随机一个数
 	static int RandInt(int min, int max);
 
 	//随机小数
@@ -86,3 +86,27 @@ struct Random
     //如果区间跨度大，效率会低。建议用PrimeRandom类
 	static bool GetIntervalNoRepeatedRandNum(U16 low, U16 high, U16 cnt, U16 *num);
 };
+
+struct RandomC11
+{
+	//返回 闭区间[min,max]内随机一个数
+	template<class IntType>
+	static IntType Rand(IntType min, IntType max);
+
+	//返回 闭区间[min,max]内随机一个数
+	static double Double(double min, double max);
+
+private:
+	static std::default_random_engine & GetEgnine();
+};
+
+template<class IntType>
+IntType RandomC11::Rand(IntType min, IntType max)
+{
+	if (min > max)
+	{
+		std::swap(min, max);
+	}
+	std::uniform_int_distribution<IntType> distribution(min, max);
+	return distribution(GetEgnine());
+}

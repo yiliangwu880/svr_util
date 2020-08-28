@@ -15,6 +15,20 @@
 #define L_DEBUG(x, ...)  _LOG_PRINTER_(x, su::LL_DEBUG, ##__VA_ARGS__);
 #define L_TRACE(x, ...)  _LOG_PRINTER_(x, su::LL_TRACE, ##__VA_ARGS__);
 
+
+//日志记录宏，每秒一次
+#define L_TRACE_SEC(iSec, x, ...)\
+    do\
+    {\
+        int iCurrTime = time(0);\
+        static int iBaseLogTime = 0;\
+        if (iCurrTime >= iBaseLogTime + iSec)\
+        {\
+            iBaseLogTime = iCurrTime;\
+            _LOG_PRINTER_(x, su::LL_TRACE, ##__VA_ARGS__);\
+        }\
+    }while(0);
+
 //简化if语句写法,让代码简洁，一但习惯，提高编写效率和浏览代码效率。
 #define L_COND(cond, ret, ...)\
 	do{\

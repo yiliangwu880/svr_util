@@ -9,15 +9,7 @@ using namespace placeholders;
 
 #define WHILE_NUM(num)\
     for(unsigned int i=0; i<num; ++i)
-//简化stl迭代写法
-#define FOR_IT(type, ctn)\
-    for(type::iterator it=(ctn).begin(); it!=(ctn).end(); ++it)
-//C++11才支持
-#define FOR_IT_(ctn)\
-    for(auto it=(ctn).begin(); it!=(ctn).end(); ++it)
 
-#define CONST_FOR_IT(type, ctn)\
-    for(type::const_iterator it=(ctn).begin(); it!=(ctn).end(); ++it)
 namespace
 {
 	class MyTarget
@@ -85,9 +77,8 @@ namespace
 		}
 
 
-		FOR_IT(VecUint64, g_req_db_id_ls)
+		for(uint64 id : g_req_db_id_ls)
 		{
-			uint64 id = *it;
 			g_id_2_target[id] = MyTarget();
 			MyTarget &target = g_id_2_target[id];
 			g_opt_mgr.OptTarget(id, target);
@@ -143,9 +134,8 @@ namespace
 		UNIT_ASSERT(2== g_opt_mgr.GetOptNum(1));
 
 		//读库模拟
-		FOR_IT(VecUint64, g_req_db_id_ls)
+		for(uint64 id: g_req_db_id_ls)
 		{
-			uint64 id = *it;
 			if (g_id_2_target.find(id) == g_id_2_target.end())
 			{
 				g_id_2_target[id]= MyTarget();
