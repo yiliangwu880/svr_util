@@ -15,22 +15,25 @@ author: yiliangwu880
 
 code example:
 	
+	//声明事件参数列表
+	----------------------
 	template<>
 	struct EVENT_ID_INFO<1> {
 		using Fun = void(*)(Player &player, int num);
-	};
+	};	
+
+	//触发事件1
 	----------------------
+	Player player;
+	TriggerEvent<1>(player, 10); 
 
 	//注册事件1回调函数。 为什么放这里：优点，不用去跳别的地方写代码，提高些写代码效率。 缺点，浏览代码不好找到统一注册的地方（利用vs查找引用功能可以解决）。
+	----------------------
 	STATIC_REG(RegEvent<1>(OnAddMoney);)
 	void OnAddMoney(Player &player, int num)
 	{
 		...
 	}
-
-	----------------------
-	Player player;
-	TriggerEvent<1>(player, 10); //触发事件1
 
 	----------延时调用，可以参考----------------------------------------
 
