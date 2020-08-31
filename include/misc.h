@@ -46,7 +46,7 @@ public:
 	//      *  自适应时间根据当前时间进行修正，初始为当前时间
     //  *  若自适应时间滞后于当前时间，说明创建UID速度较慢，每次创建UID时修正靠近当前时间
     // //  *  若创建UID速度较快，例如在一秒内循环序号已经循环一次了(少见情况)，自适应时间将会快于当前时间
-	uint64 CreateId()
+	uint64 CreateIdRef()
 	{
 		
 		time_t iNowTime;
@@ -67,7 +67,7 @@ public:
 			}
 		}
 
-		uint64 id = m_lAdapativeTime << 32;
+		uint64 id = (uint64)m_lAdapativeTime << 32;
 		id = id | m_seed;
 
 
