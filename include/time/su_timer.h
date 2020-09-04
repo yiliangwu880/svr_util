@@ -102,6 +102,7 @@ namespace su
 
 	using TimerCB = std::function<void(void)>;
 	//里面做创建，销毁定时器，保证不泄露资源, 不会回调不存在的Timer
+	//注意： StartTimer传入的 指针，引用 对象，生成期需要用户保证正确，不然会野！
 	class Timer
 	{
 		friend class TimeDriver;
