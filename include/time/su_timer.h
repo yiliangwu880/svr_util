@@ -101,8 +101,13 @@ namespace su
 	};
 
 	using TimerCB = std::function<void(void)>;
-	//里面做创建，销毁定时器，保证不泄露资源, 不会回调不存在的Timer
-	class Timer
+	//特点：
+	//析构的时候销毁定时器，保证不会回调不存在的Timer对象。
+	//Noncopyable 不让复制，避免写出复杂易错代码。比如 vector<Timer> t; ，重分配内存就危险了。
+	//注意： 
+	//StartTimer 传入的 对象，生成期需要用户保证正确，不然会野！(转入方式包括 指针，引用， 函数对象保存的指针，引用 )
+	//不要把Timer对象保存到单例，因为Timer引用了单例  TimeDriver::Obj()。 不然析构就会运行野对象。
+	class Timer : private Noncopyable
 	{
 		friend class TimeDriver;
 	public:
@@ -116,6 +121,7 @@ namespace su
 		//para is_loop true表示循环定时器
 		//return, true成功开始定时器，false 已经开始了，不需要设定(可以先stop,再start)
 		bool StartTimer(uint32 interval_sec, void *para = nullptr, bool is_loop = false);
+		//@brief 回调方式设置timer
 		//@para const TimerCB &cb,  用std::bind绑定的函数
 		bool StartTimer(uint32 interval_sec, const TimerCB &cb, bool is_loop = false);
 		//停止正在进行的定时器，

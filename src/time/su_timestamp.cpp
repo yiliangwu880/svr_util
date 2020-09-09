@@ -97,6 +97,10 @@ namespace su
 
     void SysTime::SetTimeOffset( time_t offset )
     {
+		if (offset > m_offset)
+		{
+			return;
+		}
         m_offset = offset;
         Refresh();
     }
