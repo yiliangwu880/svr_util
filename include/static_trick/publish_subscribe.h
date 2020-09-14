@@ -39,7 +39,7 @@ code example:
 
 	PostTriggerEventExample<1>(player, 10); //延时触发事件1
 
-	延时以后某个地方执行：
+	延时以后某个地方执行：注意延时后，你的传入对象生存期是否有效！！
 	DoPostEvent();
 
 */
