@@ -42,7 +42,7 @@ void LvupBase::AddExpNew( uint64 addNum )
 		uint64 needExp = GetNextLvNeedExp(m_lv+1);
 		if(m_exp < needExp)
 		{
-			break
+			break;
 		}
 
 		m_exp -= needExp;
@@ -50,6 +50,7 @@ void LvupBase::AddExpNew( uint64 addNum )
 		OnLvup();
 	};
 }
+
 void LvupBase::SetLv(uint32 lv)
 {
 	uint32 max_lv = GetMaxLv();
