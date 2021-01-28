@@ -131,6 +131,7 @@ namespace su
 
 	DefaultLog::DefaultLog(const char *fname)
 	{
+		m_file_name = fname;
 		OpenFile();
 	}
 

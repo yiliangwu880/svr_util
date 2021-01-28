@@ -19,6 +19,7 @@ class LvupBase
 
 public:
 	void AddExp(uint64 addNum);
+	void AddExpNew(uint64 addNum);
 	uint32 GetLv() const { return m_lv; }
 	uint64 GetExp() const { return m_exp; }
 	void SetLv(uint32 lv);
