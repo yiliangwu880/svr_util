@@ -220,24 +220,25 @@ void testCurCycleNum()
 	}
 	{
 		CurCycleNum week1(3600/2, 10);
-		tm tmNow ;
+		tm tmNow;
 		tmNow.tm_sec = 0;
 		tmNow.tm_min = 0; 
 		tmNow.tm_hour = 0; 
 		tmNow.tm_mday = 27;		// week 0
 		tmNow.tm_mon = 6;	//7 start
 		tmNow.tm_year = 2014-1900;
-		tmNow.tm_isdst = 0 ;
+		tmNow.tm_isdst = -1 ; //夏令时
 
 
 		tmNow.tm_sec = 10;
 		tmNow.tm_min = 0; 
 		tmNow.tm_hour = 0; 	
+		
 		time_t zero = week1.Get(mktime( &tmNow  ));
 
 		tmNow.tm_sec = 10;
 		tmNow.tm_min = 30; 
-		tmNow.tm_hour = 0; 
+		tmNow.tm_hour = 0;
 		time_t ret = week1.Get(mktime( &tmNow  ));
 		UNIT_ASSERT(ret==zero+1);
 

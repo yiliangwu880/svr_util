@@ -20,6 +20,30 @@ using namespace su;
 
 namespace su
 {
+
+	namespace
+	{
+		//1970-01-04 00:00:00，周日 为周期值0开始计算,以前的日期一律用周期值0表示
+		time_t GetStartSec()
+		{
+			//static const time_t START_SEC = 3*24*3600-8*3600;	//从北京时间
+			//static const time_t START_SEC = 288000; //PST时区
+			//static const time_t START_SEC = 3*24*3600;   //用世界时做日历，就用这个
+			tm tmNow;
+			tmNow.tm_sec = 0;
+			tmNow.tm_min = 0;
+			tmNow.tm_hour = 0;
+			tmNow.tm_mday = 4;		//4 == week 0
+			tmNow.tm_mon = 0;	//0 start
+			tmNow.tm_year = 1970 - 1900;
+			tmNow.tm_isdst = 0;
+			return mktime(&tmNow);
+		}
+
+}
+
+const time_t CurCycleNum::START_SEC = GetStartSec();
+
 CurCycleNum::CurCycleNum( const time_t &period, const time_t &limit/* = 0*/ )
 :m_period(period)
 ,m_start(START_SEC+limit)
@@ -61,6 +85,8 @@ time_t CurCycleNum::GetCurPeriodNum( time_t start, time_t period )
 	time_t dist = cur - start;
 	return dist/period;
 }
+
+
 
 PeriodCnt::PeriodCnt( const time_t &period, const time_t &limit )
 :m_last(time_t())

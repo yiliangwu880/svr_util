@@ -35,6 +35,10 @@ namespace su
 	void LogMgr::SetLogPrinter(PrintfCB cb)
 	{
 		m_cb = cb;
+		if (nullptr == m_cb)
+		{
+			m_cb = &DefaultPrintf;
+		}
 	}
 
 	void LogMgr::Printf(LogLv lv, const char * file, int line, const char *fun, const char * pattern, ...)
@@ -47,7 +51,6 @@ namespace su
 		{
 			return;
 		}
-		PrintfCB cb = GetPrintfCB();
 		va_list vp;
 		va_start(vp, pattern);
 
@@ -56,11 +59,11 @@ namespace su
 		//最多写sizeof(out_str)-1个，自动末尾字符填'\0'
 		//正确返回长度， 长度>=sizeof(out_str) 表示截断
 		int r = vsnprintf(out_str, sizeof(out_str), pattern, vp);
-		cb(lv, file, line, fun, out_str);
+		m_cb(lv, file, line, fun, out_str);
 		if (r >= (int)sizeof(out_str))
 		{
 			snprintf(out_str, sizeof(out_str), "-----------[before str too long，was truncated,actual len=%d]-----------\n", r);
-			cb(lv, file, line, fun, out_str);
+			m_cb(lv, file, line, fun, out_str);
 		}
 
 
@@ -77,18 +80,17 @@ namespace su
 		{
 			return;
 		}
-		PrintfCB cb = GetPrintfCB();
 
 		char out_str[1000];
 		//用一次vfprintf，vp会被 vfprintf修改
 		//最多写sizeof(out_str)-1个，自动末尾字符填'\0'
 		//正确返回长度， 长度>=sizeof(out_str) 表示截断
 		int r = vsnprintf(out_str, sizeof(out_str), pattern, vp);
-		cb(lv, file, line, fun, out_str);
+		m_cb(lv, file, line, fun, out_str);
 		if (r >= (int)sizeof(out_str))
 		{
 			snprintf(out_str, sizeof(out_str), "-----------[before str too long，was truncated,actual len=%d]-----------\n", r);
-			cb(lv, file, line, fun, out_str);
+			m_cb(lv, file, line, fun, out_str);
 		}
 	}
 
@@ -108,15 +110,6 @@ namespace su
 	void LogMgr::Enable(bool isEnable)
 	{
 		m_isEnable = isEnable;
-	}
-
-	PrintfCB &LogMgr::GetPrintfCB()
-	{
-		if (nullptr == m_cb)
-		{
-			m_cb = &DefaultPrintf;
-		}
-		return m_cb;
 	}
 
 	void LogMgr::DefaultPrintf(LogLv lv, const char *file, int line, const char *fun, const char * pattern)

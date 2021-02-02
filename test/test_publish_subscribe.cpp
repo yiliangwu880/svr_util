@@ -144,7 +144,7 @@ namespace
 
 	struct PostPlayer
 	{
-		bool num = 0;
+		uint32_t num = 0;
 		void fun()
 		{
 			num++;

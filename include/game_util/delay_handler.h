@@ -59,7 +59,7 @@ class  DelayOptMgr
 	typedef std::vector<OptFun> VecDelayOpt;
 	typedef std::map<ObjId, VecDelayOpt> Id2Vec;
 
-	bool m_is_opting = nullptr;				                            //true表示进入BaseDelayOptMgr::OptTarget运行中
+	bool m_is_opting = false;				                            //true表示进入BaseDelayOptMgr::OptTarget运行中
 	Id2Vec m_id_2_vec;		                                            //id 2 vec, vec ==opt list
 public:
 	//加一个操作.		(目标找到马上执行，不在就等调用  HandleTarget 再操作)

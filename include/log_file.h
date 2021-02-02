@@ -40,24 +40,23 @@ namespace su
 		LL_DEBUG,
 		LL_TRACE //追踪BUG用，频繁打印的时候用
 	};
-
+	
 	using PrintfCB = void(*)(LogLv lv, const char *file, int line, const char *fun, const char * pattern);
 
 	//日志管理单例
 	class LogMgr
 	{
-		PrintfCB m_cb = nullptr;
+		PrintfCB m_cb = &DefaultPrintf;//选用函数指针，不选用 function<void(LogLv lv...)>. 因为函数对象通常引用另一个对象，另一个对象什么时候会野是个多坑问题。
 		bool m_isEnable = true;
 	public:
 		static LogMgr &Obj();
 		void SetLogPrinter(PrintfCB cb); //改变日志实现
 		void Printf(LogLv lv, const char * file, int line, const char *fun, const char * pattern, ...);
-		void Printf(LogLv lv, const char * file, int line, const char *fun, const char * pattern, va_list vp);
 		void PrintfCond(LogLv lv, const char * file, int line, const char *fun, const char * cond, const char * pattern = "", ...);
 		void Enable(bool isEnable);//false == isEnable 表示不打日志
 	private:
 		LogMgr() {};
-		PrintfCB &GetPrintfCB();
 		static void DefaultPrintf(LogLv lv, const char *file, int line, const char *fun, const char * pattern);
+		void Printf(LogLv lv, const char * file, int line, const char *fun, const char * pattern, va_list vp);
 	};
 }
