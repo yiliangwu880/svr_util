@@ -2,7 +2,7 @@
 /* 
 	注意：阻止不了用户创建多个对象。 比如 concreterClass a; 用户自己负责。
 
-Example:
+阻止多个对象Example:
 class concreterClass : public SingletonBase<concreterClass>
 {
 private:
