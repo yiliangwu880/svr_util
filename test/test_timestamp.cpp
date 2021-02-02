@@ -42,83 +42,84 @@ namespace
         SysTime::Obj().AddTimerOffset(0);
         const char *p1 = NULL;
 
-        p1 = "2015-01-01 00-00-01";
+        p1 = "2060-01-01 00-00-01";
         UNIT_ASSERT(SysTime::Obj().SetTimeByStr(p1));
         UNIT_ASSERT(p1 == SysTime::Obj().GetTimeStr());
 
         p1 = "1970-01-01 07-00-01";
         UNIT_ASSERT(!SysTime::Obj().SetTimeByStr(p1));
-        UNIT_ASSERT("2015-01-01 00-00-01" == SysTime::Obj().GetTimeStr());
+        UNIT_ASSERT("2060-01-01 00-00-01" == SysTime::Obj().GetTimeStr());
      
+		SysTime::Obj().ClearOffsetForTest();
         p1 = "1970-01-01 08-00-01";
-        UNIT_ASSERT(SysTime::Obj().SetTimeByStr(p1));
+        UNIT_ASSERT(SysTime::Obj().SetTimeByStr(p1, true));
         UNIT_ASSERT(p1 == SysTime::Obj().GetTimeStr());
         SysTime::Obj().AddTimerOffset(3600);
         UNIT_ASSERT("1970-01-01 09-00-01" == SysTime::Obj().GetTimeStr());
         
         ///////////////////////////////////
         
-        UNIT_ASSERT(SysTime::Obj().SetTimeByStr("1972-02-01 08-00-01"));
+        UNIT_ASSERT(SysTime::Obj().SetTimeByStr("1972-02-01 08-00-01", true));
         UNIT_ASSERT(SysTime::Obj().IsLeapYear());
         UNIT_ASSERT(29==SysTime::Obj().GetDaysInMonth());
-        UNIT_ASSERT(SysTime::Obj().SetTimeByStr("1970-02-01 08-00-00"));
+        UNIT_ASSERT(SysTime::Obj().SetTimeByStr("1970-02-01 08-00-00", true));
         UNIT_ASSERT(!SysTime::Obj().IsLeapYear());
         UNIT_ASSERT(28==SysTime::Obj().GetDaysInMonth());
-        UNIT_ASSERT(SysTime::Obj().SetTimeByStr("2000-02-01 08-00-01"));
+        UNIT_ASSERT(SysTime::Obj().SetTimeByStr("2000-02-01 08-00-01", true));
         UNIT_ASSERT(SysTime::Obj().IsLeapYear());
         UNIT_ASSERT(29==SysTime::Obj().GetDaysInMonth());
-        UNIT_ASSERT(SysTime::Obj().SetTimeByStr("2100-02-01 08-00-01"));
+        UNIT_ASSERT(SysTime::Obj().SetTimeByStr("2100-02-01 08-00-01", true));
         UNIT_ASSERT(!SysTime::Obj().IsLeapYear());
 		UNIT_ASSERT(28==SysTime::Obj().GetDaysInMonth());
-		UNIT_ASSERT(SysTime::Obj().SetTimeByStr("2010-02-01 08-00-01"));
+		UNIT_ASSERT(SysTime::Obj().SetTimeByStr("2010-02-01 08-00-01", true));
 		UNIT_ASSERT(!SysTime::Obj().IsLeapYear());
 
-        UNIT_ASSERT(SysTime::Obj().SetTimeByStr("2100-01-01 00-00-00"));
+        UNIT_ASSERT(SysTime::Obj().SetTimeByStr("2100-01-01 00-00-00", true));
         UNIT_ASSERT(31==SysTime::Obj().GetDaysInMonth());
-        UNIT_ASSERT(SysTime::Obj().SetTimeByStr("2100-08-01 00-00-00"));
+        UNIT_ASSERT(SysTime::Obj().SetTimeByStr("2100-08-01 00-00-00", true));
         UNIT_ASSERT(31==SysTime::Obj().GetDaysInMonth());
-        UNIT_ASSERT(SysTime::Obj().SetTimeByStr("2100-09-01 00-00-00"));
+        UNIT_ASSERT(SysTime::Obj().SetTimeByStr("2100-09-01 00-00-00", true));
         UNIT_ASSERT(30==SysTime::Obj().GetDaysInMonth());
-        UNIT_ASSERT(SysTime::Obj().SetTimeByStr("2100-12-41 00-00-00"));//故意写41日，里面会调整
+        UNIT_ASSERT(SysTime::Obj().SetTimeByStr("2100-12-41 00-00-00", true));//故意写41日，里面会调整
         UNIT_ASSERT(31==SysTime::Obj().GetDaysInMonth());
 
         //测试getMonthPeriodCnt
-        UNIT_ASSERT(SysTime::Obj().SetTimeByStr("1970-01-01 08-00-00"));
+        UNIT_ASSERT(SysTime::Obj().SetTimeByStr("1970-01-01 08-00-00", true));
         UNIT_ASSERT(1 == SysTime::Obj().GetMonthPeriodCnt());
-        UNIT_ASSERT(SysTime::Obj().SetTimeByStr("1970-01-31 23-59-59"));;
+        UNIT_ASSERT(SysTime::Obj().SetTimeByStr("1970-01-31 23-59-59", true));;
         UNIT_ASSERT(1 == SysTime::Obj().GetMonthPeriodCnt());
-        UNIT_ASSERT(SysTime::Obj().SetTimeByStr("1970-02-22 00-00-00"));
+        UNIT_ASSERT(SysTime::Obj().SetTimeByStr("1970-02-22 00-00-00", true));
         UNIT_ASSERT(2 == SysTime::Obj().GetMonthPeriodCnt());
-        UNIT_ASSERT(SysTime::Obj().SetTimeByStr("2015-12-22 00-00-00"));
+        UNIT_ASSERT(SysTime::Obj().SetTimeByStr("2015-12-22 00-00-00", true));
         UNIT_ASSERT(552 == SysTime::Obj().GetMonthPeriodCnt());
 
         //测试getDayPeriodCnt
-        UNIT_ASSERT(SysTime::Obj().SetTimeByStr("1970-01-01 08-00-00"));
+        UNIT_ASSERT(SysTime::Obj().SetTimeByStr("1970-01-01 08-00-00", true));
         UNIT_ASSERT(0 == SysTime::Obj().GetDayPeriodCnt());
-        UNIT_ASSERT(SysTime::Obj().SetTimeByStr("1970-01-04 00-00-00"));
+        UNIT_ASSERT(SysTime::Obj().SetTimeByStr("1970-01-04 00-00-00", true));
         UNIT_ASSERT(0 == SysTime::Obj().GetDayPeriodCnt());
-        UNIT_ASSERT(SysTime::Obj().SetTimeByStr("1970-01-04 23-59-59"));
+        UNIT_ASSERT(SysTime::Obj().SetTimeByStr("1970-01-04 23-59-59", true));
         UNIT_ASSERT(0 == SysTime::Obj().GetDayPeriodCnt());
-        UNIT_ASSERT(SysTime::Obj().SetTimeByStr("1970-01-05 00-00-00"));
+        UNIT_ASSERT(SysTime::Obj().SetTimeByStr("1970-01-05 00-00-00", true));
         UNIT_ASSERT(1 == SysTime::Obj().GetDayPeriodCnt());
-        UNIT_ASSERT(SysTime::Obj().SetTimeByStr("1970-01-06 00-00-00"));
+        UNIT_ASSERT(SysTime::Obj().SetTimeByStr("1970-01-06 00-00-00", true));
         UNIT_ASSERT(2 == SysTime::Obj().GetDayPeriodCnt());
-        UNIT_ASSERT(SysTime::Obj().SetTimeByStr("2015-01-06 00-00-00"));
+        UNIT_ASSERT(SysTime::Obj().SetTimeByStr("2015-01-06 00-00-00", true));
         UNIT_ASSERT(16438 == SysTime::Obj().GetDayPeriodCnt());
-        UNIT_ASSERT(SysTime::Obj().SetTimeByStr("2015-01-05 23-59-59"));
+        UNIT_ASSERT(SysTime::Obj().SetTimeByStr("2015-01-05 23-59-59", true));
         UNIT_ASSERT(16437 == SysTime::Obj().GetDayPeriodCnt());
 
-        UNIT_ASSERT(SysTime::Obj().SetTimeByStr("1970-01-04 00-00-00"));
+        UNIT_ASSERT(SysTime::Obj().SetTimeByStr("1970-01-04 00-00-00", true));
         UNIT_ASSERT(0 == SysTime::Obj().GetWeekPeriodCnt());
-        UNIT_ASSERT(SysTime::Obj().SetTimeByStr("1970-01-11 00-00-00"));
+        UNIT_ASSERT(SysTime::Obj().SetTimeByStr("1970-01-11 00-00-00", true));
         UNIT_ASSERT(1 == SysTime::Obj().GetWeekPeriodCnt());
-        UNIT_ASSERT(SysTime::Obj().SetTimeByStr("1970-01-17 23-59-59"));
+        UNIT_ASSERT(SysTime::Obj().SetTimeByStr("1970-01-17 23-59-59", true));
         UNIT_ASSERT(1 == SysTime::Obj().GetWeekPeriodCnt());
-        UNIT_ASSERT(SysTime::Obj().SetTimeByStr("1970-01-18 00-00-00"));
+        UNIT_ASSERT(SysTime::Obj().SetTimeByStr("1970-01-18 00-00-00", true));
         UNIT_ASSERT(2 == SysTime::Obj().GetWeekPeriodCnt());
-        UNIT_ASSERT(SysTime::Obj().SetTimeByStr("2015-12-20 00-00-00"));
+        UNIT_ASSERT(SysTime::Obj().SetTimeByStr("2015-12-20 00-00-00", true));
         UNIT_ASSERT(2398 == SysTime::Obj().GetWeekPeriodCnt());
-        UNIT_ASSERT(SysTime::Obj().SetTimeByStr("2015-12-19 23-59-59"));
+        UNIT_ASSERT(SysTime::Obj().SetTimeByStr("2015-12-19 23-59-59", true));
         UNIT_ASSERT(2397 == SysTime::Obj().GetWeekPeriodCnt());
 
     }
@@ -178,8 +179,8 @@ namespace
 		const char *p1 = NULL;
 
 		p1 = "2016-05-05 00-00-01";
-		UNIT_ASSERT(SysTime::Obj().SetTimeByStr(p1));
-		UNIT_ASSERT(p1 == SysTime::Obj().GetTimeStr());
+		UNIT_ASSERT(SysTime::Obj().SetTimeByStr(p1, true));
+		UNIT_ASSERT(p1 == SysTime::Obj().GetTimeStr() || "2016-05-05 01-00-01" == SysTime::Obj().GetTimeStr());
 
 		{
 			string str;
@@ -207,7 +208,7 @@ namespace
 		}
 
 		p1 = "2015-05-05 00-00-00";
-		UNIT_ASSERT(SysTime::Obj().SetTimeByStr(p1));
+		UNIT_ASSERT(SysTime::Obj().SetTimeByStr(p1, true));
 		UNIT_ASSERT(p1 == SysTime::Obj().GetTimeStr());
 
 		{
@@ -248,11 +249,11 @@ namespace
 		const char *p1 = NULL;
 
 		p1 = "a";
-		UNIT_ASSERT(!SysTime::Obj().SetTimeByStr(p1));
+		UNIT_ASSERT(!SysTime::Obj().SetTimeByStr(p1, true));
 		p1 = "2015-01-";
-		UNIT_ASSERT(!SysTime::Obj().SetTimeByStr(p1));
+		UNIT_ASSERT(!SysTime::Obj().SetTimeByStr(p1, true));
 		p1 = "2015-01-01";
-		UNIT_ASSERT(SysTime::Obj().SetTimeByStr(p1));
+		UNIT_ASSERT(SysTime::Obj().SetTimeByStr(p1, true));
 		UNIT_ASSERT("2015-01-01 00-00-00" == SysTime::Obj().GetTimeStr());
 	}
 

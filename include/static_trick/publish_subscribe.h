@@ -152,7 +152,6 @@ namespace su
 		ss.m_is_triggering = true;
 		for (const auto &v : ss.m_funs)
 		{
-			printf("s2\n");
 			v(std::forward<Args>(args)...);
 		}
 		ss.m_is_triggering = false;

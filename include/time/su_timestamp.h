@@ -78,13 +78,17 @@ namespace su
 
         //调试用
         /////////////////////////////////////////
-        //设置系统时间的偏移。 往将来偏移。 比如设置1，表示获取系统时间==真实时间+1秒
-        void SetTimeOffset(time_t offset);
+        //设置系统时间的偏移。 往未来偏移，不能往过去编译。 比如设置1，表示获取系统时间==真实时间+1秒
+		//@para isForcePast , true表示强制设置时间回到过去。//注意：仅测试用，时间回到过去，会很容易产生无法修复的BUG。
+        bool SetTimeOffset(time_t offset, bool isForcePast=false);
+		//注意：仅测试用，时间回到过去，会很容易产生无法修复的BUG。
+		void ClearOffsetForTest();
         //加秒偏移
         void AddTimerOffset(time_t offset);
         //将格式"%Y-%m-%d-%H-%M-%S"表示的时间 设置为当前时间
-        //数字必须为4位或者2位
-        bool SetTimeByStr(const char *pTime);
+		//数字必须为4位或者2位
+		//@para isForcePast , true表示强制设置时间回到过去。//注意：仅测试用，时间回到过去，会很容易产生无法修复的BUG。
+        bool SetTimeByStr(const char *pTime, bool isForcePast = false);
         //加月偏移
         void AddMonthOffset(unsigned int month);
         //加年偏移

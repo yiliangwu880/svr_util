@@ -95,15 +95,23 @@ namespace su
 		return IsLeapYear(1900+m_tm.tm_year);
 	}
 
-    void SysTime::SetTimeOffset( time_t offset )
+    bool SysTime::SetTimeOffset( time_t offset, bool isForcePast)
     {
-		if (offset > m_offset)
+		if (!isForcePast)
 		{
-			return;
+			if (offset < m_offset)
+			{
+				return false;
+			}
 		}
         m_offset = offset;
         Refresh();
-    }
+		return true;
+	}
+	void SysTime::ClearOffsetForTest()
+	{
+		m_offset = 0;
+	}
     void SysTime::AddTimerOffset( time_t offset )
     {
         m_offset += offset;
@@ -208,7 +216,7 @@ namespace su
         return true;
     }
 
-    bool SysTime::SetTimeByStr( const char *pTime )
+    bool SysTime::SetTimeByStr( const char *pTime, bool isForcePast)
     {
 		if (NULL == pTime)
 		{
@@ -224,8 +232,7 @@ namespace su
         time(&t); 
 
 		time_t offset = ret_time-t;
-        SetTimeOffset(offset);
-        return true;
+		return SetTimeOffset(offset, isForcePast);
     }
 
     bool SysTime::TimeToTimeStr( time_t t, string &str )

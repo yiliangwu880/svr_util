@@ -228,11 +228,11 @@ CycleMoreReset::CycleMoreReset( const time_t &period, const VecInt64 &vec_limit 
 	m_vec_limit = vec_limit;
 	std::sort(m_vec_limit.begin(), m_vec_limit.end());
 
-	for (VecInt64::const_iterator it=m_vec_limit.begin(); it!=m_vec_limit.end(); ++it)
+	for (int64 v : m_vec_limit)
 	{
-		if(*it>=period)
+		if(v>=period)
 		{
-			printf("input para error, %lld", *it);
+			printf("input para error, %lld", v);
 		}
 	}	
 }
