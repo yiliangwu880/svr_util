@@ -4,7 +4,7 @@ you can get more refer from https://github.com/yiliangwu880/svr_util.git
 brief:
 	迷你日志。
 	写库时需要打印日志，同时给使用库的用户提供改变日志实现的选择。
-	日志宏在 log_def.h.  供开发库用户使用。
+	日志宏在 log_def.h.  供开发库用户使用。(不放log_file,避免和用户项目日志宏冲突)
 	使用库用户需要自己定义新的宏来定义新的实现。
 	代码无依赖，直接复制就轻易使用到你的项目。
 
