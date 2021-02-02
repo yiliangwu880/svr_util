@@ -1,4 +1,5 @@
 /*
+参考 SnowFlake算法 重新做一个吧
 author: YiliangWu
 杂项：
 )id生成器

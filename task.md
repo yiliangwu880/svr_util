@@ -13,6 +13,7 @@ C++11 时间
 参考 delay_handler.h ，写异步调用，保存上下文
 实现 守护进程 参考 man daemon
 
+ 参考 SnowFlake算法 重新做一个ID生成器
 
 # 实时排行榜：
 方法1：
