@@ -49,7 +49,7 @@ SET(LIBRARY_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/lib)
 ADD_SUBDIRECTORY(src)
 ADD_SUBDIRECTORY(test)
 ADD_SUBDIRECTORY(test_single_process)
-ADD_SUBDIRECTORY(sample/gameSvr)
+ADD_SUBDIRECTORY(samples/gameSvr)
 
 #自定义命令
 ##################################
