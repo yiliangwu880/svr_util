@@ -2,14 +2,14 @@
 brief: ¾²Ì¬×¢²áÊ¹ÓÃÀı×Ó
 */
 
-#include "static_trick/publish_subscribe.h"
+#include "game_util/publish_subscribe.h"
 #include "unit_test.h"
 #include "misc.h"
 #include <iostream>
 #include <map>
 #include <string>
 #include "stl_boost.h"
-#include "static_trick/static_reg.h"
+#include "game_util/static_reg.h"
 
 using namespace std;
 using namespace su;

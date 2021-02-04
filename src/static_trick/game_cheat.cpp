@@ -5,7 +5,7 @@ brief:游戏作弊码
 
 
 
-#include "static_trick/game_cheat.h"
+#include "game_util/game_cheat.h"
 #include "str_util.h"
 #include "misc.h"
 

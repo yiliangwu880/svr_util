@@ -8,7 +8,7 @@
 #include   <time.h>   
 #include "easy_code.h"
 #include "unit_test.h"
-#include "static_trick/publish_subscribe.h"
+#include "game_util/publish_subscribe.h"
 #include <functional>
 #include <type_traits>
 

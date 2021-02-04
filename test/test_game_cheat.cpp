@@ -1,5 +1,5 @@
 
-#include "static_trick/game_cheat.h"
+#include "game_util/game_cheat.h"
 #include "unit_test.h"
 
 

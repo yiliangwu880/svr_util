@@ -1,4 +1,4 @@
-#include "static_trick/publish_subscribe.h"
+#include "game_util/publish_subscribe.h"
 
 void su::PostEvent::Add(const PostEventFun &fun)
 {
