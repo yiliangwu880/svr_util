@@ -9,7 +9,7 @@ brief: ¾²Ì¬×¢²áÊ¹ÓÃÀı×Ó
 #include <map>
 #include <string>
 #include "stl_boost.h"
-#include "game_util/static_reg.h"
+#include "static_reg.h"
 
 using namespace std;
 using namespace su;

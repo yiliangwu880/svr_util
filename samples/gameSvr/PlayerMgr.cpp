@@ -5,7 +5,7 @@
 #include "unit_test.h"
 #include "singleton.h"
 #include "PlayerMgr.h"
-#include "game_util/static_reg.h"
+#include "static_reg.h"
 
 using namespace su;
 using namespace std;

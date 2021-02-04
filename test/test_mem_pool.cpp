@@ -2,7 +2,7 @@
 brief: ¾²Ì¬×¢²áÊ¹ÓÃÀı×Ó
 */
 
-#include "game_util/static_reg.h"
+#include "static_reg.h"
 #include "unit_test.h"
 #include "misc.h"
 #include <iostream>
