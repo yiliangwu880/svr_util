@@ -52,11 +52,11 @@ namespace su
 		static LogMgr &Obj();
 		void SetLogPrinter(PrintfCB cb); //改变日志实现
 		void Printf(LogLv lv, const char * file, int line, const char *fun, const char * pattern, ...);
+		void Printf(LogLv lv, const char * file, int line, const char *fun, const char * pattern, va_list vp);
 		void PrintfCond(LogLv lv, const char * file, int line, const char *fun, const char * cond, const char * pattern = "", ...);
 		void Enable(bool isEnable);//false == isEnable 表示不打日志
 	private:
 		LogMgr() {};
 		static void DefaultPrintf(LogLv lv, const char *file, int line, const char *fun, const char * pattern);
-		void Printf(LogLv lv, const char * file, int line, const char *fun, const char * pattern, va_list vp);
 	};
 }
