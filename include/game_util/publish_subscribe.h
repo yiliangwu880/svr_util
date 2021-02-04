@@ -1,39 +1,48 @@
 /*
 author: yiliangwu880
 可以从 git@github.com:yiliangwu880/svr_util.git 获取更多的参考。
-发布订阅 ，publish/subscribe
-参考用，具体项目需要新增 多个 EVENT_ID_INFO 定义
+事件，发布订阅 ，publish/subscribe
+参考用，具体项目需要新增 多个 EventTraits 定义
 特点：泛型编程
-	发布,订阅接口，任意类型  (接收事件函数参数为任意自定义类型)
+	事件接口
+	事件ID和事件函数类型绑定一起定义。
 	channel 由 事件id标识
 	用户用起来代码很简洁
-	缺点:实现不太好理解, 不能完成复用，需要修改一些自定义代码：EVENT_ID_INFO  
-	注册事件入口不提供 对象，成员函数注册。 避免对象生存期问题复杂话，减少野指针问题。
+	注册事件入口不提供注册对象。 避免对象生存期的控制，减少野指针问题。
+	缺点: 奇技淫巧. 需要修改一些自定义代码：EventTraits
 适用:
-	游戏很多子系统，互相调用需要订阅发布事件来解耦。 
+	游戏很多子系统，互相调用需要事件来解耦。 
 	好处： 各子系统开发不用互相关注代码，都关注中介作用的事件管理系统就可以了。
+
+设计思想：
+	事件比较常见和便捷的方式可以这样写：
+		mgr.RegEvent(eventId, &ins, &Ins::fun); --或者std::bind，函数对象等。共同点都是把对象注册导事件管理器。
+		mgr.Trigger(eventId)			--触发事件回调函数。
+	这个有个容易出错的地方，注册的事件对象生存期怎么维护？一不小心就导致 mgr.Trigger 调用了野指针了。合适有CG的语言。
+	所有这里设计注重稳健的代码。不考虑灵活性，只提供注册函数指针。 
 
 code example:
 	
 	//声明事件参数列表
 	----------------------
 	template<>
-	struct EVENT_ID_INFO<1> {
+	struct EventTraits<1> {
 		using Fun = void(*)(Player &player, int num);
 	};	
 
-	//触发事件1
-	----------------------
-	Player player;
-	TriggerEvent<1>(player, 10); 
-
 	//注册事件1回调函数。 为什么放这里：优点，不用去跳别的地方写代码，提高些写代码效率。 缺点，浏览代码不好找到统一注册的地方（利用vs查找引用功能可以解决）。
 	----------------------
-	STATIC_REG(RegEvent<1>(OnAddMoney);)
+	STATIC_RUN(RegEvent<1>(OnAddMoney);)   -- 可考虑宏 REG_EVENT(1, OnAddMoney)
 	void OnAddMoney(Player &player, int num)
 	{
 		...
 	}
+
+	//触发事件1
+	----------------------
+	Player player;
+	TriggerEvent<1>(player, 10);
+
 
 	----------延时调用，可以参考----------------------------------------
 
@@ -41,6 +50,7 @@ code example:
 
 	延时以后某个地方执行：注意延时后，你的传入对象生存期是否有效！！
 	DoPostEvent();
+
 
 */
 
@@ -57,7 +67,7 @@ code example:
 namespace su
 {
 	using PostEventFun = std::function<void(void)>;
-	//注意：延时调用容易引用了释放的对象。用户需要正确控制对象的生存期。
+	//注意：延时调用容易引用野对象。用户需要正确控制对象的生存期。
 	class PostEvent
 	{
 		std::vector<PostEventFun> m_eventA;
@@ -72,24 +82,24 @@ namespace su
 
 	//定义事件ID 关联 接收函数参数列表
 	template<int ID>
-	struct EVENT_ID_INFO {
+	struct EventTraits {
 		using Fun = int;
 	};
 
 	template<>
-	struct EVENT_ID_INFO<1> {
+	struct EventTraits<1> {
 		using Fun = void(*)();
 	};
 	template<>
-	struct EVENT_ID_INFO<2> {
+	struct EventTraits<2> {
 		using Fun = void(*)(int i);
 	};
 	template<>
-	struct EVENT_ID_INFO<11> {
+	struct EventTraits<11> {
 		using Fun = void(*)();
 	};
 	template<>
-	struct EVENT_ID_INFO<12> {
+	struct EventTraits<12> {
 		using Fun = void(*)();
 	};
 
@@ -100,23 +110,32 @@ namespace su
 		std::set<Fun> m_funs; //订阅channel的回调集合
 		bool m_is_triggering = false; //true表示触发回调中
 	};
-	namespace inner //外部不需要访问
+
+	namespace//用户不需要访问
 	{
 		//ID标识不同channel
 		template<int ID>
-		SubscribeSet<typename EVENT_ID_INFO<ID>::Fun> &GetChannel()
+		SubscribeSet<typename EventTraits<ID>::Fun> &GetChannel()
 		{
-			using Fun = typename EVENT_ID_INFO<ID>::Fun;
+			using Fun = typename EventTraits<ID>::Fun;
 			static SubscribeSet<Fun> s;
 			return s;
 		}
 	}
 
+	//仅测试访问内部用
+	template<int ID>
+	SubscribeSet<typename EventTraits<ID>::Fun> &TestGetChannel()
+	{
+		return GetChannel<ID>();
+	}
+	
+
 	//订阅
 	template<const int ID>
-	void RegEvent(typename EVENT_ID_INFO<ID>::Fun fun)
+	void RegEvent(typename EventTraits<ID>::Fun fun)
 	{
-		auto &ss = inner::GetChannel<ID>();
+		auto &ss = GetChannel<ID>();
 		if (ss.m_is_triggering)
 		{
 			su::LogMgr::Obj().Printf(su::LL_ERROR, __FILE__, __LINE__, __FUNCTION__, "can't RegEvent when triggering");
@@ -127,9 +146,9 @@ namespace su
 
 
 	template<const int ID>
-	void UnRegEvent(typename EVENT_ID_INFO<ID>::Fun fun)
+	void UnRegEvent(typename EventTraits<ID>::Fun fun)
 	{
-		auto &ss = inner::GetChannel<ID>();
+		auto &ss = GetChannel<ID>();
 		if (ss.m_is_triggering)
 		{
 			su::LogMgr::Obj().Printf(su::LL_ERROR, __FILE__, __LINE__, __FUNCTION__, "can't UnRegEvent when triggering");
@@ -143,7 +162,7 @@ namespace su
 	template<int ID, class ... Args>
 	void TriggerEvent(Args&& ... args)
 	{
-		auto &ss = inner::GetChannel<ID>();
+		auto &ss = GetChannel<ID>();
 		if (ss.m_is_triggering) //触发回调过程，禁止插入触发，避免复杂调用流程。
 		{
 			su::LogMgr::Obj().Printf(su::LL_ERROR, __FILE__, __LINE__, __FUNCTION__, "can't recursion trigger");
@@ -165,7 +184,7 @@ namespace su
 		template<const int ID, class ... Args>
 		void PostTriggerEventRefer(Args&& ... args)
 		{
-		//	PostEvent &pe = inner::GetGlobalPostEvent();
+		//	PostEvent &pe = GetGlobalPostEvent();
 			const std::function<void(void)> &f = std::bind(TriggerEvent<ID>, std::forward<Args>(args)...);
 		//	pe.Add(f);
 		}
@@ -173,7 +192,7 @@ namespace su
 		template<const int ID, class T1>
 		void PostTriggerEventExample(T1 t1)
 		{
-			//PostEvent &pe = inner::GetGlobalPostEvent();
+			//PostEvent &pe = GetGlobalPostEvent();
 			auto f = [&]() {
 				TriggerEvent<ID>(t1);
 			};
@@ -182,7 +201,7 @@ namespace su
 		template<const int ID, class T1, class T2>
 		void PostTriggerEventExample(T1 t1, T2 t2)
 		{
-			//PostEvent &pe = inner::GetGlobalPostEvent();
+			//PostEvent &pe = GetGlobalPostEvent();
 			auto f = [&]() {
 				TriggerEvent<ID>(t1, t2);
 			};

@@ -20,11 +20,11 @@ namespace
 namespace su{
 //定义你的事件ID对应参数类型
 template<>
-struct EVENT_ID_INFO<51> {
+struct EventTraits<51> {
 	using Fun = void(*)(Player &player);
 };
 template<>
-struct EVENT_ID_INFO<52> {
+struct EventTraits<52> {
 	using Fun = void(*)(Player &player, int i);
 };
 }
