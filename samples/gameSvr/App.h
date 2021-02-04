@@ -13,8 +13,9 @@ using namespace std;
 //100¿ªÊ¼
 enum  APP_EVENT 
 {
-	AE_CFG_INI=100,
-
+	AE_CFG_INI = 1,
+	AE_AFTER_CFG_INI = 2,
+	AE_INI_NET = 3,
 
 };
 

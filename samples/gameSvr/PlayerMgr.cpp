@@ -24,3 +24,10 @@ void ON_PE_LOGIN(Player &player)
 }
 
 STATIC_RUN(RegEvent<PE_LOGIN>(ON_PE_LOGIN);)
+
+
+void f2()
+{
+	RegEvent<AE_CFG_INI>(ON_AE_CFG_INI);
+	RegEvent<PE_LOGIN>(ON_PE_LOGIN);
+}

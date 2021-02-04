@@ -14,8 +14,25 @@
 
 using namespace std;
 using namespace su;
-
-
+namespace su
+{
+	template<>
+	struct EventTraits<1> {
+		using Fun = void(*)();
+	};
+	template<>
+	struct EventTraits<2> {
+		using Fun = void(*)(int i);
+	};
+	template<>
+	struct EventTraits<11> {
+		using Fun = void(*)();
+	};
+	template<>
+	struct EventTraits<12> {
+		using Fun = void(*)();
+	};
+}
 
 namespace
 {

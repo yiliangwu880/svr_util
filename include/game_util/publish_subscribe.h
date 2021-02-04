@@ -63,6 +63,7 @@ code example:
 #include <functional>
 #include <tuple>
 #include "../log_file.h"
+#include "static_reg.h"
 
 namespace su
 {
@@ -86,22 +87,22 @@ namespace su
 		using Fun = int;
 	};
 
-	template<>
-	struct EventTraits<1> {
-		using Fun = void(*)();
-	};
-	template<>
-	struct EventTraits<2> {
-		using Fun = void(*)(int i);
-	};
-	template<>
-	struct EventTraits<11> {
-		using Fun = void(*)();
-	};
-	template<>
-	struct EventTraits<12> {
-		using Fun = void(*)();
-	};
+	//template<>
+	//struct EventTraits<1> {
+	//	using Fun = void(*)();
+	//};
+	//template<>
+	//struct EventTraits<2> {
+	//	using Fun = void(*)(int i);
+	//};
+	//template<>
+	//struct EventTraits<11> {
+	//	using Fun = void(*)();
+	//};
+	//template<>
+	//struct EventTraits<12> {
+	//	using Fun = void(*)();
+	//};
 
 
 	template<class Fun>
@@ -111,7 +112,7 @@ namespace su
 		bool m_is_triggering = false; //true表示触发回调中
 	};
 
-	namespace//用户不需要访问
+	namespace inner//用户不需要访问，不能是匿名。匿名会导致每个cpp文件独立生成不同对象
 	{
 		//ID标识不同channel
 		template<int ID>
@@ -127,7 +128,7 @@ namespace su
 	template<int ID>
 	SubscribeSet<typename EventTraits<ID>::Fun> &TestGetChannel()
 	{
-		return GetChannel<ID>();
+		return inner::GetChannel<ID>();
 	}
 	
 
@@ -135,7 +136,7 @@ namespace su
 	template<const int ID>
 	void RegEvent(typename EventTraits<ID>::Fun fun)
 	{
-		auto &ss = GetChannel<ID>();
+		auto &ss = inner::GetChannel<ID>();
 		if (ss.m_is_triggering)
 		{
 			su::LogMgr::Obj().Printf(su::LL_ERROR, __FILE__, __LINE__, __FUNCTION__, "can't RegEvent when triggering");
@@ -148,7 +149,7 @@ namespace su
 	template<const int ID>
 	void UnRegEvent(typename EventTraits<ID>::Fun fun)
 	{
-		auto &ss = GetChannel<ID>();
+		auto &ss = inner::GetChannel<ID>();
 		if (ss.m_is_triggering)
 		{
 			su::LogMgr::Obj().Printf(su::LL_ERROR, __FILE__, __LINE__, __FUNCTION__, "can't UnRegEvent when triggering");
@@ -162,7 +163,7 @@ namespace su
 	template<int ID, class ... Args>
 	void TriggerEvent(Args&& ... args)
 	{
-		auto &ss = GetChannel<ID>();
+		auto &ss = inner::GetChannel<ID>();
 		if (ss.m_is_triggering) //触发回调过程，禁止插入触发，避免复杂调用流程。
 		{
 			su::LogMgr::Obj().Printf(su::LL_ERROR, __FILE__, __LINE__, __FUNCTION__, "can't recursion trigger");

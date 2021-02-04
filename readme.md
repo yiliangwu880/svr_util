@@ -8,6 +8,11 @@
 	整个文件夹放到linux目录，安装cmake gcc等。
 	当前目录执行：sh clearBuild.sh 完成编译
 
+使用方法：
+	引入库 svr_util
+	设置include path:
+	svr_util/include
+
 典型使用例子参考: https://github.com/yiliangwu880/simple_web_svr.git
 
 目录结构：
