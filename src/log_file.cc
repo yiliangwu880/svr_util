@@ -26,7 +26,7 @@ namespace su
 		void OpenFile();
 	};
 
-	LogMgr & LogMgr::Obj()
+	LogMgr & LogMgr::Ins()
 	{
 		static LogMgr d;
 		return d;

@@ -38,11 +38,7 @@ protected:
 	virtual ~Singleton() {}
 
 public:
-	static T& Obj() //等删掉
-	{
-		return Ins();
-	}
-	static T& Ins() //新代码改用instance吧，意义更准确
+	static T& Ins() 
 	{
 		if (!m_obj)
 			m_obj = new T;

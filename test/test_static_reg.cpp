@@ -39,23 +39,23 @@ namespace
 UNITTEST(test_static_reg)
 {
 
-	UNIT_ASSERT(MyName::Obj().size() == 3);
+	UNIT_ASSERT(MyName::Ins().size() == 3);
 	
-	UNIT_ASSERT(MyName::Obj().insert(0).second == false);
-	UNIT_ASSERT(MyName::Obj().insert(1).second == false);
-	UNIT_ASSERT(MyName::Obj().insert(2).second == false);
-	UNIT_ASSERT(MyName::Obj().insert(3).second == true);
+	UNIT_ASSERT(MyName::Ins().insert(0).second == false);
+	UNIT_ASSERT(MyName::Ins().insert(1).second == false);
+	UNIT_ASSERT(MyName::Ins().insert(2).second == false);
+	UNIT_ASSERT(MyName::Ins().insert(3).second == true);
 
 
-	UNIT_ASSERT(MyName2::Obj().size() == 3);
-	UNIT_ASSERT(MyName2::Obj().insert(20).second == false);
-	UNIT_ASSERT(MyName2::Obj().insert(21).second == false);
-	UNIT_ASSERT(MyName2::Obj().insert(22).second == false);
-	UNIT_ASSERT(MyName2::Obj().insert(23).second == true);
+	UNIT_ASSERT(MyName2::Ins().size() == 3);
+	UNIT_ASSERT(MyName2::Ins().insert(20).second == false);
+	UNIT_ASSERT(MyName2::Ins().insert(21).second == false);
+	UNIT_ASSERT(MyName2::Ins().insert(22).second == false);
+	UNIT_ASSERT(MyName2::Ins().insert(23).second == true);
 
-	UNIT_ASSERT(MapName2::Obj().size() == 5);
-	UNIT_ASSERT(MapInsert(MapName2::Obj(), "a", 1) == false);
-	UNIT_ASSERT(MapInsert(MapName2::Obj(), "adfdfd2", 1) == true);
+	UNIT_ASSERT(MapName2::Ins().size() == 5);
+	UNIT_ASSERT(MapInsert(MapName2::Ins(), "a", 1) == false);
+	UNIT_ASSERT(MapInsert(MapName2::Ins(), "adfdfd2", 1) == true);
 
 
 }

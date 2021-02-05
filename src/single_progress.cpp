@@ -166,10 +166,10 @@ void SingleProgress::Stop(const std::string &single_file_name)
 
 void SingleProgress::catch_signal(int sig_type)
 {
-	SingleProgress::Obj().m_is_exit = true;
-	if (nullptr != SingleProgress::Obj().m_old_cb)
+	SingleProgress::Ins().m_is_exit = true;
+	if (nullptr != SingleProgress::Ins().m_old_cb)
 	{
-		SingleProgress::Obj().m_old_cb(sig_type);
+		SingleProgress::Ins().m_old_cb(sig_type);
 	}
 }
 

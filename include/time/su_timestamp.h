@@ -15,13 +15,13 @@ namespace su
 {
     //参数描述中的术语年月： 表示实际数字，比如 2015 1 就是2015年1月
     //time_t表达：  格林威治时间1970 年 1 月 1 日 00:00:00 开始计算的秒数。 换成中国时间是 1970-01-01 08:00:00
-	//使用方法：用定时器每秒调用SysTime::Obj().Refresh()，其他时间不刷新。好处，比每次调用刷新效率高一点， 函数运行过程中，SysTime::Obj()不会发生变化。避免时间变化引起的bug
+	//使用方法：用定时器每秒调用SysTime::Ins().Refresh()，其他时间不刷新。好处，比每次调用刷新效率高一点， 函数运行过程中，SysTime::Ins()不会发生变化。避免时间变化引起的bug
 	//使用例子：
 	/*
 		main_loop()
 		{
-			SysTime::Obj().Refresh();刷新当前系统时间
-			const tm &t = SysTime::Obj().getTm();
+			SysTime::Ins().Refresh();刷新当前系统时间
+			const tm &t = SysTime::Ins().getTm();
 		}
 
 	*/

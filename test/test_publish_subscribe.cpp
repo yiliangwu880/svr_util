@@ -147,11 +147,11 @@ namespace
 		//test recursion trigger
 
 		RegEvent<11>(recursion_cb);
-		LogMgr::Obj().Enable(false);
+		LogMgr::Ins().Enable(false);
 		TriggerEvent<11>();
 		TriggerEvent<12>();
 		RegEvent<12>(recursion_cb12_1);
-		LogMgr::Obj().Enable(true);
+		LogMgr::Ins().Enable(true);
 		TriggerEvent<12>();
 
 		UNIT_ASSERT(!g_cb12);

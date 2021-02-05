@@ -12,7 +12,7 @@ using namespace std;
 
 void ON_AE_CFG_INI( int num)
 {
-	CfgMgr::Obj().Init();
+	CfgMgr::Ins().Init();
 	printf("ON_AE_CFG_INI\n");
 }
 
@@ -20,7 +20,7 @@ STATIC_RUN(RegEvent<AE_CFG_INI>(ON_AE_CFG_INI);)
 
 void ON_AE_INI_NET(int num)
 {
-	CfgMgr::Obj().m_isNetInit = true;
+	CfgMgr::Ins().m_isNetInit = true;
 }
 
 STATIC_RUN(RegEvent<AE_INI_NET>(ON_AE_INI_NET);)

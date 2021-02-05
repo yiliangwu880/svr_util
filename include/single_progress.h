@@ -12,12 +12,12 @@ example:
 int main(int argc, char* argv[])
 {
 	//start or stop proccess
-	SingleProgress::Obj().Check(argc, argv, "acc_svr");
+	SingleProgress::Ins().Check(argc, argv, "acc_svr");
 	.... //设置timer一些代码
 }
 void OnTimer()
 {
-	if (SingleProgress::Obj().IsExit())
+	if (SingleProgress::Ins().IsExit())
 	{
 		...//处理结束
 		exit(1);
@@ -55,7 +55,7 @@ class SingleProgress
 {
 	SingleProgress();
 public:
-	static SingleProgress &Obj()
+	static SingleProgress &Ins()
 	{
 		static SingleProgress d;
 		return d;
@@ -71,7 +71,7 @@ public:
 	//return true表示进程是退出状态。 由用户代码执行退出操作。
 	//注意：
 	//建议再timer里面不断检查这个状态，根据状态实现退出进程。
-	//为什么要建议Timer定时检查if(SingleProgress::Obj().IsExit()) ？
+	//为什么要建议Timer定时检查if(SingleProgress::Ins().IsExit()) ？
 	//因为信号中断函数会中断执行的主线程，中断函数里面修改非局部变量，容易变量冲突，BUG难查。
 	bool IsExit(){ return m_is_exit; };
 

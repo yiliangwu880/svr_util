@@ -5,7 +5,7 @@
 
 etc:
 驱动timer,定时调用：
-		TimeDriver::Obj().checkTimeOut();
+		TimeDriver::Ins().checkTimeOut();
 虚函数用法：
 		class MyTimer : public Timer
 		{
@@ -106,7 +106,7 @@ namespace su
 	//Noncopyable 不让复制，避免写出复杂易错代码。比如 vector<Timer> t; ，重分配内存就危险了。
 	//注意： 
 	//StartTimer 传入的 对象，生成期需要用户保证正确，不然会野！(转入方式包括 指针，引用， 函数对象保存的指针，引用 )
-	//不要把Timer对象保存到单例，因为Timer引用了单例  TimeDriver::Obj()。 不然析构就会运行野对象。
+	//不要把Timer对象保存到单例，因为Timer引用了单例  TimeDriver::Ins()。 不然析构就会运行野对象。
 	class Timer : private Noncopyable
 	{
 		friend class TimeDriver;

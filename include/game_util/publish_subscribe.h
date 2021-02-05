@@ -131,7 +131,7 @@ namespace su
 		auto &ss = inner::GetChannel<ID>();
 		if (ss.m_is_triggering)
 		{
-			su::LogMgr::Obj().Printf(su::LL_ERROR, __FILE__, __LINE__, __FUNCTION__, "can't RegEvent when triggering");
+			su::LogMgr::Ins().Printf(su::LL_ERROR, __FILE__, __LINE__, __FUNCTION__, "can't RegEvent when triggering");
 			return;
 		}
 		ss.m_funs.insert(fun);
@@ -144,7 +144,7 @@ namespace su
 		auto &ss = inner::GetChannel<ID>();
 		if (ss.m_is_triggering)
 		{
-			su::LogMgr::Obj().Printf(su::LL_ERROR, __FILE__, __LINE__, __FUNCTION__, "can't UnRegEvent when triggering");
+			su::LogMgr::Ins().Printf(su::LL_ERROR, __FILE__, __LINE__, __FUNCTION__, "can't UnRegEvent when triggering");
 			return;
 		}
 		ss.m_funs.erase(fun);
@@ -158,7 +158,7 @@ namespace su
 		auto &ss = inner::GetChannel<ID>();
 		if (ss.m_is_triggering) //触发回调过程，禁止插入触发，避免复杂调用流程。
 		{
-			su::LogMgr::Obj().Printf(su::LL_ERROR, __FILE__, __LINE__, __FUNCTION__, "can't recursion trigger");
+			su::LogMgr::Ins().Printf(su::LL_ERROR, __FILE__, __LINE__, __FUNCTION__, "can't recursion trigger");
 			return;
 		}
 		ss.m_is_triggering = true;

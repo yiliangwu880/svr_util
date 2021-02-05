@@ -18,7 +18,7 @@ void MyPrintf(LogLv lv, const char * file, int line, const char *fun, const char
 
 int main(int argc, char* argv[])
 {
-	LogMgr::Obj().SetLogPrinter(&MyPrintf)
+	LogMgr::Ins().SetLogPrinter(&MyPrintf)
 }
 
 库用户使用：
@@ -49,7 +49,7 @@ namespace su
 		PrintfCB m_cb = &DefaultPrintf;//选用函数指针，不选用 function<void(LogLv lv...)>. 因为函数对象通常引用另一个对象，另一个对象什么时候会野是个多坑问题。
 		bool m_isEnable = true;
 	public:
-		static LogMgr &Obj();
+		static LogMgr &Ins();
 		void SetLogPrinter(PrintfCB cb); //改变日志实现
 		void Printf(LogLv lv, const char * file, int line, const char *fun, const char * pattern, ...);
 		void Printf(LogLv lv, const char * file, int line, const char *fun, const char * pattern, va_list vp);

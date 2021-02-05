@@ -27,8 +27,8 @@ std::string GameCheat::DoCmd( GamePlayer *pPlayer, const char *pChar )
 	{
 		return "no string";
 	}
-	StrMapCheatFun::const_iterator it = StrMapCheatFun::Obj().find(vec_str.front());
-	if (it==StrMapCheatFun::Obj().end())
+	StrMapCheatFun::const_iterator it = StrMapCheatFun::Ins().find(vec_str.front());
+	if (it==StrMapCheatFun::Ins().end())
 	{
 		return "can't find handle function";
 	}
@@ -51,8 +51,8 @@ std::string GameCheat::DoCmd(const char *pChar)
 	{
 		return "no string";
 	}
-	auto it = StrMapCheatFun_DoCmdFun::Obj().find(vec_str.front());
-	if (it == StrMapCheatFun_DoCmdFun::Obj().end())
+	auto it = StrMapCheatFun_DoCmdFun::Ins().find(vec_str.front());
+	if (it == StrMapCheatFun_DoCmdFun::Ins().end())
 	{
 		return "can't find handle function";
 	}

@@ -33,7 +33,7 @@ namespace su
 			return 0;
 		}
 
-		time_t sec = SysTime::Obj().Sec();
+		time_t sec = SysTime::Ins().Sec();
 		time_t key = sec + interval_sec;
 		if (key < sec)//时间太大溢出，好几千年都不过期，没意义。
 		{
@@ -86,7 +86,7 @@ namespace su
 
 	void TimeDriver::CheckTimeOut()
 	{
-		time_t sec = SysTime::Obj().Sec();
+		time_t sec = SysTime::Ins().Sec();
         VecData vec_timeout;
 
 		{
@@ -172,7 +172,7 @@ namespace su
 			//L_ERROR("state error, repeated start timer");
 			return false;
 		}
-		bool ret = TimeDriver::Obj().NewTimer(this, interval_sec, is_loop);
+		bool ret = TimeDriver::Ins().NewTimer(this, interval_sec, is_loop);
 		if (!ret)
 		{
 			//L_ERROR("AttachTimer fail");
@@ -189,7 +189,7 @@ namespace su
 		{
 			return false;
 		}
-		TimeDriver::Obj().DelTimer(this);//里面保证Timer指针删掉，不会野掉
+		TimeDriver::Ins().DelTimer(this);//里面保证Timer指针删掉，不会野掉
 
 		m_state = S_WAIT_START_TIMER;
 		return true;

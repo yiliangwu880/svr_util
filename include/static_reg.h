@@ -37,7 +37,7 @@ STATIC_RUN(int i=3;) //可以任意CPP文件定义
 class SetClassName : public std::set<ValueType>\
 {\
 public:\
-	static SetClassName &Obj()\
+	static SetClassName &Ins()\
 	{\
 		static SetClassName d;\
 		return d;\
@@ -46,7 +46,7 @@ public:\
 		{\
 		RunReg(ValueType para)\
 			{ \
-			SetClassName::Obj().insert(para).second; \
+			SetClassName::Ins().insert(para).second; \
 			};\
 		}; \
 private:\
@@ -69,7 +69,7 @@ private:\
 class MapClassName : public std::map<KeyType, MapType>\
 {\
 public:\
-	static MapClassName &Obj()\
+	static MapClassName &Ins()\
 	{\
 	static MapClassName d; \
 	return d; \
@@ -78,7 +78,7 @@ public:\
 	{\
 		RunReg(const std::pair<KeyType, MapType> &para)\
 		{ \
-			MapClassName::Obj().insert(para).second; \
+			MapClassName::Ins().insert(para).second; \
 		};\
 	}; \
 private:\
@@ -127,7 +127,7 @@ namespace
 }
 void test()
 {
-	LOG( (StaticReg1::Obj()[22]));
+	LOG( (StaticReg1::Ins()[22]));
 }
 */
 
@@ -135,7 +135,7 @@ template<class KeyType, class MapType, int Id>
 class StaticReg : public std::map<KeyType, MapType>
 {
 public:
-	static StaticReg &Obj()
+	static StaticReg &Ins()
 	{
 		static StaticReg d;
 		return d;
@@ -144,7 +144,7 @@ public:
 	{
 		RunReg(KeyType key, MapType value)
 		{
-			StaticReg::Obj().insert(std::make_pair(key, value));
+			StaticReg::Ins().insert(std::make_pair(key, value));
 		};
 	};
 private:

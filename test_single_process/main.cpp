@@ -15,18 +15,18 @@ using namespace std;
 int main(int argc, char* argv[])
 {
 
-	SingleProgress::Obj().Check(argc, argv, "single_process_test");
+	SingleProgress::Ins().Check(argc, argv, "single_process_test");
 
 
 	while (true)
 	{
-		if (SingleProgress::Obj().IsExit())
+		if (SingleProgress::Ins().IsExit())
 		{
 			printf("stop");
 			break;
 		}
 	}
-	//UnitTestMgr::Obj().Start();
+	//UnitTestMgr::Ins().Start();
 	return 0;
 }
 
