@@ -1,12 +1,12 @@
 /**
 author: yilaing.wu
 
-功能：限制程序进程数量为一。 信号结束进程.
-会在程序当前目录创建锁文件，比如 my_name.lock
-
+功能：
+	限制程序进程数量为一。 
+	信号安全结束进程. 方式：./excute stop 
+	会在程序当前目录创建锁文件，比如 my_name.lock
 
 example:
-//不建议用，依赖一个timer循环调用，不直观。 以后删掉
 启动进程：例子 ./acc_svr
 结束进程: 命令参数例子： ./acc_svr stop
 int main(int argc, char* argv[])

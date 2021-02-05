@@ -124,14 +124,6 @@ namespace su
 		}
 	}
 
-	//仅测试访问内部用
-	template<int ID>
-	SubscribeSet<typename EventTraits<ID>::Fun> &TestGetChannel()
-	{
-		return inner::GetChannel<ID>();
-	}
-	
-
 	//订阅
 	template<const int ID>
 	void RegEvent(typename EventTraits<ID>::Fun fun)

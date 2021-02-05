@@ -49,11 +49,7 @@ class PlayerMgr : public Singleton<PlayerMgr>
 public:
 	PlayerMgr() {};
 	Player m_player;
-	void Login()
-	{
-		m_player.n = 33;
-		TriggerEvent<PE_LOGIN>(m_player);
-	}
+	void Login();
 };
 
 

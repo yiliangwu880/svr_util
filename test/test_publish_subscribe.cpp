@@ -40,15 +40,15 @@ namespace
 	void test1()
 	{
 		{
-			auto &s1 = TestGetChannel<1>();
-			auto &s2 = TestGetChannel<1>();
+			auto &s1 = inner::GetChannel<1>();
+			auto &s2 = inner::GetChannel<1>();
 			auto ok = std::is_same<decltype(s1), decltype(s2)>::value;
 			UNIT_ASSERT(ok);
 			UNIT_ASSERT(&s1 == &s2);
 		}
 		{
-			auto &s1 = TestGetChannel<1>();
-			auto &s2 = TestGetChannel<2>();
+			auto &s1 = inner::GetChannel<1>();
+			auto &s2 = inner::GetChannel<2>();
 			auto ok = std::is_same<decltype(s1), decltype(s2)>::value;
 			UNIT_ASSERT(!ok);
 		}
