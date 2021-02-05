@@ -62,7 +62,7 @@ public:
 	}
 	//启动单例进程， 检查main参数， 带"stop"参数就是停止进程。
 	//@pname 程序名称，用来区分同文件夹的不同名程序
-	void Check(int argc, char* argv[], const char *pname);
+	void Check(int argc, char* argv[], const char *pname, bool isDaemon = false);
 
 	//根据文件名，检查确保程序唯一进程，多次启动就会结束后启动进程
 	void Check(const std::string &single_file_name);

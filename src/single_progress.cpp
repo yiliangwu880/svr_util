@@ -116,7 +116,7 @@ void SingleProgress::Check(const std::string &single_file_name)
 	if (!m_file_lock.lock())
 	{
 		L_DEBUG("======progress %s aleady run! exit cur progress======", single_file_name.c_str());
-		printf("======progress %s aleady run! exit cur progress======", single_file_name.c_str());
+		printf("======progress %s aleady run! exit cur progress======\n", single_file_name.c_str());
 		exit(1);
 	}
 	sighandler_t old_cb = signal(SIGUSR1, SingleProgress::catch_signal);
@@ -130,8 +130,18 @@ void SingleProgress::Check(const std::string &single_file_name)
 	}
 }
 
-void SingleProgress::Check(int argc, char* argv[], const char *pname)
-{
+void SingleProgress::Check(int argc, char* argv[], const char *pname, bool isDaemon)
+{ 
+	if (isDaemon)
+	{
+		//当nochdir为0时，daemon将更改进城的根目录为root(“ / ”)。
+		//当noclose为0是，daemon将进城的STDIN, STDOUT, STDERR都重定向到 / dev / null。
+		if (0 != daemon(1, 0))
+		{
+			printf("daemon fail\n");
+		}
+	} 
+	
 	if (argc == 2 && string("stop") == argv[1])
 	{
 		Stop(pname);
@@ -139,6 +149,9 @@ void SingleProgress::Check(int argc, char* argv[], const char *pname)
 		return;
 	}
 	Check(pname);
+
+	//这里不能调用 daemon函数，不然会无效。可能进程和锁文件关系变化。
+	//daemon(1, 0)
 }
 
 void SingleProgress::Stop(const std::string &single_file_name)
