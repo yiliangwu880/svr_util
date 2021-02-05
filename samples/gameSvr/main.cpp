@@ -15,8 +15,8 @@ using namespace su;
 using namespace std;
 int main(int argc, char* argv[])
 {
-	TriggerEvent<AE_CFG_INI>(1);
-	TriggerEvent<AE_INI_NET>(1);
+	FireEvent<AE_CFG_INI>(1);
+	FireEvent<AE_INI_NET>(1);
 	PlayerMgr::Ins().Login();
 
 

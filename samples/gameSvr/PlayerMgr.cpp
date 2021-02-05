@@ -37,5 +37,5 @@ STATIC_RUN(RegEvent<PE_LOGIN>(ON_PE_LOGIN);)
 void PlayerMgr::Login()
 {
 	m_player.n = 33;
-	TriggerEvent<PE_LOGIN>(m_player);
+	FireEvent<PE_LOGIN>(m_player);
 }

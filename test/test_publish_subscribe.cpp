@@ -86,16 +86,16 @@ namespace
 	void test2()
 	{
 		RegEvent<1>(cb1);
-		TriggerEvent<1>();
+		FireEvent<1>();
 		UNIT_ASSERT(1 == g_cb1);
 		int t1 = 3;
-		TriggerEvent<2>(t1);
-		TriggerEvent<1>();
+		FireEvent<2>(t1);
+		FireEvent<1>();
 		UNIT_ASSERT(2 == g_cb1);
 		UNIT_ASSERT(0 == g_cb2);
 
 		RegEvent<2>(cb2);
-		TriggerEvent<2>(1);
+		FireEvent<2>(1);
 		UNIT_ASSERT(1 == g_cb2);
 
 
@@ -106,15 +106,15 @@ namespace
 		};
 
 		RegEvent<E1>(cb1);
-		TriggerEvent<E1>();
+		FireEvent<E1>();
 		UNIT_ASSERT(3 == g_cb1);
 		RegEvent<E2>(cb2);
-		TriggerEvent<E2>(2);
+		FireEvent<E2>(2);
 		UNIT_ASSERT(2 == g_cb2);
 
 		function<void(void)> postEvent = []()
 		{
-			TriggerEvent<1>();
+			FireEvent<1>();
 		};
 		UNIT_ASSERT(3 == g_cb1);
 		postEvent();
@@ -130,7 +130,7 @@ namespace
 	}
 	void recursion_cb12()
 	{
-		TriggerEvent<11>();
+		FireEvent<11>();
 	}
 	void recursion_cb()
 	{
@@ -140,7 +140,7 @@ namespace
 	void recursion_cb12_1()
 	{
 		g_cb121 = true;
-		TriggerEvent<12>();
+		FireEvent<12>();
 	}
 	void test3()
 	{
@@ -148,11 +148,11 @@ namespace
 
 		RegEvent<11>(recursion_cb);
 		LogMgr::Ins().Enable(false);
-		TriggerEvent<11>();
-		TriggerEvent<12>();
+		FireEvent<11>();
+		FireEvent<12>();
 		RegEvent<12>(recursion_cb12_1);
 		LogMgr::Ins().Enable(true);
-		TriggerEvent<12>();
+		FireEvent<12>();
 
 		UNIT_ASSERT(!g_cb12);
 		UNIT_ASSERT(g_cb121);
@@ -188,7 +188,7 @@ namespace
 		//还不能用，参考吧。变量模板有问题
 		//RegEvent<104>(PostHandle);
 		//int i = 11;
-		//PostTriggerEventExample<104>(1);
+		//PostFireEventExample<104>(1);
 		//DoPostEvent();
 
 	//	UNIT_ASSERT(1 == g_post_num);

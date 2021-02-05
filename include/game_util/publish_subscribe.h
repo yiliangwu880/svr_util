@@ -17,8 +17,8 @@ author: yiliangwu880
 设计思想：
 	事件比较常见和便捷的方式可以这样写：
 		mgr.RegEvent(eventId, &ins, &Ins::fun); --或者std::bind，函数对象等。共同点都是把对象注册导事件管理器。
-		mgr.Trigger(eventId)			--触发事件回调函数。
-	这个有个容易出错的地方，注册的事件对象生存期怎么维护？一不小心就导致 mgr.Trigger 调用了野指针了。合适有CG的语言。
+		mgr.Fire(eventId)			--触发事件回调函数。
+	这个有个容易出错的地方，注册的事件对象生存期怎么维护？一不小心就导致 mgr.Fire 调用了野指针了。合适有CG的语言。
 	所有这里设计注重稳健的代码。不考虑灵活性，只提供注册函数指针。 
 
 code example:
@@ -41,12 +41,12 @@ code example:
 	//触发事件1
 	----------------------
 	Player player;
-	TriggerEvent<1>(player, 10);
+	FireEvent<1>(player, 10);
 
 
 	----------延时调用，可以参考----------------------------------------
 
-	PostTriggerEventExample<1>(player, 10); //延时触发事件1
+	PostFireEventExample<1>(player, 10); //延时触发事件1
 
 	延时以后某个地方执行：注意延时后，你的传入对象生存期是否有效！！
 	DoPostEvent();
@@ -109,7 +109,7 @@ namespace su
 	struct SubscribeSet  
 	{
 		std::set<Fun> m_funs; //订阅channel的回调集合
-		bool m_is_triggering = false; //true表示触发回调中
+		bool m_is_firing = false; //true表示触发回调中
 	};
 
 	namespace inner//用户不需要访问，不能是匿名。匿名会导致每个cpp文件独立生成不同对象
@@ -129,9 +129,9 @@ namespace su
 	void RegEvent(typename EventTraits<ID>::Fun fun)
 	{
 		auto &ss = inner::GetChannel<ID>();
-		if (ss.m_is_triggering)
+		if (ss.m_is_firing)
 		{
-			su::LogMgr::Ins().Printf(su::LL_ERROR, __FILE__, __LINE__, __FUNCTION__, "can't RegEvent when triggering");
+			su::LogMgr::Ins().Printf(su::LL_ERROR, __FILE__, __LINE__, __FUNCTION__, "can't RegEvent when firing");
 			return;
 		}
 		ss.m_funs.insert(fun);
@@ -142,9 +142,9 @@ namespace su
 	void UnRegEvent(typename EventTraits<ID>::Fun fun)
 	{
 		auto &ss = inner::GetChannel<ID>();
-		if (ss.m_is_triggering)
+		if (ss.m_is_firing)
 		{
-			su::LogMgr::Ins().Printf(su::LL_ERROR, __FILE__, __LINE__, __FUNCTION__, "can't UnRegEvent when triggering");
+			su::LogMgr::Ins().Printf(su::LL_ERROR, __FILE__, __LINE__, __FUNCTION__, "can't UnRegEvent when firing");
 			return;
 		}
 		ss.m_funs.erase(fun);
@@ -153,20 +153,20 @@ namespace su
 	//发布
 	//ID标识channel， 非类型形参 只支持实参为常量
 	template<int ID, class ... Args>
-	void TriggerEvent(Args&& ... args)
+	void FireEvent(Args&& ... args)
 	{
 		auto &ss = inner::GetChannel<ID>();
-		if (ss.m_is_triggering) //触发回调过程，禁止插入触发，避免复杂调用流程。
+		if (ss.m_is_firing) //触发回调过程，禁止插入触发，避免复杂调用流程。
 		{
 			su::LogMgr::Ins().Printf(su::LL_ERROR, __FILE__, __LINE__, __FUNCTION__, "can't recursion trigger");
 			return;
 		}
-		ss.m_is_triggering = true;
+		ss.m_is_firing = true;
 		for (const auto &v : ss.m_funs)
 		{
 			v(std::forward<Args>(args)...);
 		}
-		ss.m_is_triggering = false;
+		ss.m_is_firing = false;
 	}
 
 	//给用户参考用
@@ -175,34 +175,34 @@ namespace su
 	{
 		//用不了，参考这个思想吧。以后看能不能写出 一个参数可变的模板。
 		template<const int ID, class ... Args>
-		void PostTriggerEventRefer(Args&& ... args)
+		void PostFireEventRefer(Args&& ... args)
 		{
 		//	PostEvent &pe = GetGlobalPostEvent();
-			const std::function<void(void)> &f = std::bind(TriggerEvent<ID>, std::forward<Args>(args)...);
+			const std::function<void(void)> &f = std::bind(FireEvent<ID>, std::forward<Args>(args)...);
 		//	pe.Add(f);
 		}
 		//参考用
 		template<const int ID, class T1>
-		void PostTriggerEventExample(T1 t1)
+		void PostFireEventExample(T1 t1)
 		{
 			//PostEvent &pe = GetGlobalPostEvent();
 			auto f = [&]() {
-				TriggerEvent<ID>(t1);
+				FireEvent<ID>(t1);
 			};
 			//pe.Add(f);
 		}
 		template<const int ID, class T1, class T2>
-		void PostTriggerEventExample(T1 t1, T2 t2)
+		void PostFireEventExample(T1 t1, T2 t2)
 		{
 			//PostEvent &pe = GetGlobalPostEvent();
 			auto f = [&]() {
-				TriggerEvent<ID>(t1, t2);
+				FireEvent<ID>(t1, t2);
 			};
 			//pe.Add(f);
 		}
 
 		template<const int ID, class T1, class T2, class T3>
-		void PostTriggerEventExample(T1 t1, T2 t2, T3 t3)
+		void PostFireEventExample(T1 t1, T2 t2, T3 t3)
 		{
 		}
 	}

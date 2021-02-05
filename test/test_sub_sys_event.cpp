@@ -55,20 +55,20 @@ namespace
 		SubMode2 m_m2;
 		void f();
 
-		//PostTriggerEvent 这里比较遗憾，还找不到通用方法，需要定义所有模板特例
+		//PostFireEvent 这里比较遗憾，还找不到通用方法，需要定义所有模板特例
 		template<const int ID>
-		void PostTriggerEvent()
+		void PostFireEvent()
 		{
 			auto f = [&]() {
-				TriggerEvent<ID>(*this);
+				FireEvent<ID>(*this);
 			};
 			m_event.Add(f);
 		}
 		template<const int ID, class T1>
-		void PostTriggerEvent(const T1 &t1)
+		void PostFireEvent(const T1 &t1)
 		{
 			auto f = [&]() {
-				TriggerEvent<ID>(*this, t1);
+				FireEvent<ID>(*this, t1);
 			};
 			m_event.Add(f);
 		}
@@ -76,7 +76,7 @@ namespace
 		template<const int ID, class ... Args>
 		void Event(Args&& ... args)
 		{
-			::TriggerEvent<ID>(*this, std::forward<Args>(args)...);
+			::FireEvent<ID>(*this, std::forward<Args>(args)...);
 		}
 
 
@@ -108,8 +108,8 @@ namespace
 		Event<52>(3);
 		UNIT_ASSERT(m_m2.m_f2 == 1);
 
-		PostTriggerEvent<51>();
-		PostTriggerEvent<52>(3);
+		PostFireEvent<51>();
+		PostFireEvent<52>(3);
 
 		UNIT_ASSERT(m_m2.m_f2 == 1);
 		m_event.Do();
