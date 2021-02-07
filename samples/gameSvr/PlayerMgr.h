@@ -14,8 +14,7 @@ using namespace std;
 enum  PLAYER_EVENT
 {
 	PE_LOGIN = 500,
-
-
+	PE_LVUP = 501,
 };
 class Player;
 namespace su

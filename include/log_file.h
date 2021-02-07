@@ -42,7 +42,22 @@ namespace su
 	};
 	
 	using PrintfCB = void(*)(LogLv lv, const char *file, int line, const char *fun, const char * pattern);
+	//缺省定义,打印到文件和标准输出
+	class DefaultLog
+	{
+		int m_fd = -1;
+		std::string m_file_name;
 
+	public:
+		//para:const char *fname, 文件路径名
+		explicit DefaultLog(const char *fname = "svr_util_log.txt");
+		~DefaultLog();
+		void Printf(LogLv lv, const char *file, int line, const char *fun, const char *pattern);
+
+	private:
+		const char * GetLogLevelStr(LogLv lv) const;
+		void OpenFile();
+	};
 	//日志管理单例
 	class LogMgr
 	{
