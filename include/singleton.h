@@ -25,8 +25,9 @@ protected:
 	~Noncopyable() {};
 
 private:
-	Noncopyable(const Noncopyable&); 
-	Noncopyable & operator= (const Noncopyable &);
+	Noncopyable(const Noncopyable&)=delete; 
+	Noncopyable & operator= (const Noncopyable &) = delete;
+	Noncopyable(Noncopyable&&) = delete; //移动构造函数
 };
 
 
