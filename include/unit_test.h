@@ -1,7 +1,7 @@
 /*
 author:yiliangwu880
-you can get more refer from https://github.com/yiliangwu880/CppUtility.git
-version: 1.02
+you can get more refer from https://github.com/yiliangwu880/svr_util.git
+version: 1.03
 简单的单元测试功能。
 	 语法简洁
 	 结果显示在标准输出，可以选择接入自己的日志实现。
