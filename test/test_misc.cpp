@@ -7,6 +7,7 @@
 #include <set>
 #include <map>
 #include "easy_code.h"
+#include <memory>
 
 using namespace std;
 using namespace su;
@@ -58,7 +59,146 @@ namespace
 UNITTEST(testMisc)
 {
 	test1();
+}
 
 
+namespace su
+{
+	template <typename Owner, typename Other>
+	class DoublePoint
+	{
+		friend class DoublePoint<Other, Owner>;
+		Other *othter = nullptr;
+		DoublePoint<Other, Owner> *otherProxy = nullptr;
+		Owner &owner;
+	public:
+		DoublePoint(Owner &in_owner)
+			:owner(in_owner)
+		{
+		}
+		Other * operator->() const
+		{
+			return othter;
+		}
+		explicit operator bool() const noexcept
+		{
+			return othter != nullptr;
+		}
+	
 
+		void Attach(DoublePoint<Other, Owner> &bp)
+		{
+			if (nullptr != othter)
+			{
+				Detach();
+			}
+			othter = &(bp.owner);
+			otherProxy = &bp;
+
+			bp.othter = &owner;
+			bp.otherProxy = this;
+		}
+		void Detach()
+		{
+			otherProxy->othter = nullptr;
+			othter = nullptr;
+			//节省点效率，不改变 otherProxy
+			//otherProxy->otherProxy = nullptr;
+			//otherProxy = nullptr;
+		}
+	private:
+	}; 
+
+
+	template<typename _Tp, typename _Dp>
+	inline bool
+		operator==(nullptr_t, const DoublePoint<_Tp, _Dp>& __x) noexcept
+	{
+		return !__x;
+	}
+	template<typename _Tp, typename _Dp>
+	inline bool
+		operator==(const DoublePoint<_Tp, _Dp>& __x, nullptr_t) noexcept
+	{
+		return !__x;
+	}
+	template<typename _Tp, typename _Dp>
+	inline bool
+		operator!=(nullptr_t, const DoublePoint<_Tp, _Dp>& __x) noexcept
+	{
+		return bool(__x);
+	}
+	template<typename _Tp, typename _Dp>
+	inline bool
+		operator!=(const DoublePoint<_Tp, _Dp>& __x, nullptr_t) noexcept
+	{
+		return bool(__x);
+	}
+
+	class B;
+	class A
+	{
+	public:
+		int i = 1;
+		DoublePoint<A, B> bp;
+		A()
+			:bp(*this)
+		{
+
+		}
+		~A()
+		{}
+
+	private:
+
+	};
+
+	class B
+	{
+	public:
+		int i = 2;
+		DoublePoint<B, A> bp;
+		B() 
+			:bp(*this)
+		{
+
+		}
+		~B() {}
+
+	private:
+
+	};
+}
+UNITTEST(TestPointProxy)
+{
+	A *a = new A();
+	B *b = new B();
+	UNIT_ASSERT(nullptr == a->bp);
+	UNIT_ASSERT(b->bp == nullptr);
+	UNIT_ASSERT(!a->bp);
+	UNIT_ASSERT(!b->bp);
+	{
+		unique_ptr<A> p;
+		if (nullptr == p)
+		{
+		}	
+		if (p == nullptr )
+		{
+		}
+		if (p)
+		{
+		}
+	}
+	a->bp.Attach(b->bp);
+	UNIT_ASSERT(nullptr != a->bp);
+	UNIT_ASSERT(b->bp != nullptr);
+	UNIT_ASSERT(a->bp);
+	UNIT_ASSERT(b->bp);
+
+	UNIT_INFO("a->bp->i =%d", a->bp->i);
+	UNIT_ASSERT(a->bp->i == 2);
+	UNIT_ASSERT(b->bp->i == 1);
+
+	UNIT_INFO("===================end ==========");
+	UNIT_ASSERT(false);
 }
