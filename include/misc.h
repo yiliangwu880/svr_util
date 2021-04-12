@@ -79,6 +79,7 @@ namespace su
 		uint32 m_lAdapativeTime = 0;
 	};
 
+	//适用场景：A,B对象互相指向， 一对一关系。又需要自动释放
 	template <typename Owner, typename Other>
 	class DoublePoint
 	{
