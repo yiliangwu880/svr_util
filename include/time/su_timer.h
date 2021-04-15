@@ -24,14 +24,14 @@ etc:
 
 std::bind用法：
 
-		void testFreeCb()
+		void A::f()
 		{
 
 		}
 
 		main(){
 			Timer t12;
-			t1.StartTimer(1, testFreeCb);
+			t1.StartTimer(1, std::bind(&A::f, &a););
 		}
 */
 
@@ -44,61 +44,13 @@ std::bind用法：
 #include <map>
 #include <functional>
 #include "../cnt_typedef.h"
+#include "su_timerDriver.h"
 
 namespace su
 {
 
 	class Timer;
-
-	namespace inner
-	{
-		//定时器控制数据
-		struct CtrlData
-		{
-			time_t start_sec;
-			uint32 interval_sec;
-			bool is_loop;  //true表示循环定时器
-			Timer *pTimer;
-			CtrlData()
-				:start_sec(0)
-				, interval_sec(0)
-				, is_loop(false)
-				, pTimer(nullptr)
-			{}
-		};
-	}
-	/*
-		定时器，注册回调函数，timeout调用函数。
-        注意：定时器不合适设置太多，经验证明很多问题的。
-	*/
-	class TimeDriver : public Singleton<TimeDriver>
-	{
-		friend class Timer;
-        using VecData = std::vector<inner::CtrlData>;
-		using TimeMapData = std::multimap<time_t, inner::CtrlData>;   //到期绝对时间 map 数据   需要优化，频繁增加删除会有内存碎片
-
-
-	public:
-		~TimeDriver();
-        //检测timeout事件，执行回调。（一般循环调用这个函数）
-		void CheckTimeOut();
-
-        //清所有定时事件
-		void Clear();
-
-        //获取等待到期的定时器数量
-        uint32 GetTimeNum();
-
-    private:
-		//涉及指针接口私有化，防君子犯错.
-		bool NewTimer(Timer *pTimer, uint32 interval_sec, bool is_loop= false);
-		bool DelTimer(Timer *pTimer); //deattach and stop timer, 里面保证Timer指针删掉，不会野掉
-
-
-	private:
-        static const uint32 MAX_TIMER_NUMBER = 1000; //一般进程定时器超1000就是设计不好。
-		TimeMapData m_time2data;
-	};
+	class TimeDriver;
 
 	using TimerCB = std::function<void(void)>;
 	//特点：
