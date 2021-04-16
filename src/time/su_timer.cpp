@@ -21,6 +21,7 @@ namespace su
 	Timer::Timer()
 		: m_state(S_WAIT_START_TIMER)
 		, m_cb(nullptr)
+		, m_ctrlData(*this)
 	{
 	}
 
@@ -51,7 +52,7 @@ namespace su
 			//L_ERROR("state error, repeated start timer");
 			return false;
 		}
-		bool ret = TimeDriver::Ins().NewTimer(this, interval_sec, is_loop);
+		bool ret = TimeDriver::Ins().NewTimer(*this, interval_sec, is_loop);
 		if (!ret)
 		{
 			//L_ERROR("AttachTimer fail");
@@ -68,7 +69,7 @@ namespace su
 		{
 			return false;
 		}
-		TimeDriver::Ins().DelTimer(this);//里面保证Timer指针删掉，不会野掉
+		TimeDriver::Ins().DelTimer(*this);//里面保证Timer指针删掉，不会野掉
 
 		m_state = S_WAIT_START_TIMER;
 		return true;

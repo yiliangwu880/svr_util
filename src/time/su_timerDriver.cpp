@@ -11,15 +11,13 @@
 #include "../log_def.h"
 
 using namespace std;
+
+using namespace su::inner;
 namespace su
 {
-	bool TimeDriver::NewTimer(Timer *pTimer, uint32 interval_sec, bool is_loop)
+	bool TimeDriver::NewTimer(Timer &timer, uint32 interval_sec, bool is_loop)
 	{
 		if (0 == interval_sec)
-		{
-			return false;
-		}
-		if (nullptr == pTimer)
 		{
 			return false;
 		}
@@ -33,42 +31,23 @@ namespace su
 			return 0;
 		}
 
-		inner::CtrlData d;
+		inner::CtrlData &d = timer.m_ctrlData;
+		d.end_sec = key;
 		d.start_sec = sec;
 		d.interval_sec = interval_sec;
 		d.is_loop = is_loop;
-		d.pTimer = pTimer;
 
-		m_time2data.insert(make_pair(key, d));
+		m_all.Push(d);
 		return true;
 
 	}
 
 
 
-	bool TimeDriver::DelTimer(Timer *pTimer)
+	bool TimeDriver::DelTimer(Timer &timer)
 	{
-		if (nullptr == pTimer)
-		{
-			L_ERROR("error para. nullptr == pTimer");
-			return false;
-		}
 		bool ret = false;
-		for (TimeMapData::iterator it = m_time2data.begin(); it != m_time2data.end(); )
-		{
-			const inner::CtrlData &d = it->second;
-			if (d.pTimer == pTimer)
-			{
-				m_time2data.erase(it++);
-				ret = true;
-				return true;
-			}
-			else
-			{
-				++it;
-			}
-		}
-		return ret;
+		return m_all.Erase(timer.m_ctrlData);
 	}
 
 	TimeDriver::~TimeDriver()
@@ -79,55 +58,62 @@ namespace su
 	void TimeDriver::CheckTimeOut()
 	{
 		time_t sec = SysTime::Ins().Sec();
-		VecData vec_timeout;
-
+		std::vector<Timer *> vec;
+		while (true)
 		{
-			for (TimeMapData::iterator it = m_time2data.begin(); it != m_time2data.end(); )
+			CtrlData *p= m_all.Front();
+			if (nullptr == p)
 			{
-				if (it->first > sec)
-				{
-					break;
-				}
-				//time out
-				const inner::CtrlData &d = it->second;
-				vec_timeout.push_back(d);
-				m_time2data.erase(it++);
+				break;
 			}
+			if (p->end_sec > sec)
+			{
+				break;
+			}
+			Timer* pTimer = &(p->m_owner);
+			//time out
+			m_all.Pop();
+			vec.push_back(pTimer);
 		}
-		//重设循环的timer
-		for (inner::CtrlData &d : vec_timeout)
+
+		for (Timer* pTimer : vec)
 		{
+			//重设循环的timer
+			CtrlData &d = pTimer->m_ctrlData;
 			if (d.is_loop)
 			{
 				d.start_sec += d.interval_sec;
-				m_time2data.insert(make_pair(d.start_sec + d.interval_sec, d));
+				d.end_sec = d.start_sec + d.interval_sec;
+				m_all.Push(d);
 			}
 			else
 			{
-				d.pTimer->StopTimer();
-
+				pTimer->StopTimer();
 			}
 		}
-
-		//保证最后调用，防止回调的时候，调用接口改变对象状态。
-		for (const inner::CtrlData &d : vec_timeout)
+		for (Timer* pTimer: vec)
 		{
-			d.pTimer->OnTimerCB();
+			//保证最后调用，防止回调的时候，调用接口改变对象状态。
+			pTimer->OnTimerCB();
 		}
 	}
 
 	void TimeDriver::Clear()
 	{
-		for (auto &v : m_time2data)
+		std::vector<CtrlData *> vec;
+		auto f=[&](CtrlData *p) {
+			vec.push_back(p);
+		};
+		m_all.Foreach(f);
+		for (CtrlData *p: vec)
 		{
-			const inner::CtrlData &d = v.second;
-			d.pTimer->StopTimer();
+			p->m_owner.StopTimer();
 		}
-		m_time2data.clear();
+		m_all.clear();
 	}
 
 	uint32 TimeDriver::GetTimeNum()
 	{
-		return m_time2data.size();
+		return m_all.size();
 	}
 }

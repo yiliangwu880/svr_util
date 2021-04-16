@@ -1,16 +1,18 @@
-/*//¶ş²æ¶Ñ Ëã·¨£¬
-MinHeap ÒıÓÃ½Úµã
-½ÚµãÊÍ·ÅÊ±£¬×Ô¶¯´Ó¶ÑÉ¾³ı¡£
+/*//äºŒå‰å † ç®—æ³•ï¼Œ
+MinHeap å¼•ç”¨èŠ‚ç‚¹
+èŠ‚ç‚¹é‡Šæ”¾æ—¶ï¼Œè‡ªåŠ¨ä»å †åˆ é™¤ã€‚
 
-±¸×¢£º
-	²âÊÔËæ»ú¼ÓÈë£¬³öÁĞ·¢ÏÖºÍ stl::priority_queue ĞÔÄÜ²¿·ÖÉÏÏÂ£¬ÓĞÊ±queue¸ß£¬ÓĞÊ±minhap¸ß¡£
-	¿ÉÊÇpriority_queueÃ»ÓĞÉ¾³ıÈÎÒâ½Úµã¹¦ÄÜÑ½£¬¶¨Ê±Æ÷³¡¾°ÓÃ²»ÁË¡£ 
+å¤‡æ³¨ï¼š
+	æµ‹è¯•éšæœºåŠ å…¥ï¼Œå‡ºåˆ—å‘ç°å’Œ stl::priority_queue æ€§èƒ½éƒ¨åˆ†ä¸Šä¸‹ï¼Œæœ‰æ—¶queueé«˜ï¼Œæœ‰æ—¶minhapé«˜ã€‚
+	å¯æ˜¯priority_queueæ²¡æœ‰åˆ é™¤ä»»æ„èŠ‚ç‚¹åŠŸèƒ½å‘€ï¼Œå®šæ—¶å™¨åœºæ™¯ç”¨ä¸äº†ã€‚ 
 
 */
 
 #pragma once
 #include <cstdio>
 #include "vector"
+#include <functional>
+
 
 namespace su
 {
@@ -18,7 +20,7 @@ namespace su
 template<class >
 class MinHeap;
 
-//Node ÊµÏÖÒªÇóÓĞº¯Êı bool IsLess(const Data &other) £¬ true±íÊ¾ this < other
+//Node å®ç°è¦æ±‚æœ‰å‡½æ•° bool IsLess(const Data &other) ï¼Œ trueè¡¨ç¤º this < other
 template<class Node>
 class MinHeapNodeBase
 {
@@ -27,14 +29,14 @@ class MinHeapNodeBase
 	int index = -1;
 	MinHeap<Node> *pMinHeap = nullptr;
 
-private: //²»ÄÜ¸´ÖÆ
+private: //ä¸èƒ½å¤åˆ¶
 	MinHeapNodeBase(const MinHeapNodeBase&) = delete;
 	MinHeapNodeBase & operator= (const MinHeapNodeBase &) = delete;
 
 public:
 	MinHeapNodeBase() {};
 	~MinHeapNodeBase();
-	MinHeapNodeBase(MinHeapNodeBase&& tmp);//ÒÆ¶¯¹¹Ôìº¯Êı, Ã»¼ÓÈë¶Ñ£¬ÔÊĞíÒÆ¶¯¹¹Ôì¡£·½±ã¼ÓÈëstlÈİÆ÷¹ÜÀí
+	MinHeapNodeBase(MinHeapNodeBase&& tmp);//ç§»åŠ¨æ„é€ å‡½æ•°, æ²¡åŠ å…¥å †ï¼Œå…è®¸ç§»åŠ¨æ„é€ ã€‚æ–¹ä¾¿åŠ å…¥stlå®¹å™¨ç®¡ç†
 };
 
 template<class Node>
@@ -43,22 +45,47 @@ class MinHeap
 	friend class MinHeapNodeBase<Node>;
 
 	std::vector<Node*>  m_vec;
+
 public:
 	MinHeap();
 	~MinHeap();
 	bool Push(Node &node);
-	//Ê÷¸ù½Úµã³öÁĞ
+	//æ ‘æ ¹èŠ‚ç‚¹å‡ºåˆ—
 	Node *Pop();
-	//»ñÈ¡Ê÷¸ù£¬£¨×îĞ¡»òÕß×î´óÖµ£©
+	//è·å–æ ‘æ ¹ï¼Œï¼ˆæœ€å°æˆ–è€…æœ€å¤§å€¼ï¼‰
 	Node *Front();
-	bool Erase(Node* node);
-
+	bool Erase(Node &node);
+	size_t size();
+	void clear();
+	void Foreach(std::function<void(Node*)> f); //æ…ç”¨,å»ºè®®è¿˜æ˜¯åˆ«ç”¨ã€‚ å›è°ƒæ”¹ nodeï¼Œ MinHeapçŠ¶æ€å°±å‘ç”Ÿæœªå®šä¹‰è¡Œä¸ºã€‚
 private:
 	bool Siftdown(int x, int n);
 	void Siftup(int j);
-	//ÎªÁËÖ§³Ö MinHeapNodeÒÆ¶¯¹¹Ôìº¯Êı
+	//ä¸ºäº†æ”¯æŒ MinHeapNodeç§»åŠ¨æ„é€ å‡½æ•°
 	void ReplaceNode(Node *oldNode, Node *newNode);
 };
+
+template<class Node>
+void MinHeap<Node>::Foreach(std::function<void(Node*)> f)
+{
+	for (auto &v : m_vec)
+	{
+		f(v);
+	}
+}
+
+template<class Node>
+void MinHeap<Node>::clear()
+{
+	m_vec.clear();
+}
+
+template<class Node>
+size_t MinHeap<Node>::size()
+{
+	return m_vec.size();
+}
+
 
 template<class Node>
 void MinHeap<Node>::ReplaceNode(Node *oldNode, Node *newNode)
@@ -117,19 +144,19 @@ Node *MinHeap<Node>::Pop()
 		return nullptr;
 	}
 	Node* node = m_vec.front();
-	Erase(node);
+	Erase(*node);
 	return node;
 }
 
 template<typename Node>
-bool MinHeap<Node>::Erase(Node* node)
+bool MinHeap<Node>::Erase(Node &node)
 {
-	if (node->pMinHeap != this)
+	if (node.pMinHeap != this)
 	{
 		return false;
 	}
 	int n = (int)m_vec.size() - 1;
-	int i = node->index;
+	int i = node.index;
 	if (i != n)
 	{
 		std::swap(m_vec[i], m_vec[n]);
@@ -140,7 +167,7 @@ bool MinHeap<Node>::Erase(Node* node)
 		}
 	}
 	m_vec.pop_back();
-	node->pMinHeap = nullptr;
+	node.pMinHeap = nullptr;
 	return true;
 }
 
@@ -209,7 +236,7 @@ MinHeapNodeBase<Node>::~MinHeapNodeBase()
 {
 	if (pMinHeap)
 	{
-		pMinHeap->Erase((Node*)this);
+		pMinHeap->Erase(*(Node *)this);
 	}
 }
 

@@ -373,7 +373,7 @@ namespace
 		UNIT_ASSERT(0 == TimeDriver::Ins().GetTimeNum());
 	}
 
-	//测试数量溢出
+	//数量
 	static uint32 s_cnt_10 = 0;
 	void TimeCBFun10(uint32 para1, void *para2)
 	{
@@ -397,13 +397,13 @@ namespace
 			}
 		}
 		LogMgr::Ins().Enable(true);
-		UNIT_ASSERT(1000 == TimeDriver::Ins().GetTimeNum());
+		UNIT_ASSERT(NUM_1W == TimeDriver::Ins().GetTimeNum());
 		//g_timer_cb.delTimer(id_1st);
 		all_tm[0].StopTimer();
-		UNIT_ASSERT(999 == TimeDriver::Ins().GetTimeNum());
-		SysTime::Ins().AddTimerOffset(1);
-		TimeDriver::Ins().CheckTimeOut();
-		UNIT_ASSERT(999 == s_cnt_10);
+		UNIT_ASSERT(NUM_1W-1 == TimeDriver::Ins().GetTimeNum());
+		//SysTime::Ins().AddTimerOffset(1);
+		//TimeDriver::Ins().CheckTimeOut();
+		//UNIT_ASSERT(999 == s_cnt_10);
 
 	}
 	namespace

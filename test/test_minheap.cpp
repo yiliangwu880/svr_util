@@ -72,7 +72,7 @@ UNITTEST(minheap_base_view)
 		UNIT_ASSERT(&tmp != p);
 		if (::rand() % 2 == 0)
 		{
-			UNIT_ASSERT(hp.Erase(p));
+			UNIT_ASSERT(hp.Erase(*p));
 		}
 		else
 		{
@@ -112,7 +112,7 @@ UNITTEST(minheap_rand)
 		lastNum = p->v;
 		if (::rand() % 2 == 0)
 		{
-			UNIT_ASSERT(hp.Erase(p));
+			UNIT_ASSERT(hp.Erase(*p));
 		}
 		else
 		{

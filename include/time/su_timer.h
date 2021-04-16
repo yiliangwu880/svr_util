@@ -62,6 +62,17 @@ namespace su
 	class Timer : private Noncopyable
 	{
 		friend class TimeDriver;
+
+
+		enum State
+		{
+			S_WAIT_START_TIMER,
+			S_WAIT_TIME_OUT,
+		};
+		State m_state;
+		TimerCB m_cb; //用std::bind方式绑定的回调函数
+		inner::CtrlData m_ctrlData;
+
 	public:
 		Timer();
 		virtual ~Timer();
@@ -84,13 +95,6 @@ namespace su
 		void OnTimerCB();
 
 	private:
-		enum State
-		{
-			S_WAIT_START_TIMER,
-			S_WAIT_TIME_OUT,
-		};
-		State m_state;
-		TimerCB m_cb; //用std::bind方式绑定的回调函数
 	};
 	
 
