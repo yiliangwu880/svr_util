@@ -3,7 +3,7 @@ brief:常用基本类型定义
 */
 #pragma once
 
-using uint16 = unsigned short;
+using uint16_t = unsigned short;
 using uint32 = unsigned int;
 using uint64 = unsigned long long;
 using int64 = long long;
