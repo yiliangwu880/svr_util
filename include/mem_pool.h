@@ -120,7 +120,7 @@ namespace su
 	{
 		//内存已经分配完了， 动态增长  
 		if (m_vec_free_obj.empty()) {
-			printf("error, mem_pool [%s] is empty. total allocate num=%d", typeid(int).name(), (int)m_vec_all_obj.size());
+			printf("mem_pool [%s] is empty. total allocate num=%d\n", typeid(int).name(), (int)m_vec_all_obj.size());
 			for (unsigned int i = 0; i < 1000; ++i)
 			{
 				Obj *p = (Obj *)::malloc(sizeof(Obj));

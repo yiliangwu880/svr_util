@@ -3,7 +3,7 @@
 	注意：阻止不了用户创建多个对象。 比如 concreterClass a; 用户自己负责。
 
 阻止多个对象Example:
-class concreterClass : public SingletonBase<concreterClass>
+class concreterClass : public Singleton<concreterClass>
 {
 private:
 concreterClass(){};
@@ -25,8 +25,9 @@ protected:
 	~Noncopyable() {};
 
 private:
-	Noncopyable(const Noncopyable&); 
-	Noncopyable & operator= (const Noncopyable &);
+	Noncopyable(const Noncopyable&)=delete; 
+	Noncopyable & operator= (const Noncopyable &) = delete;
+	Noncopyable(Noncopyable&&) = delete; //移动构造函数
 };
 
 
@@ -38,7 +39,7 @@ protected:
 	virtual ~Singleton() {}
 
 public:
-	static T& Obj()
+	static T& Ins() 
 	{
 		if (!m_obj)
 			m_obj = new T;

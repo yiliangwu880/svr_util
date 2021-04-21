@@ -1,5 +1,5 @@
 
-#include "static_trick/game_cheat.h"
+#include "game_util/game_cheat.h"
 #include "unit_test.h"
 
 
@@ -10,7 +10,7 @@ namespace
 {
 	void test1()
 	{
-		for (auto &v : StrMapCheatFun::Obj())
+		for (auto &v : StrMapCheatFun::Ins())
 		{
 			string key = v.first;
 		//	UNIT_INFO("key=%s", key.c_str());

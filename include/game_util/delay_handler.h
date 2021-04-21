@@ -1,19 +1,19 @@
 /*
 author:yiliangwu880
 you can get more refer from https://github.com/yiliangwu880/CppUtility.git
-brief: ÑÓÊ±´¦ÀíÂß¼­£¬ 
-±ÈÈç:
-ÎªÁË±ÜÃâ´¦ÀíÀëÏßºÍÔÚÏßÍæ¼ÒµÄÏàÍ¬¹¦ÄÜĞ´²»Í¬º¯ÊıÁ÷³Ì¡£Í³Ò»Èë¿Ú´¦Àí¡£
-Àı×Ó£º
+brief: å»¶æ—¶å¤„ç†é€»è¾‘ï¼Œ 
+æ¯”å¦‚:
+ä¸ºäº†é¿å…å¤„ç†ç¦»çº¿å’Œåœ¨çº¿ç©å®¶çš„ç›¸åŒåŠŸèƒ½å†™ä¸åŒå‡½æ•°æµç¨‹ã€‚ç»Ÿä¸€å…¥å£å¤„ç†ã€‚
+ä¾‹å­ï¼š
 	class MyOptMgr: public DelayOptMgr<MyTarget, uint64>
 	{
 	public:
-		virtual MyTarget *OnFindTarget(uint64 target_id)		//ÊµÏÖ²éÕÒÄÚ´æÄ¿±ê	
+		virtual MyTarget *OnFindTarget(uint64 target_id)		//å®ç°æŸ¥æ‰¾å†…å­˜ç›®æ ‡	
 		{
 			...
 		}
 
-		virtual void OnMissTarget(uint64 target_id)			//ÊµÏÖ£¬ÇëÇó¶Áµµ¡£  (»º´æÃ»ÓĞ¶ÔÏóÊ±»áµ÷ÓÃ£©
+		virtual void OnMissTarget(uint64 target_id)			//å®ç°ï¼Œè¯·æ±‚è¯»æ¡£ã€‚  (ç¼“å­˜æ²¡æœ‰å¯¹è±¡æ—¶ä¼šè°ƒç”¨ï¼‰
 		{
 			...
 		}
@@ -21,21 +21,21 @@ brief: ÑÓÊ±´¦ÀíÂß¼­£¬
 
 	MyOptMgr mgr;
 
-	mgr.OptTarget(id, target);                                          //3 ¶Áµµ³É¹¦ 
-	mgr.DelOpt(id);                                                     //4 ¶ÁµµÊ§°Üµ÷ÓÃ
+	mgr.OptTarget(id, target);                                          //3 è¯»æ¡£æˆåŠŸ 
+	mgr.DelOpt(id);                                                     //4 è¯»æ¡£å¤±è´¥è°ƒç”¨
 
-	                                                                    //5 ¼ÓÈë²Ù×÷ÇëÇó
-	auto opt = [&](TargetType &target){};                                          
+	                                                                    //5 åŠ å…¥æ“ä½œè¯·æ±‚
+	auto opt = [&](TargetType &target){};                              //æ³¨æ„ï¼Œå›è°ƒå‡½æ•°ï¼Œå¼•ç”¨äº†å¯¹è±¡ï¼Œè‡ªå·±å°±è´Ÿè´£ä¿è¯å¯¹è±¡ä¸é‡ï¼Œä¸ç„¶å°±è¿›ç¨‹å°±æœªå®šä¹‰ç»“æœ          
 	mgr.AddOpt(target_id, opt);
 
-	»òÕß
+	æˆ–è€…
 
 	auto opt = std::bind(bindFun, _1, ...);
 	mgr.AddOpt(target_id, opt);
 
-	»òÕß 
+	æˆ–è€… 
 
-	auto opt = std::bind(&TargetType::Fun, _1, ...);//Ö¸¶¨³ÉÔ±º¯Êı
+	auto opt = std::bind(&TargetType::Fun, _1, ...);//æŒ‡å®šæˆå‘˜å‡½æ•°
 	mgr.AddOpt(target_id, opt);
 
 */
@@ -47,11 +47,11 @@ brief: ÑÓÊ±´¦ÀíÂß¼­£¬
 #include <utility>
 #include <functional>
 
-                                                                        //²Ù×÷Ä¿±ê
+                                                                        //æ“ä½œç›®æ ‡
 
-//@Obj			 ±»²Ù×÷µÄ¶ÔÏó
-//@ObjId		 ¶ÔÏóµÄ id
-//@MAX_OPT_NUM   Ã¿¸ö¶ÔÏó×î´ó»º´æº¯Êı¶ÔÏóÊı
+//@Obj			 è¢«æ“ä½œçš„å¯¹è±¡
+//@ObjId		 å¯¹è±¡çš„ id
+//@MAX_OPT_NUM   æ¯ä¸ªå¯¹è±¡æœ€å¤§ç¼“å­˜å‡½æ•°å¯¹è±¡æ•°
 template<class Obj, class ObjId=uint64, const uint32 MAX_OPT_NUM = 3>
 class  DelayOptMgr
 {
@@ -59,24 +59,24 @@ class  DelayOptMgr
 	typedef std::vector<OptFun> VecDelayOpt;
 	typedef std::map<ObjId, VecDelayOpt> Id2Vec;
 
-	bool m_is_opting = false;				                            //true±íÊ¾½øÈëBaseDelayOptMgr::OptTargetÔËĞĞÖĞ
+	bool m_is_opting = false;				                            //trueè¡¨ç¤ºè¿›å…¥BaseDelayOptMgr::OptTargetè¿è¡Œä¸­
 	Id2Vec m_id_2_vec;		                                            //id 2 vec, vec ==opt list
 public:
-	//¼ÓÒ»¸ö²Ù×÷.		(Ä¿±êÕÒµ½ÂíÉÏÖ´ĞĞ£¬²»ÔÚ¾ÍµÈµ÷ÓÃ  HandleTarget ÔÙ²Ù×÷)
-	//×¢Òâ£ºÄã´«Ò»Ğ©Ö¸Õë£¬ÒıÓÃ½øÈ¥ÑÓºóµ÷ÓÃ£¬¾ÍĞèÒª×¢ÒâÊÇ·ñ»áÒ°Ö¸Õë¡£
+	//åŠ ä¸€ä¸ªæ“ä½œ.		(ç›®æ ‡æ‰¾åˆ°é©¬ä¸Šæ‰§è¡Œï¼Œä¸åœ¨å°±ç­‰è°ƒç”¨  HandleTarget å†æ“ä½œ)
+	//æ³¨æ„ï¼šä½ ä¼ ä¸€äº›æŒ‡é’ˆï¼Œå¼•ç”¨è¿›å»å»¶åè°ƒç”¨ï¼Œå°±éœ€è¦æ³¨æ„æ˜¯å¦ä¼šé‡æŒ‡é’ˆã€‚
 	void AddOpt(ObjId target_id, OptFun opt);	
 
-	                                                                    //¶ÔÄ¿±ê²Ù×÷»º´æ²Ù×÷
+	                                                                    //å¯¹ç›®æ ‡æ“ä½œç¼“å­˜æ“ä½œ
 	void OptTarget(ObjId target_id, Obj &target);
 
-	void DelOpt(ObjId target_id);								        //µ÷ÓÃÉ¾³ıÄ¿±ê»º´æ²Ù×÷  (¶ÁµµÊ§°Ü£¬Ä¿±ê²»´æÊ±µ÷ÓÃ)
+	void DelOpt(ObjId target_id);								        //è°ƒç”¨åˆ é™¤ç›®æ ‡ç¼“å­˜æ“ä½œ  (è¯»æ¡£å¤±è´¥ï¼Œç›®æ ‡ä¸å­˜æ—¶è°ƒç”¨)
 
 	 //for test use
 	uint32 GetMaxNum() const {return MAX_OPT_NUM;}
 	uint32 GetOptNum(ObjId target_id);
 private:
-    virtual Obj *OnFindTarget(ObjId target_id)=0;			//ÊµÏÖ²éÕÒÄÚ´æÄ¿±ê
-	virtual void OnMissTarget(ObjId target_id) = 0;				    //ÊµÏÖ£¬ÇëÇó¶Áµµ¡£  (»º´æÃ»ÓĞ¶ÔÏóÊ±»áµ÷ÓÃ£©
+    virtual Obj *OnFindTarget(ObjId target_id)=0;			//å®ç°æŸ¥æ‰¾å†…å­˜ç›®æ ‡
+	virtual void OnMissTarget(ObjId target_id) = 0;				    //å®ç°ï¼Œè¯·æ±‚è¯»æ¡£ã€‚  (ç¼“å­˜æ²¡æœ‰å¯¹è±¡æ—¶ä¼šè°ƒç”¨ï¼‰
 
 
 public:
@@ -89,13 +89,13 @@ void DelayOptMgr<Obj, ObjId, MAX_OPT_NUM>::OptTarget(ObjId target_id, Obj &targe
 {
 	if (m_is_opting)
 	{
-		return;//ÅÜÕâÀïÊôÓÚµİ¹éµ÷ÓÃ£¬ÍË³ö²»ÓÃ´¦Àí¡£µÚÒ»´Îµ÷ÓÃ½øÀ´µÄº¯Êı»á´¦Àí
+		return;//è·‘è¿™é‡Œå±äºé€’å½’è°ƒç”¨ï¼Œé€€å‡ºä¸ç”¨å¤„ç†ã€‚ç¬¬ä¸€æ¬¡è°ƒç”¨è¿›æ¥çš„å‡½æ•°ä¼šå¤„ç†
 	}
 	int cnt = 0;
 	while (true)
 	{
 		m_is_opting = true;
-		//////////////²âÊÔ´íÎó´úÂë£¬ºóÆÚÃ»´í¿ÉÒÔÉ¾µô//////////
+		//////////////æµ‹è¯•é”™è¯¯ä»£ç ï¼ŒåæœŸæ²¡é”™å¯ä»¥åˆ æ‰//////////
 		cnt++;
 		if (cnt > 100)
 		{
@@ -108,7 +108,7 @@ void DelayOptMgr<Obj, ObjId, MAX_OPT_NUM>::OptTarget(ObjId target_id, Obj &targe
 			m_is_opting = false;
 			return;
 		}
-		//¸´ÖÆÒ»·İ,±ÜÃâÖ±½ÓÒıÓÃ m_id_2_vec µ¼ÖÂÏÂÃæµİ¹é´íÎó
+		//å¤åˆ¶ä¸€ä»½,é¿å…ç›´æ¥å¼•ç”¨ m_id_2_vec å¯¼è‡´ä¸‹é¢é€’å½’é”™è¯¯
 		VecDelayOpt vec_opt;
 		vec_opt.swap(it->second);
 		m_id_2_vec.erase(it);
@@ -120,7 +120,7 @@ void DelayOptMgr<Obj, ObjId, MAX_OPT_NUM>::OptTarget(ObjId target_id, Obj &targe
 				printf("error, why save null point?\n");
 				continue;
 			}
-			opt(target);//ÀïÃæ»á¿ÉÄÜ¼ÌĞøµ÷ÓÃAddOpt£¬¸øm_id_2_vec[id]¼Ó³ÉÔ±
+			opt(target);//é‡Œé¢ä¼šå¯èƒ½ç»§ç»­è°ƒç”¨AddOptï¼Œç»™m_id_2_vec[id]åŠ æˆå‘˜
 		}
 	}
 	m_is_opting = false;
@@ -138,7 +138,7 @@ void DelayOptMgr<Obj, ObjId, MAX_OPT_NUM>::AddOpt(ObjId target_id, OptFun opt)
 	VecDelayOpt &vec_opt = m_id_2_vec[target_id];
 	if (vec_opt.size() >= MAX_OPT_NUM)
 	{
-		//»º´æ²Ù×÷Ì«¶àÁË		
+		//ç¼“å­˜æ“ä½œå¤ªå¤šäº†		
 		printf("error, req is too more, id=%lld\n", target_id);
 		return;
 	}
@@ -152,7 +152,7 @@ void DelayOptMgr<Obj, ObjId, MAX_OPT_NUM>::AddOpt(ObjId target_id, OptFun opt)
 	else
 	{
 		//req get target from db
-		if (vec_opt.size() == 1) //µÚÒ»¸ö²Ù×÷²ÅÇëÇó¶Á¿â
+		if (vec_opt.size() == 1) //ç¬¬ä¸€ä¸ªæ“ä½œæ‰è¯·æ±‚è¯»åº“
 		{
 			OnMissTarget(target_id);
 		}

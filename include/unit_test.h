@@ -1,7 +1,7 @@
 /*
 author:yiliangwu880
-you can get more refer from https://github.com/yiliangwu880/CppUtility.git
-version: 1.02
+you can get more refer from https://github.com/yiliangwu880/svr_util.git
+version: 1.03
 简单的单元测试功能。
 	 语法简洁
 	 结果显示在标准输出，可以选择接入自己的日志实现。
@@ -20,7 +20,7 @@ UNITTEST(t1)
 
 int main()
 {
-UnitTestMgr::Obj().Start();
+UnitTestMgr::Ins().Start();
 }
 
 */
@@ -49,7 +49,7 @@ class UnitTestMgr
 	bool m_isEnable = true;
 
 public:
-	static UnitTestMgr &Obj()
+	static UnitTestMgr &Ins()
 	{
 		static UnitTestMgr d;
 		return d;
@@ -61,8 +61,8 @@ public:
 
 };
 
-#define UNIT_ERROR(x, ...)  UnitTestMgr::Obj().Printf( true, __FILE__, __LINE__, __FUNCTION__, x, ##__VA_ARGS__);
-#define UNIT_INFO(x, ...)  UnitTestMgr::Obj().Printf( false, __FILE__, __LINE__, __FUNCTION__, x, ##__VA_ARGS__);
+#define UNIT_ERROR(x, ...)  UnitTestMgr::Ins().Printf( true, __FILE__, __LINE__, __FUNCTION__, x, ##__VA_ARGS__);
+#define UNIT_INFO(x, ...)  UnitTestMgr::Ins().Printf( false, __FILE__, __LINE__, __FUNCTION__, x, ##__VA_ARGS__);
 
 #define UNIT_ASSERT(expression) do{  \
 				if(!(expression))                                                              \
@@ -89,5 +89,5 @@ public:
    private:                                                                              \
       virtual void Run();                                                      \
    };                                         \
-    namespace { Test##Name  test##Name##Obj;}                                   \
+    namespace { Test##Name  test##Name##Ins;}                                   \
    void Test##Name::Run()

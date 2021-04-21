@@ -5,7 +5,7 @@
 
 etc:
 驱动timer,定时调用：
-		TimeDriver::Obj().checkTimeOut();
+		TimeDriver::Ins().checkTimeOut();
 虚函数用法：
 		class MyTimer : public Timer
 		{
@@ -24,14 +24,14 @@ etc:
 
 std::bind用法：
 
-		void testFreeCb()
+		void A::f()
 		{
 
 		}
 
 		main(){
 			Timer t12;
-			t1.StartTimer(1, testFreeCb);
+			t1.StartTimer(1, std::bind(&A::f, &a););
 		}
 */
 
@@ -44,61 +44,13 @@ std::bind用法：
 #include <map>
 #include <functional>
 #include "../cnt_typedef.h"
+#include "su_timerDriver.h"
 
 namespace su
 {
 
 	class Timer;
-
-	namespace inner
-	{
-		//定时器控制数据
-		struct CtrlData
-		{
-			time_t start_sec;
-			uint32 interval_sec;
-			bool is_loop;  //true表示循环定时器
-			Timer *pTimer;
-			CtrlData()
-				:start_sec(0)
-				, interval_sec(0)
-				, is_loop(false)
-				, pTimer(nullptr)
-			{}
-		};
-	}
-	/*
-		定时器，注册回调函数，timeout调用函数。
-        注意：定时器不合适设置太多，经验证明很多问题的。
-	*/
-	class TimeDriver : public Singleton<TimeDriver>
-	{
-		friend class Timer;
-        using VecData = std::vector<inner::CtrlData>;
-		using TimeMapData = std::multimap<time_t, inner::CtrlData>;   //到期绝对时间 map 数据   需要优化，频繁增加删除会有内存碎片
-
-
-	public:
-		~TimeDriver();
-        //检测timeout事件，执行回调。（一般循环调用这个函数）
-		void CheckTimeOut();
-
-        //清所有定时事件
-		void Clear();
-
-        //获取等待到期的定时器数量
-        uint32 GetTimeNum();
-
-    private:
-		//涉及指针接口私有化，防君子犯错.
-		bool NewTimer(Timer *pTimer, uint32 interval_sec, bool is_loop= false);
-		bool DelTimer(Timer *pTimer); //deattach and stop timer, 里面保证Timer指针删掉，不会野掉
-
-
-	private:
-        static const uint32 MAX_TIMER_NUMBER = 1000; //一般进程定时器超1000就是设计不好。
-		TimeMapData m_time2data;
-	};
+	class TimeDriver;
 
 	using TimerCB = std::function<void(void)>;
 	//特点：
@@ -106,10 +58,21 @@ namespace su
 	//Noncopyable 不让复制，避免写出复杂易错代码。比如 vector<Timer> t; ，重分配内存就危险了。
 	//注意： 
 	//StartTimer 传入的 对象，生成期需要用户保证正确，不然会野！(转入方式包括 指针，引用， 函数对象保存的指针，引用 )
-	//不要把Timer对象保存到单例，因为Timer引用了单例  TimeDriver::Obj()。 不然析构就会运行野对象。
+	//不要把Timer对象保存到单例，因为Timer引用了单例  TimeDriver::Ins()。 不然析构就会运行野对象。
 	class Timer : private Noncopyable
 	{
 		friend class TimeDriver;
+
+
+		enum State
+		{
+			S_WAIT_START_TIMER,
+			S_WAIT_TIME_OUT,
+		};
+		State m_state;
+		TimerCB m_cb; //用std::bind方式绑定的回调函数
+		inner::CtrlData m_ctrlData;
+
 	public:
 		Timer();
 		virtual ~Timer();
@@ -132,13 +95,6 @@ namespace su
 		void OnTimerCB();
 
 	private:
-		enum State
-		{
-			S_WAIT_START_TIMER,
-			S_WAIT_TIME_OUT,
-		};
-		State m_state;
-		TimerCB m_cb; //用std::bind方式绑定的回调函数
 	};
 	
 

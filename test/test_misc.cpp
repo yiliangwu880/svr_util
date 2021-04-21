@@ -7,6 +7,7 @@
 #include <set>
 #include <map>
 #include "easy_code.h"
+#include <memory>
 
 using namespace std;
 using namespace su;
@@ -58,7 +59,5 @@ namespace
 UNITTEST(testMisc)
 {
 	test1();
-
-
-
 }
+

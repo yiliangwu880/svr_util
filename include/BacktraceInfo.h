@@ -23,7 +23,7 @@ addr2line -e ./zonesvr 0xbd0f18
 	{
 		using SigCb =void(*)(int);
 	public:
-		static CBacktraceInfo &Obj()
+		static CBacktraceInfo &Ins()
 		{
 			static CBacktraceInfo d;
 			return d;

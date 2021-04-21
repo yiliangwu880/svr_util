@@ -18,7 +18,7 @@ void MyPrintf(LogLv lv, const char * file, int line, const char *fun, const char
 
 int main(int argc, char* argv[])
 {
-	LogMgr::Obj().SetLogPrinter(&MyPrintf)
+	LogMgr::Ins().SetLogPrinter(&MyPrintf)
 }
 
 库用户使用：
@@ -42,21 +42,36 @@ namespace su
 	};
 	
 	using PrintfCB = void(*)(LogLv lv, const char *file, int line, const char *fun, const char * pattern);
+	//缺省定义,打印到文件和标准输出
+	class DefaultLog
+	{
+		int m_fd = -1;
+		std::string m_file_name;
 
+	public:
+		//para:const char *fname, 文件路径名
+		explicit DefaultLog(const char *fname = "svr_util_log.txt");
+		~DefaultLog();
+		void Printf(LogLv lv, const char *file, int line, const char *fun, const char *pattern);
+
+	private:
+		const char * GetLogLevelStr(LogLv lv) const;
+		void OpenFile();
+	};
 	//日志管理单例
 	class LogMgr
 	{
 		PrintfCB m_cb = &DefaultPrintf;//选用函数指针，不选用 function<void(LogLv lv...)>. 因为函数对象通常引用另一个对象，另一个对象什么时候会野是个多坑问题。
 		bool m_isEnable = true;
 	public:
-		static LogMgr &Obj();
+		static LogMgr &Ins();
 		void SetLogPrinter(PrintfCB cb); //改变日志实现
 		void Printf(LogLv lv, const char * file, int line, const char *fun, const char * pattern, ...);
+		void Printf(LogLv lv, const char * file, int line, const char *fun, const char * pattern, va_list vp);
 		void PrintfCond(LogLv lv, const char * file, int line, const char *fun, const char * cond, const char * pattern = "", ...);
 		void Enable(bool isEnable);//false == isEnable 表示不打日志
 	private:
 		LogMgr() {};
 		static void DefaultPrintf(LogLv lv, const char *file, int line, const char *fun, const char * pattern);
-		void Printf(LogLv lv, const char * file, int line, const char *fun, const char * pattern, va_list vp);
 	};
 }

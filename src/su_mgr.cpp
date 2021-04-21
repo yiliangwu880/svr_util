@@ -9,14 +9,14 @@ using namespace su;
 
 bool SuMgr::Init()
 {
-	//整个系统 需要初始化的模块都在这里初始化
+	//整个svr_util系统 需要初始化的模块都在这里初始化
 	Random::Init();
-	CBacktraceInfo::Obj().RegHangUpHandler();
+	CBacktraceInfo::Ins().RegHangUpHandler();
 	return true;
 }
 
 void SuMgr::OnTimer()
 {
-	SysTime::Obj().Refresh();
-	TimeDriver::Obj().CheckTimeOut();
+	SysTime::Ins().Refresh();
+	TimeDriver::Ins().CheckTimeOut();
 }

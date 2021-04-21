@@ -12,7 +12,7 @@ using namespace std;
 int main(int argc, char* argv[])
 {
 
-	UnitTestMgr::Obj().Start();
+	UnitTestMgr::Ins().Start();
 	return 0;
 }
 

@@ -15,7 +15,7 @@ namespace
 	void test()
 	{
 		UNIT_INFO("============\testBacktrace start============\n");
-		CBacktraceInfo::Obj().RegHangUpHandler();
+		CBacktraceInfo::Ins().RegHangUpHandler();
 		int *p = 0;
 		*p = 3;
 		UNIT_INFO("============\testBacktrace done================\n");

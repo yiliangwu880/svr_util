@@ -9,24 +9,9 @@
 using namespace std;
 namespace su
 {
-	//缺省定义,打印到文件和标准输出
-	class DefaultLog
-	{
-		int m_fd = -1;
-		std::string m_file_name;
 
-	public:
-		//para:const char *fname, 文件路径名
-		explicit DefaultLog(const char *fname = "svr_util_log.txt");
-		~DefaultLog();
-		void Printf(LogLv lv, const char *file, int line, const char *fun, const char *pattern);
 
-	private:
-		const char * GetLogLevelStr(LogLv lv) const;
-		void OpenFile();
-	};
-
-	LogMgr & LogMgr::Obj()
+	LogMgr & LogMgr::Ins()
 	{
 		static LogMgr d;
 		return d;

@@ -166,7 +166,7 @@ void ShowRandRate()
 
 UNITTEST(testRandom)
 {
-	SuMgr::Obj().Init();
+	SuMgr::Ins().Init();
 	testPrimeRandom();
 	testRandomWeight();
 	testRandomBetween();
