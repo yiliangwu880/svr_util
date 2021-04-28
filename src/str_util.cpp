@@ -14,6 +14,7 @@ namespace su
 		{
 			ret.push_back(hex[(c >> 4) & 0xf]); //取二进制高四位
 			ret.push_back(hex[c & 0xf]);        //取二进制低四位
+			ret.push_back(' ');
 		}
 		return ret;
 	}
