@@ -85,7 +85,7 @@ namespace
 
 	}
 	void test4()
-	{//StringTool::format
+	{//StrUtil::format
 
 		string out, correct;
 		string in = "12345";
@@ -95,7 +95,7 @@ namespace
 		StrFormat::format(out, "%s", in.c_str());
 		UNIT_ASSERT(in == out);
 
-		//StringTool::format(out, "a%d%s", in.c_str()); //段错误 SIGSEGV      11    
+		//StrUtil::format(out, "a%d%s", in.c_str()); //段错误 SIGSEGV      11    
 
 		{
 			string ret = StrFormat::format("%s", in.c_str());
