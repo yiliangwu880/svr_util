@@ -15,6 +15,7 @@ author: YiliangWu
 #include <time.h>
 #include "typedef.h"
 #include <functional>
+#include <memory>
 
 #define UNUSED(x) (void)(x)  //无用代码，用来去编译警告
 
@@ -79,7 +80,19 @@ namespace su
 		uint32 m_lAdapativeTime = 0;
 	};
 
+	template<class T>
+	struct WeakPtr {
+		WeakPtr()
+			:m_sharePtr((T*)this, [](T *) {})
+		{
 
+		}
+		std::shared_ptr<T> m_sharePtr;
+		std::weak_ptr<T> GetWeakPtr()
+		{
+			return m_sharePtr;
+		}
+	};
 } //end namespace su
 
 
