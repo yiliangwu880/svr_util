@@ -45,11 +45,24 @@ namespace
 
 		}
 	}
+	void TestEffectSize()
+	{
+		time_t start = time(nullptr);
+		for (int i = 0; i < 1000 ; i++)
+		{
+			string str;
+			str.assign(1024 * 10, 'a');
+			L_DEBUG("t%s", str.c_str());
+		}
+		time_t end = time(nullptr);
+		L_DEBUG("%ld", end - start);
+	}
 }//end namespace
 
 UNITTEST(testLogFile)
 {
-	UNUSED(delLogfile);
-	UNUSED(t1);
+	//TestEffectSize();
+//	f();
+//	delLogfile();
 	//L_ASSERT(1 == 4);
 }

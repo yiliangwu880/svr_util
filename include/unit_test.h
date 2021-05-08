@@ -54,7 +54,8 @@ public:
 		static UnitTestMgr d;
 		return d;
 	}
-	void Start(UnitTestPrintf printf= nullptr);
+	void Start(UnitTestPrintf printf = nullptr);
+	void Run(const std::string &testName, UnitTestPrintf printf = nullptr);//只运行测试一个注册模块
 	void Reg(IUnitTest *p);
 	void Printf(bool is_error, const char * file, int line, const char *pFun, const char * pattern, ...);
 	void Enable(bool isEnalbe) { m_isEnable = isEnalbe; } //fasle == isEnalbe表示不打日志

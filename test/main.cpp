@@ -13,6 +13,7 @@ int main(int argc, char* argv[])
 {
 
 	UnitTestMgr::Ins().Start();
+	//UnitTestMgr::Ins().Run("testLogFile");
 	return 0;
 }
 

@@ -21,6 +21,20 @@ void UnitTestMgr::Start(UnitTestPrintf printf)
 		var.second->Run();
 	}
 }
+void UnitTestMgr::Run(const std::string &testName, UnitTestPrintf printf /*= nullptr*/)
+{
+	m_print = printf;
+	auto it = m_name2unit.find(testName);
+	if (it == m_name2unit.end())
+	{
+		UNIT_ERROR("find testName fail %s", testName.c_str());
+		return;
+	}
+	UNIT_INFO("=========[%s]========", it->second->m_unit_name);
+	it->second->Run();
+
+}
+
 
 void UnitTestMgr::Reg(IUnitTest *p)
 {
