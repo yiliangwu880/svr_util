@@ -62,8 +62,8 @@ public:
 
 };
 
-#define UNIT_ERROR(x, ...)  UnitTestMgr::Ins().Printf( true, __FILE__, __LINE__, __FUNCTION__, x, ##__VA_ARGS__);
-#define UNIT_INFO(x, ...)  UnitTestMgr::Ins().Printf( false, __FILE__, __LINE__, __FUNCTION__, x, ##__VA_ARGS__);
+#define UNIT_ERROR(x, ...)  UnitTestMgr::Ins().Printf( true, __FILE__, __LINE__, __FUNCTION__, x, ##__VA_ARGS__)
+#define UNIT_INFO(x, ...)  UnitTestMgr::Ins().Printf( false, __FILE__, __LINE__, __FUNCTION__, x, ##__VA_ARGS__)
 
 #define UNIT_ASSERT(expression) do{  \
 				if(!(expression))                                                              \
