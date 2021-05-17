@@ -86,7 +86,7 @@ namespace su
 	//定义事件ID 关联 接收函数参数列表
 	template<int ID>
 	struct EventTraits {
-		using Fun = int;
+		using Fun = void(*)();
 	};
 
 	//template<>
