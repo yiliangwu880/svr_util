@@ -100,7 +100,7 @@ namespace su
 	void LogMgr::DefaultPrintf(LogLv lv, const char *file, int line, const char *fun, const char * pattern)
 	{
 		// 使用默认才创建s_log对象
-		static DefaultLog s_log;
+		static DefaultLog s_log(LogMgr::Ins().m_defaultFileName.c_str());
 		s_log.Printf(lv, file, line, fun, pattern);
 	}
 

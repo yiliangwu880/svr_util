@@ -63,9 +63,11 @@ namespace su
 	{
 		PrintfCB m_cb = &DefaultPrintf;//选用函数指针，不选用 function<void(LogLv lv...)>. 因为函数对象通常引用另一个对象，另一个对象什么时候会野是个多坑问题。
 		bool m_isEnable = true;
+		std::string m_defaultFileName = "svr_util_log.txt";
 	public:
 		static LogMgr &Ins();
 		void SetLogPrinter(PrintfCB cb); //改变日志实现
+		void DefaultFileName(std::string val) { m_defaultFileName = val; }
 		void Printf(LogLv lv, const char * file, int line, const char *fun, const char * pattern, ...);
 		void Printf(LogLv lv, const char * file, int line, const char *fun, const char * pattern, va_list vp);
 		void PrintfCond(LogLv lv, const char * file, int line, const char *fun, const char * cond, const char * pattern = "", ...);
