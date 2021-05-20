@@ -103,9 +103,9 @@ namespace su
 	}
 
 	template <typename Map>
-	inline bool MapInsert(Map &map, typename Map::key_type key, typename Map::mapped_type v)
+	inline bool MapInsert(Map &map, typename Map::key_type key, typename Map::mapped_type mapped)
 	{
-		return  map.insert(std::make_pair(key, v)).second;
+		return  map.emplace(std::make_pair(key, std::forward<typename Map::mapped_type>(mapped))).second;
 	}
 
 	//迭代map,mutlmap区间 [min,max) 里面的元素
