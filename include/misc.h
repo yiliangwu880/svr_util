@@ -80,20 +80,37 @@ namespace su
 		uint32 m_lAdapativeTime = 0;
 	};
 
+	/*
+	提供弱引用任意类型。
+
+	使用例子：
+	class ConcreteClass : public WeakPtr<ConcreteClass>
+	{
+	public:
+
+	};
+
+	void f1()
+	{
+		ConcreteClass a;
+		weak_ptr<ConcreteClass>wp = a.GetWeakPtr();
+		auto p = wp.lock();
+		UNIT_ASSERT(p);
+	}
+	*/
 	template<class T>
 	struct WeakPtr {
+		std::shared_ptr<T> m_sharePtr;
+
 		WeakPtr()
 			:m_sharePtr((T*)this, [](T *) {})
 		{
 
 		}
-		std::shared_ptr<T> m_sharePtr;
-		std::weak_ptr<T> GetWeakPtr()
-		{
-			return m_sharePtr;
-		}
+		std::weak_ptr<T> GetWeakPtr(){return m_sharePtr;}
 	};
 } //end namespace su
+
 
 
 //end file
