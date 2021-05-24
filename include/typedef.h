@@ -2,6 +2,7 @@
 brief:常用基本类型定义
 */
 #pragma once
+#include <stdint.h>
 using uint16 = uint16_t;
 using uint32 = uint32_t;
 using uint64 = uint64_t;

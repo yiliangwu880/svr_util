@@ -100,7 +100,7 @@ uint64 Config::GetUint64( const char *name )
 #ifdef WIN32
 	sscanf_s((it->second).c_str(), "%lld", &num);
 #else
-	sscanf((it->second).c_str(), "%lld", &num);
+	sscanf((it->second).c_str(), "%ld", &num);
 #endif //#ifdef WIN32
     return num;
 }

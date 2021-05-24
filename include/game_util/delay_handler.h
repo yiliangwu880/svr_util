@@ -139,7 +139,7 @@ void DelayOptMgr<Obj, ObjId, MAX_OPT_NUM>::AddOpt(ObjId target_id, OptFun opt)
 	if (vec_opt.size() >= MAX_OPT_NUM)
 	{
 		//缓存操作太多了		
-		printf("error, req is too more, id=%lld\n", target_id);
+		printf("error, req is too more, id=%ld\n", target_id);
 		return;
 	}
 

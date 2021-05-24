@@ -232,7 +232,7 @@ CycleMoreReset::CycleMoreReset( const time_t &period, const VecInt64 &vec_limit 
 	{
 		if(v>=period)
 		{
-			printf("input para error, %lld", v);
+			printf("input para error, %ld", v);
 		}
 	}	
 }
