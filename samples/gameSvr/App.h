@@ -10,12 +10,11 @@
 using namespace su;
 using namespace std;
 
-//100¿ªÊ¼
 enum  APP_EVENT 
 {
-	AE_CFG_INI = 1, //³õÊ¼»¯ÅäÖÃ
-	AE_AFTER_CFG_INI = 2, //³õÊ¼»¯ÅäÖÃºó
-	AE_INI_NET = 3, //³õÊ¼»¯ÍøÂç
+	AE_CFG_INI = 1, //åˆå§‹åŒ–é…ç½®
+	AE_AFTER_CFG_INI = 2, //åˆå§‹åŒ–é…ç½®åŽ
+	AE_INI_NET = 3, //åˆå§‹åŒ–ç½‘ç»œ
 
 };
 
