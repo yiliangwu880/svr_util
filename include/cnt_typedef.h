@@ -24,5 +24,5 @@ using VecInt          = std::vector<int>					;
 using VecUint32       = std::vector<uint32>					;
 using VecUint64       = std::vector<uint64>					;
 using VecInt64        = std::vector<int64>					;
-
+using CStr = const std::string;
 }
