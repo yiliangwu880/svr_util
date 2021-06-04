@@ -24,7 +24,7 @@ namespace su
 		using Fun = void();
 	};
 
-
+	//根据函数类型，获取参数数量
 	template<typename Sig>
 	struct FunParaNum_;
 
@@ -37,9 +37,8 @@ namespace su
 		return FunParaNum_<Sig>::value;
 	}
 
-
 	template<int ID, class MemFun, class T, class FunObj>
-	struct BindPara2
+	struct BindPara
 	{
 		inline static FunObj bind(MemFun fun, T *ins)
 		{
@@ -47,7 +46,7 @@ namespace su
 		}
 	};
 	template< class MemFun, class T, class FunObj>
-	struct BindPara2<1, MemFun, T, FunObj>
+	struct BindPara<1, MemFun, T, FunObj>
 	{
 		inline static FunObj bind(MemFun fun, T *ins)
 		{
@@ -55,13 +54,30 @@ namespace su
 		}
 	};
 	template< class MemFun, class T, class FunObj>
-	struct BindPara2<2, MemFun, T, FunObj>
+	struct BindPara<2, MemFun, T, FunObj>
 	{
 		inline static FunObj bind(MemFun fun, T *ins)
 		{
 			return std::bind(fun, ins, std::placeholders::_1, std::placeholders::_2);
 		}
 	};
+	template< class MemFun, class T, class FunObj>
+	struct BindPara<3, MemFun, T, FunObj>
+	{
+		inline static FunObj bind(MemFun fun, T *ins)
+		{
+			return std::bind(fun, ins, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
+		}
+	};
+	template< class MemFun, class T, class FunObj>
+	struct BindPara<4, MemFun, T, FunObj>
+	{
+		inline static FunObj bind(MemFun fun, T *ins)
+		{
+			return std::bind(fun, ins, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4);
+		}
+	};
+
 	//有 publish_subscribe.h，为什么提供局部对象管理的事件？
 	//全局事件最安全好用，但没提供注销事件功能，没有注册成员函数功能。
 	//注册接口提供 注册成员函数，编码工作更简洁。
@@ -135,7 +151,7 @@ namespace su
 					return;
 				}
 			}
-			FunObj funObj = BindPara2<FunParaNum_<typename EventMgrTraits<ID>::Fun>::value, MemFun, T, FunObj>::bind(fun, ins);
+			FunObj funObj = BindPara<FunParaNum_<typename EventMgrTraits<ID>::Fun>::value, MemFun, T, FunObj>::bind(fun, ins);
 			vec.emplace_back(Observer{ ins, fun, funObj });
 		}
 
