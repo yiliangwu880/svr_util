@@ -22,16 +22,44 @@ namespace su
 	template<int ID>
 	struct EventMgrTraits {
 		using Fun = void();
-		static const int ParaNum = 0;
 	};
 
-	template<int ID, class MemFun, class T>
-	struct BindPara
+
+	template<typename Sig>
+	struct FunParaNum_;
+
+	template<typename R, typename... Args>
+	struct FunParaNum_<R(Args...)> {
+		static size_t const value = sizeof...(Args);
+	};
+	template<typename Sig>
+	inline size_t FunParaNum(Sig) {
+		return FunParaNum_<Sig>::value;
+	}
+
+
+	template<int ID, class MemFun, class T, class FunObj>
+	struct BindPara2
 	{
-		using FunObj = std::function<typename EventMgrTraits<ID>::Fun>;
 		inline static FunObj bind(MemFun fun, T *ins)
 		{
 			return std::bind(fun, ins);
+		}
+	};
+	template< class MemFun, class T, class FunObj>
+	struct BindPara2<1, MemFun, T, FunObj>
+	{
+		inline static FunObj bind(MemFun fun, T *ins)
+		{
+			return std::bind(fun, ins, std::placeholders::_1);
+		}
+	};
+	template< class MemFun, class T, class FunObj>
+	struct BindPara2<2, MemFun, T, FunObj>
+	{
+		inline static FunObj bind(MemFun fun, T *ins)
+		{
+			return std::bind(fun, ins, std::placeholders::_1, std::placeholders::_2);
 		}
 	};
 	//有 publish_subscribe.h，为什么提供局部对象管理的事件？
@@ -84,13 +112,12 @@ namespace su
 		//	//vec.emplace_back({ ins, fun, funObj });
 		//}
 
-
 	
 		//cb 为类成员函数。注意：需要用户保证事件回调时， ins不野。
 		template<int ID, class MemFun, class T>
 		void Reg(MemFun fun, T *ins)
 		{
-			using Fun = std::function<typename EventMgrTraits<ID>::Fun>;
+			using FunObj = std::function<typename EventMgrTraits<ID>::Fun>;
 			
 			Observers &ss = m_idfuns[ID];
 			if (ss.m_is_firing)
@@ -108,9 +135,7 @@ namespace su
 					return;
 				}
 			}
-		//	Fun funObj = std::bind(fun, ins, std::forward<_Types>(_Args)...);
-		//	Fun funObj = std::bind(fun, ins);
-			Fun funObj = BindPara<EventMgrTraits<ID>::ParaNum, MemFun, T>::bind(fun, ins);
+			FunObj funObj = BindPara2<FunParaNum_<typename EventMgrTraits<ID>::Fun>::value, MemFun, T, FunObj>::bind(fun, ins);
 			vec.emplace_back(Observer{ ins, fun, funObj });
 		}
 

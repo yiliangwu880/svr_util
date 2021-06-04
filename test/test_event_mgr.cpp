@@ -16,17 +16,6 @@ using namespace su;
 using namespace std::placeholders;
 
 
-template<typename Sig>
-struct FunParaNum_;
-
-template<typename R, typename... Args>
-struct FunParaNum_<R(Args...)> {
-	static size_t const value = sizeof...(Args);
-};
-template<typename Sig>
-inline size_t FunParaNum(Sig) {
-	return FunParaNum_<Sig>::value;
-}
 
 
 namespace su
@@ -39,42 +28,19 @@ namespace su
 	template<>
 	struct EventMgrTraits<1> {
 		using Fun = void(int i);
-		static const int ParaNum = FunParaNum_<Fun>::value;
 	};
-
-
 
 	template<>
 	struct EventMgrTraits<2> {
 		using Fun = void(int a, int b);
-		static const int ParaNum = 2;
 	};
 	template<>
 	struct EventMgrTraits<3> {
 		using Fun = void(int a, int b);
-		static const int ParaNum = 2;
 	};
 
 	
-	template< class MemFun, class T>
-	struct BindPara<1, MemFun, T>
-	{
-		using FunObj = std::function<typename EventMgrTraits<1>::Fun>;
-		inline static FunObj bind(MemFun fun, T *ins)
-		{
-			return std::bind(fun, ins, std::placeholders::_1);
-		}
-	};
 
-	template< class MemFun, class T>
-	struct BindPara<2, MemFun, T>
-	{
-		using FunObj = std::function<typename EventMgrTraits<2>::Fun>;
-		inline static FunObj bind(MemFun fun, T *ins)
-		{
-			return std::bind(fun, ins, std::placeholders::_1, std::placeholders::_2);
-		}
-	};
 
 }
 namespace
@@ -200,5 +166,8 @@ UNITTEST(event_mgr)
 	L_INFO("end");
 
 
-	L_INFO("fun para=%d", FunParaNum_<void(int i, int c)>::value); //获取参数数量
+	//L_INFO("fun para=%d", FunParaNum_<void(int i, int c)>::value); //获取参数数量
+
+
+	//m.FireEvent<FunParaNum_<void(int i, int c)>::value>(55, 6);
 }
