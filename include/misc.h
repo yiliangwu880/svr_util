@@ -83,6 +83,8 @@ namespace su
 
 	/*
 	提供弱引用任意类型。
+	1）从对象获取的 weak_ptr 能保证弱引用特性。
+	2）注意：从weak_ptr 获取的 shared_ptr 不能阻止对象释放。 
 
 	使用例子：
 	class ConcreteClass : public WeakPtr<ConcreteClass>
@@ -94,9 +96,18 @@ namespace su
 	void f1()
 	{
 		ConcreteClass a;
-		weak_ptr<ConcreteClass>wp = a.GetWeakPtr();
-		auto p = wp.lock();
-		UNIT_ASSERT(p);
+		weak_ptr<ConcreteClass>wp = a;
+		shared_ptr<ConcreteClass> p = wp.lock(); //获取
+		UNIT_ASSERT(p); //这里判断有值，能保证对象存在。后面使用就注意了
+		。。。//注意，一般当普通指针使用，shared_ptr不能保证不野。 所以需要用户保证使用p期间，对象别释放。
+	}
+
+	//错误使用例子：
+	{
+		shared_ptr<ConcreteClass> p = wp.lock(); //获取
+		UNIT_ASSERT(p); 
+		someFun(); //里面释放了对象
+		p.get() ..... //指针就野了。
 	}
 	*/
 	template<class T>
@@ -108,7 +119,10 @@ namespace su
 		{
 
 		}
-		std::weak_ptr<T> GetWeakPtr(){return m_sharePtr;}
+		operator std::weak_ptr<T>() const
+		{
+			return m_sharePtr;
+		}
 	};
 } //end namespace su
 
