@@ -12,8 +12,8 @@ using namespace std;
 int main(int argc, char* argv[])
 {
 
-	UnitTestMgr::Ins().Start();
-	//UnitTestMgr::Ins().Run("testLogFile");
+	//UnitTestMgr::Ins().Start();
+	UnitTestMgr::Ins().Run("event_mgr");
 	return 0;
 }
 
