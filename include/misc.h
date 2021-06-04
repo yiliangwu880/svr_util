@@ -22,12 +22,15 @@ author: YiliangWu
 namespace su
 {
 
-	//唯一id  高32用timestamp, 低32用自增。 
+	//唯一id  高32用timestamp sec, 低32用自增。 
 	//保证唯一条件： 1）使用少于一百多年。2）1秒内，产生少于4亿。
 	//一般几行代码，重复跑4亿次，都要十几秒了。 所以实际情况不会重复
 	//32位表示时间戳，够用一百多年不重复。
 	class IdCreater
 	{
+		uint32 m_seed = 0;
+		uint32 m_lAdapativeTime = 0;
+
 	public:
 		IdCreater()
 		{
@@ -35,6 +38,7 @@ namespace su
 			time(&sec);
 			m_lAdapativeTime = (uint32)sec;
 		}
+		//建议用这个，简单无BUG
 		uint64 CreateId()
 		{
 			time_t sec;
@@ -75,9 +79,6 @@ namespace su
 
 			return id;
 		}
-	private:
-		uint32 m_seed = 0;
-		uint32 m_lAdapativeTime = 0;
 	};
 
 	/*
