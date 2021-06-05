@@ -48,35 +48,19 @@ namespace
 
 	class Player;
 
-	struct EventCom
+
+	struct Sub1 : public EventCom<Sub1>
 	{
-		template<int i>
-		void Reg()
-		{
-		}
-		template<int i>
-		void UnReg()
-		{
-		}
+		Player &m_owner;
+		Sub1(Player &owner);
+
 	};
-	struct Sub1 : public EventCom
+
+
+	struct Sub2 : public EventCom<Sub2>
 	{
-		Player *m_owner;
-		//void On1(int i)
-		//{
-		//}
-		//void Regf()
-		//{
-		//	Reg<1>(On1);
-		//}
-		//void Unregf()
-		//{
-		//	UnReg<1>();
-		//}
-	};
-	struct Sub2
-	{
-		Player *m_owner;
+		Player &m_owner;
+		Sub2(Player &owner);
 		void OnE0()
 		{
 			L_INFO("OnE0");
@@ -97,14 +81,16 @@ namespace
 	class Player :  public EventMgr
 	{
 	public:
-		Player()
-		{
-			m_Sub1.m_owner = this;
-			m_Sub2.m_owner = this;
-		}
-
 		Sub1 m_Sub1;
 		Sub2 m_Sub2;
+	public:
+		Player()
+			:m_Sub1(*this)
+			, m_Sub2(*this)
+		{
+	
+		}
+
 		void f()
 		{
 
@@ -122,38 +108,24 @@ namespace
 
 	void Sub2::reg()
 	{
-		m_owner->Reg<0>(&Sub2::OnE0, this); 
-		m_owner->Reg<1>(&Sub2::OnE1, this);
+		Reg<0>(&Sub2::OnE0); 
+		Reg<1>(&Sub2::OnE1);
 		L_INFO("below line print error is ok");
-		m_owner->Reg<1>(&Sub2::OnE1, this);
-		m_owner->Reg<2>(&Sub2::OnE2, this);
+		Reg<1>(&Sub2::OnE1);
+		Reg<2>(&Sub2::OnE2);
 	}
+	Sub1::Sub1(Player &owner)
+		:EventCom<Sub1>(owner)
+		, m_owner(owner)
+	{}
+
+	Sub2::Sub2(Player &owner)
+		: EventCom<Sub2>(owner)
+		, m_owner(owner)
+	{}
 }
 
-template<typename Sig>
-struct get_;
 
-template<typename R, typename... Args>
-struct get_<R(*)(Args...)> {
-	static size_t const value = sizeof...(Args);
-};
-
-template<typename Sig>
-inline size_t get(Sig) {
-	return get_<Sig>::value;
-}
-
-void fun(int, int) {}
-
-void fun3(int, int, Player *) {}
-
-
-template<typename Sig>
-struct getg;
-template<typename R, typename... Args>
-struct getg<R(Args...)> {
-	static size_t const value = sizeof...(Args);
-};
 
 
 UNITTEST(event_mgr)
@@ -166,8 +138,4 @@ UNITTEST(event_mgr)
 	L_INFO("end");
 
 
-	//L_INFO("fun para=%d", FunParaNum_<void(int i, int c)>::value); //获取参数数量
-
-
-	//m.FireEvent<FunParaNum_<void(int i, int c)>::value>(55, 6);
 }
