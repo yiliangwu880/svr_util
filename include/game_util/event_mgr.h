@@ -20,7 +20,7 @@ namespace su
 {
 	//定义事件ID 关联 接收函数参数列表
 	template<int ID>
-	struct EventMgrTraits {
+	struct EventMgrTrait {
 		using Fun = void();
 	};
 
@@ -103,10 +103,17 @@ namespace su
 		{
 			m_isForbiding = true;
 		}
+
+		//one reg create one observer
+		template<int ID>
+		size_t GetObserverNum()
+		{
+			return m_idfuns[ID].vec.size();
+		}
 		template<int ID, class ... Args>
 		void FireEvent(Args&& ... args)
 		{
-			using Fun = typename std::function<typename EventMgrTraits<ID>::Fun>;
+			using Fun = typename std::function<typename EventMgrTrait<ID>::Fun>;
 			Observers &ss = m_idfuns[ID];
 			if (ss.m_is_firing) //触发回调过程，禁止插入触发，避免复杂调用流程。
 			{
@@ -127,7 +134,7 @@ namespace su
 		template<int ID, class MemFun, class T>
 		void Reg(MemFun fun, T *ins)
 		{
-			using FunObj = std::function<typename EventMgrTraits<ID>::Fun>;
+			using FunObj = std::function<typename EventMgrTrait<ID>::Fun>;
 			
 			Observers &ss = m_idfuns[ID];
 			if (ss.m_is_firing)
@@ -145,12 +152,12 @@ namespace su
 					return;
 				}
 			}
-			FunObj funObj = BindPara<FunParaNum_<typename EventMgrTraits<ID>::Fun>::value, MemFun, T, FunObj>::bind(fun, ins);
+			FunObj funObj = BindPara<FunParaNum_<typename EventMgrTrait<ID>::Fun>::value, MemFun, T, FunObj>::bind(fun, ins);
 			vec.emplace_back(Observer{ ins, fun, funObj });
 		}
 
 		template<int ID, class MemFun>
-		bool UnReg(MemFun fun)
+		bool Unreg(MemFun fun)
 		{
 			Observers &ss = m_idfuns[ID];
 			if (ss.m_is_firing)
@@ -162,7 +169,7 @@ namespace su
 			for (Observer &v : vec)
 			{
 				MemFun *pFun = std::any_cast<MemFun>(&v.memFun);
-				if (*pFun == fun)
+				if (nullptr != pFun && *pFun == fun)
 				{
 					v = vec.back();
 					vec.erase(vec.end() - 1);
@@ -172,7 +179,7 @@ namespace su
 			return false;
 		}
 		
-		void UnRegByIns(void *ins)
+		void UnregByIns(void *ins)
 		{
 			for (auto &vv: m_idfuns)
 			{
@@ -223,7 +230,7 @@ namespace su
 		}
 		~EventCom()
 		{
-			m_owner.UnRegByIns(this);
+			m_owner.UnregByIns(this);
 		}
 		//cb 为类成员函数。注意：需要用户保证事件回调时， ins不野。
 		template<int ID, class MemFun>
@@ -233,9 +240,9 @@ namespace su
 		}
 
 		template<int ID, class MemFun>
-		bool UnReg(MemFun fun)
+		bool Unreg(MemFun fun)
 		{
-			return m_owner.UnReg<ID>(fun);
+			return m_owner.Unreg<ID>(fun);
 		}
 
 	};
