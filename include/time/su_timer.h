@@ -86,6 +86,14 @@ namespace su
 		//@brief 回调方式设置timer
 		//@para const TimerCB &cb,  用std::bind绑定的函数
 		bool StartTimer(uint32 interval_sec, const TimerCB &cb, bool is_loop = false);
+
+		//简化std::bind书写。需要 _1,_2等不支持，还是手动敲出来吧
+		template< class MemFun, class T>
+		inline bool StartTimer(uint32 interval_sec, MemFun fun, T *ins, bool is_loop = false)
+		{
+			return StartTimer(interval_sec, std::bind(fun, ins), is_loop);
+		}
+
 		//停止正在进行的定时器，
 		//return, false 不需要停止. true 成功操作了停止
 		bool StopTimer();

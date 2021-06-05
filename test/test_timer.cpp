@@ -686,6 +686,22 @@ namespace
 
 		}
 	}
+	void test11()
+	{
+		struct Player 
+		{
+			void f0() {};
+			void f1() {};
+
+		};
+		{//illegal arg
+			Player p;
+			Timer t1;
+
+			t1.StartTimer(3, &Player::f0, &p);
+			t1.StartTimer(3, &Player::f0, &p, true);
+		}
+	}
 }//end namespace
 
 
@@ -704,7 +720,8 @@ UNITTEST(timer)
     test7();
     test8();
     test9();
-    test10();
+	test10();
+	test11();
 	testFree();
 	testStop();
 	

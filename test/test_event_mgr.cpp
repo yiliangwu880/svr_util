@@ -33,22 +33,32 @@ namespace su
 }
 namespace
 {
-
+	struct B1
+	{
+		virtual ~B1()
+		{}
+		virtual void v1() {};
+	};
+	struct B2
+	{
+		int i;
+	};  
 	class Player;
-	struct Sub1 : public EventCom<Sub1>
+	struct Sub1 : public EventCom<Sub1>, B1 , B2
 	{
 		bool m_r1 = false;
 		int m_p1 = 0;
 		Player &m_owner;
 		Sub1(Player &owner);
 
+		~Sub1() {}
 		void OnE1(int i)
 		{
 			m_r1 = true;
 			m_p1 = i;
 		}
 	};
-	struct Sub2 : public EventCom<Sub2>
+	struct Sub2 : public EventCom<Sub2>, B1
 	{
 		bool m_r0 = false;
 		bool m_r1 = false;
@@ -57,6 +67,7 @@ namespace
 		int m_p2 = 0;
 		Player &m_owner;
 		Sub2(Player &owner);
+		 ~Sub2() {}
 		void clearState()
 		{
 			m_r0 = false;
@@ -80,12 +91,20 @@ namespace
 			m_r2 = true;
 			m_p1 = a;
 			m_p2 = b;
-
+		}
+		void OnE21(int a, int b)
+		{
+		}
+		void OnE22(int a, int b)
+		{
+		}
+		void OnE23(int a, int b)
+		{
 		}
 		void reg();
 	};
 
-	class Player :  public EventMgr
+	class Player :  public EventMgr, B1
 	{
 	public:
 		Sub1 m_Sub1;
@@ -98,6 +117,7 @@ namespace
 		{
 			pSub2 = new Sub2(*this);
 		}
+		~Player() {}
 
 		void f()
 		{
@@ -205,13 +225,38 @@ namespace
 		UNIT_ASSERT(m.GetObserverNum<0>() == 0);
 		UNIT_ASSERT(m.GetObserverNum<1>() == 1);
 		UNIT_ASSERT(m.GetObserverNum<2>() == 0);
+
 		m.FireEvent<0>();
 		m.FireEvent<1>(5556);
 		UNIT_ASSERT(m.m_Sub1.m_p1 == 5556);
 		m.FireEvent<2>(1, 2);
+
+		Player * pp = new Player;
+		delete pp;
+
+	
+
+	}
+	void testDelSubCom2()
+	{
+		Player m;
+		Sub2 *p = m.pSub2;
+		p->Reg<0>(&Sub2::OnE0);
+		p->Reg<1>(&Sub2::OnE1);
+		p->Reg<2>(&Sub2::OnE2);
+		p->Reg<2>(&Sub2::OnE21);
+		p->Reg<2>(&Sub2::OnE22);
+		p->Reg<2>(&Sub2::OnE23);
+
+		UNIT_ASSERT(m.GetObserverNum<0>() == 1);
+		UNIT_ASSERT(m.GetObserverNum<1>() == 2);
+		UNIT_ASSERT(m.GetObserverNum<2>() == 4);
+		delete p;
+		UNIT_ASSERT(m.GetObserverNum<0>() == 0);
+		UNIT_ASSERT(m.GetObserverNum<1>() == 1);
+		UNIT_ASSERT(m.GetObserverNum<2>() == 0);
 	}
 }
-
 
 
 UNITTEST(event_mgr)
@@ -219,5 +264,6 @@ UNITTEST(event_mgr)
 
 	test();
 	testDelSubCom();
+	testDelSubCom2();
 
 }
