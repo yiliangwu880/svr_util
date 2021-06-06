@@ -1,5 +1,5 @@
 /*
-事件注册侦听。使用写法简洁。
+事件注册侦听。使用写法简洁。事件参数强类型
 
 有 publish_subscribe.h，为什么提供局部对象管理的事件？
 全局事件最安全好用，但没提供注销事件功能。
@@ -8,19 +8,21 @@
 
 例子：
 #include "game_util/event_mgr.h"
-	template<>
-	struct EventMgrTrait<1> {
-		using Fun = void(int i);
-	};
-	template<>
-	struct EventMgrTrait<2> {
-		using Fun = void(int a, int b);
-	};
-	template<>
-	struct EventMgrTrait<3> {
-		using Fun = void(int a, int b);
-	};
-
+	namespace su //必须要定义名空间
+	{
+		template<>
+		struct EventMgrTrait<1> {
+			using Fun = void(int i);
+		};
+		template<>
+		struct EventMgrTrait<2> {
+			using Fun = void(int a, int b);
+		};
+		template<>
+		struct EventMgrTrait<3> {
+			using Fun = void(int a, int b);
+		};
+	}
 	class Player;
 	struct Sub1 : public EventCom<Sub1>, B1 , B2
 	{
@@ -72,14 +74,15 @@
 #include "../log_file.h"
 #include "static_reg.h"
 
+
+//定义事件ID 关联 接收函数参数列表
+
 namespace su
 {
-	//定义事件ID 关联 接收函数参数列表
 	template<int ID>
 	struct EventMgrTrait {
 		using Fun = void();
 	};
-
 	//根据函数类型，获取参数数量
 	template<typename Sig>
 	struct FunParaNum_;
@@ -272,28 +275,28 @@ namespace su
 	template<class T>
 	class EventCom
 	{
-		EventMgr &m_owner;
+		EventMgr &m_mgr;//m_owner
 	public:
 		EventCom(EventMgr &owner)
-			:m_owner(owner)
+			:m_mgr(owner)
 		{
 		}
 		~EventCom()
 		{
-			m_owner.UnregByIns((T *)this);
+			m_mgr.UnregByIns((T *)this);
 		}
 		//cb 为类成员函数。注意：需要用户保证事件回调时， ins不野。
 		template<int ID, class MemFun>
 		void Reg(MemFun fun)
 		{
 			//如果T有虚函数 this > (T *)this 8个字节左右
-			m_owner.Reg<ID>(fun, (T *)this);
+			m_mgr.Reg<ID>(fun, (T *)this);
 		}
 
 		template<int ID, class MemFun>
 		bool Unreg(MemFun fun)
 		{
-			return m_owner.Unreg<ID>(fun, (T *)this);
+			return m_mgr.Unreg<ID>(fun, (T *)this);
 		}
 	};
 
