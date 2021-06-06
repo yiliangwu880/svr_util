@@ -271,14 +271,14 @@ namespace su
 
 
 	//继承后，能让对象注册成员函数为事件函数
-	//注意：m_owner必须拥有 this。this 是owner的组合对象（成员变量）.这样才能保证 this析构的时候，调用 m_owner 是有效的。
+	//注意：m_mgr必须拥有 this。this 是m_mgr的组合对象（成员变量）.这样才能保证 this析构的时候，调用 m_owner 是有效的。
 	template<class T>
 	class EventCom
 	{
-		EventMgr &m_mgr;//m_owner
+		EventMgr &m_mgr;
 	public:
-		EventCom(EventMgr &owner)
-			:m_mgr(owner)
+		EventCom(EventMgr &mgr)
+			:m_mgr(mgr)
 		{
 		}
 		~EventCom()
