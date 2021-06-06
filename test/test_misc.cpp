@@ -52,12 +52,66 @@ namespace
 		}
 
 	}
- 
+
+	struct B
+	{
+
+	};
+	struct VB
+	{
+		~VB() {};
+		virtual void f() {};
+	};
+	struct C : public B, public VB, public WeakPtr<C>
+	{
+		int a;
+		int b;
+		virtual void fc() {}
+	};
+	;
+	struct CB: public WeakPtr<CB>
+	{
+		int a;
+		int b;
+
+	};
+
+	void testWeakPtr()
+	{
+		{
+			weak_ptr<CB> p;
+			{
+				CB c;
+				p = c;
+				shared_ptr<CB> ps = p.lock();
+				UNIT_ASSERT(ps.get() == &c);
+			}
+			shared_ptr<CB> ps = p.lock();
+			UNIT_ASSERT(!ps);
+		}
+		{
+			weak_ptr<C> p;
+			{
+				C c;
+				c.a = 1;c.b = 2;
+				p = c;
+				auto ps = p.lock();
+				UNIT_ASSERT(ps);
+				UNIT_ASSERT(ps.get() == &c);
+				UNIT_ASSERT(ps->a == 1);
+				UNIT_ASSERT(ps->b == 2);
+			}		
+			auto ps = p.lock();
+			UNIT_ASSERT(!ps);
+		}
+
+	}
 
 }//end namespace
 
 UNITTEST(testMisc)
 {
 	test1();
+	testWeakPtr();
 }
 
