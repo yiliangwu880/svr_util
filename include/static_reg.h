@@ -1,12 +1,12 @@
 /*
 author:yiliangwu
-brief: ¾²Ì¬×¢²áÊ¹ÓÃÀı×Ó, ¾²Ì¬ÔËĞĞ
-Êµ¼ÊÏîÄ¿Ê¹ÓÃ£¬²Î¿¼ÏÂÕâÀï´úÂë£¬×ÔĞ´Ò»Ğ©×Ô¶¨Òå´úÂë£¬»á¸üºÃÔÄ¶Á¡£ ±ÈÈçĞ´¸öµ¥Àı£¬¶¨Òå¸ö×¢²áºê¾ÍĞĞÁË¡£
-ÌØµã:
-	×¢²á¿ÉÒÔĞ´ÔÚcppÈÎÒâµØ·½,ÃâÈ¥µ½´¦·­´úÂëÎÄ¼şÌí¼ÓÉùÃ÷»òÕß¶¨Òå
-	mainº¯Êıºó²Å±£Ö¤³õÊ¼»¯³É¹¦¡£
+brief: é™æ€æ³¨å†Œä½¿ç”¨ä¾‹å­, é™æ€è¿è¡Œ
+å®é™…é¡¹ç›®ä½¿ç”¨ï¼Œå‚è€ƒä¸‹è¿™é‡Œä»£ç ï¼Œè‡ªå†™ä¸€äº›è‡ªå®šä¹‰ä»£ç ï¼Œä¼šæ›´å¥½é˜…è¯»ã€‚ æ¯”å¦‚å†™ä¸ªå•ä¾‹ï¼Œå®šä¹‰ä¸ªæ³¨å†Œå®å°±è¡Œäº†ã€‚
+ç‰¹ç‚¹:
+	æ³¨å†Œå¯ä»¥å†™åœ¨cppä»»æ„åœ°æ–¹,å…å»åˆ°å¤„ç¿»ä»£ç æ–‡ä»¶æ·»åŠ å£°æ˜æˆ–è€…å®šä¹‰
+	mainå‡½æ•°åæ‰ä¿è¯åˆå§‹åŒ–æˆåŠŸã€‚
 
-È±µã£ºÊµÏÖÔ­Àí²»ºÃÀí½â
+ç¼ºç‚¹ï¼šå®ç°åŸç†ä¸å¥½ç†è§£
 
 use example:
 //in h file
@@ -15,11 +15,12 @@ REG_MAP_NAME_DECLARE(MapName2, string, int)
 //in any cpp file
 MAP_REG_DEFINE_STR(MapName2, a, 1);
 MAP_REG_DEFINE_STR(MapName2, abc, 2);
+æˆ–è€… 
+MAP_REG_DEFINE(MapName2, "abc", 2);
 
 
-
-¾²Ì¬ÔËĞĞÊ¹ÓÃÀı×Ó£º
-STATIC_RUN(int i=3;) //¿ÉÒÔÈÎÒâCPPÎÄ¼ş¶¨Òå 
+é™æ€è¿è¡Œä½¿ç”¨ä¾‹å­ï¼š
+STATIC_RUN(int i=3;) //å¯ä»¥ä»»æ„CPPæ–‡ä»¶å®šä¹‰ 
 
 
 */
@@ -31,8 +32,8 @@ STATIC_RUN(int i=3;) //¿ÉÒÔÈÎÒâCPPÎÄ¼ş¶¨Òå
 #include <vector>
 #include <string>
 
-//------------------------------------set ¾²Ì¬×¢²á----------------------------------------------
-//hÎÄ¼ş¶¨ÒåÎ¨Ò»µ¥¼ş×¢²áÀà SET
+//------------------------------------set é™æ€æ³¨å†Œ----------------------------------------------
+//hæ–‡ä»¶å®šä¹‰å”¯ä¸€å•ä»¶æ³¨å†Œç±» SET
 #define REG_SET_NAME_DECLARE(SetClassName, ValueType)\
 class SetClassName : public std::set<ValueType>\
 {\
@@ -54,17 +55,17 @@ private:\
 };
 
 
-//ÒÔÏÂºê¶¨Òå¿ÉÒÔÔÚ²»Í¬ÎÄ¼şÀïÃæµ÷ÓÃ£¬ÊµÏÖ²»Í¬cppÎÄ¼şĞ´×¢²á¹¦ÄÜ¡£
-//@SetClassName(µ¥¼ş×¢²áÀà), 
-//@value(×¢²áµÄÖµ)
+//ä»¥ä¸‹å®å®šä¹‰å¯ä»¥åœ¨ä¸åŒæ–‡ä»¶é‡Œé¢è°ƒç”¨ï¼Œå®ç°ä¸åŒcppæ–‡ä»¶å†™æ³¨å†ŒåŠŸèƒ½ã€‚
+//@SetClassName(å•ä»¶æ³¨å†Œç±»), 
+//@value(æ³¨å†Œçš„å€¼)
 #define SET_REG_DEFINE(SetClassName, value) \
 	namespace{SetClassName::RunReg SetClassName_##value(value);}
 
 #define SET_REG_NAME_DEFINE(SetClassName, obj_name, parameter) \
 	namespace{SetClassName::RunReg SetClassName_##obj_name(parameter);}
 
-//------------------------------------map ¾²Ì¬×¢²á----------------------------------------------
-//hÎÄ¼ş¶¨ÒåÎ¨Ò»µ¥¼ş×¢²áÀà MAP
+//------------------------------------map é™æ€æ³¨å†Œ----------------------------------------------
+//hæ–‡ä»¶å®šä¹‰å”¯ä¸€å•ä»¶æ³¨å†Œç±» MAP
 #define REG_MAP_NAME_DECLARE(MapClassName, KeyType, MapType)\
 class MapClassName : public std::map<KeyType, MapType>\
 {\
@@ -85,18 +86,18 @@ private:\
 	MapClassName(){};\
 };
 
-//static_castÓĞ¸üÇ¿µÄ±àÒëÆÚ´íÎó¼ì²é
+//static_castæœ‰æ›´å¼ºçš„ç¼–è¯‘æœŸé”™è¯¯æ£€æŸ¥
 #define MAP_REG_NAME_DEFINE(MapClassName, obj_name, key, map_value) \
 	namespace{MapClassName::RunReg MapClassName##obj_name(make_pair(\
 static_cast<MapClassName::key_type>(key),\
 static_cast<MapClassName::value_type::second_type>(map_value)\
 ));}
 
-//×¢²áÖµ£¬MapClassName(µ¥¼ş×¢²áÀà), key(¼üÖµ×Ö·û´®£¬²»ÓÃ"") map_value(Öµ)
+//æ³¨å†Œå€¼ï¼ŒMapClassName(å•ä»¶æ³¨å†Œç±»), key(é”®å€¼å­—ç¬¦ä¸²ï¼Œä¸ç”¨"") map_value(å€¼)
 #define MAP_REG_DEFINE_STR(MapClassName, key, map_value) \
 	MAP_REG_NAME_DEFINE(MapClassName, key, #key, map_value)
 
-//×¢²áÖµ£¬MapClassName(µ¥¼ş×¢²áÀà), key(¼üÖµ, INT) map_value(Öµ)
+//æ³¨å†Œå€¼ï¼ŒMapClassName(å•ä»¶æ³¨å†Œç±»), key(é”®å€¼, INT) map_value(å€¼)
 #define MAP_REG_DEFINE(MapClassName, key, map_value) \
 	MAP_REG_NAME_DEFINE(MapClassName, key, key, map_value)
 
@@ -113,13 +114,13 @@ namespace {\
 	static StaticRunReg##name _StaticRunReg##name;\
 }
 
- //¶àÒ»²ã£¬±ÜÃâ__LINE__Ö±½Ó±ä»¯³É×Ö·û´®"__LINE__"
+ //å¤šä¸€å±‚ï¼Œé¿å…__LINE__ç›´æ¥å˜åŒ–æˆå­—ç¬¦ä¸²"__LINE__"
 #define STATIC_RUN_LINE(line, exe) STATIC_RUN_CAT(line, exe)
 #define STATIC_RUN(exe) STATIC_RUN_LINE(__LINE__, exe)
 
-//------------------------------ĞÂÊµÏÖ,±ÜÃâºêÄÑÔÄ¶Á
+//------------------------------æ–°å®ç°,é¿å…å®éš¾é˜…è¯»
 /*
-Ê¹ÓÃÀı×Ó
+ä½¿ç”¨ä¾‹å­
 using StaticReg1 = StaticReg<int, int, 1>;
 namespace
 { 
