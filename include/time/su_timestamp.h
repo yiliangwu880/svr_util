@@ -61,8 +61,10 @@ namespace su
 	public:
 		//刷新当前日历时间
 		void Refresh();
-		//返回系统的当前日历时间的秒数
+		//返回时间戳秒数
         inline time_t Sec() const{return m_sec;};
+		//返回时间戳ms
+		time_t Ms();
 		//返回当前日历格式
 		const tm &CurTm() const;
 		bool IsLeapYear() const;

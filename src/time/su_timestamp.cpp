@@ -11,6 +11,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <sys/time.h>
 
 using namespace std;
 namespace su
@@ -40,6 +41,16 @@ namespace su
 		m_tm.tm_yday	 =0;
 		m_tm.tm_isdst	 =0;
 		Refresh();
+	}
+
+
+	time_t SysTime::Ms()
+	{
+		struct timeval tv;
+		gettimeofday(&tv, NULL);
+
+		time_t ms = m_sec * 1000 + tv.tv_usec / 1000; // 毫秒
+		return ms;
 	}
 
 	const tm & SysTime::CurTm() const
