@@ -18,10 +18,10 @@ namespace su
 		//定时器控制数据
 		struct CtrlData : public MinHeapNodeBase<CtrlData>
 		{
-			time_t start_sec;
-			time_t end_sec;
-			uint32 interval_sec;
-			bool is_loop;  //true表示循环定时器
+			time_t start_sec = 0;
+			time_t end_sec=0;
+			uint32 interval_sec = 0;
+			bool is_loop=false;  //true表示循环定时器
 			Timer &m_owner;
 			CtrlData(Timer &timer)
 				:start_sec(0)

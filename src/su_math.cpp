@@ -3,9 +3,9 @@
 
 namespace su
 {
-	void combine(uint32 total_num, int combine_num, std::vector<std::vector<int>> &all_result, int index , int deep, bool is_start)
+	void combine(uint32 total_num, uint32 combine_num, std::vector<std::vector<uint32>> &all_result, uint32 index , uint32 deep, bool is_start)
 	{
-		static std::vector<int> result;
+		static std::vector<uint32> result;
 		if (is_start == true)
 		{
 			all_result.clear();
@@ -18,8 +18,8 @@ namespace su
 		}
 		if (deep >= combine_num)
 		{
-			std::vector<int> t;
-			for (int i = 0; i < combine_num; i++)
+			std::vector<uint32> t;
+			for (uint32 i = 0; i < combine_num; i++)
 			{
 				t.push_back(result[i]);
 			}
