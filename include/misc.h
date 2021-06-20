@@ -123,6 +123,10 @@ namespace su
 		{
 			return m_sharePtr;
 		}
+		std::weak_ptr<T> GetWeakPtr() const
+		{
+			return m_sharePtr;
+		}
 	};
 } //end namespace su
 
