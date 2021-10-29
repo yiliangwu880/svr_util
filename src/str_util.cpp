@@ -79,7 +79,7 @@ std::string StrFormat::format(const char* fmt, ...)
 }
 
 
-static std::string& vformat(std::string& resultOUT, const char *fmt, va_list v1, int default_size)
+std::string& StrFormat::vformat(std::string& resultOUT, const char *fmt, va_list v1, int default_size)
 {
 	resultOUT.resize(default_size, 0);
 	int len;
