@@ -79,6 +79,29 @@ std::string StrFormat::format(const char* fmt, ...)
 }
 
 
+static std::string& vformat(std::string& resultOUT, const char *fmt, va_list v1, int default_size)
+{
+	resultOUT.resize(default_size, 0);
+	int len;
+	for (;;)
+	{
+		len = vsnprintf((char *)resultOUT.c_str(), resultOUT.size(), fmt, v1);
+		if (len == -1)
+		{
+			resultOUT.clear();
+			break;
+		}
+		if (len >= (int)resultOUT.size())
+		{
+			resultOUT = "str too long";
+			break;;
+		}
+		break;
+	}
+	resultOUT.resize(len);
+	return resultOUT;
+
+}
 void StrUtil::split(const std::string& str, std::string::value_type separator,VecStr& resultOUT,size_t max_out_size)
 {
     resultOUT.clear();
