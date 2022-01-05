@@ -12,17 +12,6 @@ fun: 简化代码
 
 namespace su
 {
-#define IF_RET(cond, ret)\
-	do{\
-	if((cond))	\
-	return (ret); \
-	}while(0)
-
-#define IF_RET_V(cond)\
-	do{\
-	if((cond))	\
-	return; \
-	}while(0)
 
 //////////////////////////////////////////////////////////////////////////
 //获取原生数组长度
