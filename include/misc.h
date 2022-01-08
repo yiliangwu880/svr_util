@@ -85,6 +85,11 @@ namespace su
 	提供弱引用任意类型。
 	1）从对象获取的 weak_ptr 能保证弱引用特性。
 	2）注意：从weak_ptr 获取的 shared_ptr 不能阻止对象释放。 
+	3）和弱引用shared_ptr类似，不过对象定义不需要shared_ptr,只需要继承WeakPtr，这样定义的地方就可以保持原生写法。比如
+		struct
+		{
+				ConcreteClass a; //不用shared_ptr<ConcreteClass> = ...;
+		}
 
 	使用例子：
 	class ConcreteClass : public WeakPtr<ConcreteClass>
