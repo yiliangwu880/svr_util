@@ -49,6 +49,6 @@ addr2line -e ./zonesvr 0xbd0f18
 		SigCb s_old_SIGFPE;
 	};
 
-#define BT_STR()   CBacktraceInfo::GetBacktrackInfo()
+#define BT_STR()   CBacktraceInfo::Ins().GetBacktrackInfo()
 
 
