@@ -19,6 +19,11 @@ namespace su
 		static std::string NumToStr(T num);
 		template<typename T>
 		static T StrToNum(const std::string &str, bool *is_success = nullptr);
+		//用下面代替StrToNum更简洁
+		static int32 ToInt32(const std::string& str, bool* is_success = nullptr);
+		static int32 ToInt64(const std::string& str, bool* is_success = nullptr);
+		static int32 ToUint32(const std::string& str, bool* is_success = nullptr);
+		static int32 ToUint64(const std::string& str, bool* is_success = nullptr);
 	};
 
 	struct StrFormat
