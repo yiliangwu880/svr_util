@@ -227,4 +227,24 @@ void StrUtil::tolower(std::string& str)
 	std::transform(str.begin(), str.end(), str.begin(), ::tolower);
 }
 
+int32 StrNum::ToInt32(const std::string& str, bool* is_success /*= nullptr*/)
+{
+	return su::inner::StrToNumEx<int32>(str, is_success);
+}
+
+int32 StrNum::ToInt64(const std::string& str, bool* is_success /*= nullptr*/)
+{
+	return su::inner::StrToNumEx<int64>(str, is_success);
+}
+
+int32 StrNum::ToUint32(const std::string& str, bool* is_success /*= nullptr*/)
+{
+	return su::inner::StrToNumEx<uint32>(str, is_success);
+}
+
+int32 StrNum::ToUint64(const std::string& str, bool* is_success /*= nullptr*/)
+{
+	return su::inner::StrToNumEx<uint64>(str, is_success);
+}
+
 }

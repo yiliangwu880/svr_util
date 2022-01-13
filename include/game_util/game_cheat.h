@@ -1,6 +1,6 @@
 /*
 author:yiliangwu880
-you can get more refer from https://github.com/yiliangwu880/CppUtility.git
+you can get more refer from https://github.com/yiliangwu880/svr_util.git
 
 brief:执行字符串命令， 游戏作弊码,
 特点：

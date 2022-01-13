@@ -8,6 +8,7 @@
 #include <map>
 #include "easy_code.h"
 #include <memory>
+#include "game_util/post_fun.h"
 
 using namespace std;
 using namespace su;
@@ -107,11 +108,26 @@ namespace
 
 	}
 
+	void testPostFun()
+	{
+		int a = 1;
+		int b = 2;
+		auto f = [&a]()
+		{
+			a = 2;
+		};
+		UNIT_ASSERT(a == 1);
+		PostFunMgr::Ins().Post(f);
+		PostFunMgr::Ins().Excute();
+		UNIT_ASSERT(a == 2);
+	}
+
 }//end namespace
 
 UNITTEST(testMisc)
 {
 	test1();
 	testWeakPtr();
+	testPostFun();
 }
 
