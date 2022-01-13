@@ -46,7 +46,7 @@ namespace
 			return &(it->second);
 		}
 
-		virtual void OnMissTarget(uint64 target_id)			//实现，请求读档。  (缓存没有对象时会调用）
+		virtual void OnMissTarget(uint64 target_id)			//实现，请求读档。  (内存没有对象时会调用）
 		{
 			g_req_db_id_ls.push_back(target_id);
 		}

@@ -1,6 +1,6 @@
 /*
 author:yiliangwu880
-you can get more refer from https://github.com/yiliangwu880/CppUtility.git
+you can get more refer from https://github.com/yiliangwu880/svr_util.git
 brief: 延时处理逻辑， 
 比如:
 为了避免处理离线和在线玩家的相同功能写不同函数流程。统一入口处理。
@@ -8,12 +8,12 @@ brief: 延时处理逻辑，
 	class MyOptMgr: public DelayOptMgr<MyTarget, uint64>
 	{
 	public:
-		virtual MyTarget *OnFindTarget(uint64 target_id)		//实现查找内存目标	
+		virtual MyTarget *OnFindTarget(uint64 target_id)				//1 实现查找内存目标	
 		{
 			...
 		}
 
-		virtual void OnMissTarget(uint64 target_id)			//实现，请求读档。  (缓存没有对象时会调用）
+		virtual void OnMissTarget(uint64 target_id)						//2 实现，请求读档。  (内存没有对象时会调用）
 		{
 			...
 		}
@@ -25,7 +25,7 @@ brief: 延时处理逻辑，
 	mgr.DelOpt(id);                                                     //4 读档失败调用
 
 	                                                                    //5 加入操作请求
-	auto opt = [&](TargetType &target){};                              //注意，回调函数，引用了对象，自己就负责保证对象不野，不然就进程就未定义结果          
+	auto opt = [&](TargetType &target){};                              //注意，回调函数，引用了对象，自己就负责保证对象不野，不然就未定义结果          
 	mgr.AddOpt(target_id, opt);
 
 	或者
@@ -47,7 +47,8 @@ brief: 延时处理逻辑，
 #include <utility>
 #include <functional>
 
-                                                                        //操作目标
+
+#define L_DEBUG(x, ...)  printf(x, ##__VA_ARGS__); //根据自己项目自定义日志
 
 //@Obj			 被操作的对象
 //@ObjId		 对象的 id
@@ -65,18 +66,15 @@ public:
 	//加一个操作.		(目标找到马上执行，不在就等调用  HandleTarget 再操作)
 	//注意：你传一些指针，引用进去延后调用，就需要注意是否会野指针。
 	void AddOpt(ObjId target_id, OptFun opt);	
-
-	                                                                    //对目标操作缓存操作
-	void OptTarget(ObjId target_id, Obj &target);
-
-	void DelOpt(ObjId target_id);								        //调用删除目标缓存操作  (读档失败，目标不存时调用)
+	void OptTarget(ObjId target_id, Obj &target);//对目标操作缓存操作
+	void DelOpt(ObjId target_id);//调用删除目标缓存操作  (读档失败，目标不存时调用)
 
 	 //for test use
 	uint32 GetMaxNum() const {return MAX_OPT_NUM;}
 	uint32 GetOptNum(ObjId target_id);
 private:
     virtual Obj *OnFindTarget(ObjId target_id)=0;			//实现查找内存目标
-	virtual void OnMissTarget(ObjId target_id) = 0;				    //实现，请求读档。  (缓存没有对象时会调用）
+	virtual void OnMissTarget(ObjId target_id) = 0;				    //实现，请求读档。  (内存没有对象时会调用）
 
 
 public:
@@ -91,15 +89,15 @@ void DelayOptMgr<Obj, ObjId, MAX_OPT_NUM>::OptTarget(ObjId target_id, Obj &targe
 	{
 		return;//跑这里属于递归调用，退出不用处理。第一次调用进来的函数会处理
 	}
+	m_is_opting = true;
 	int cnt = 0;
 	while (true)
 	{
-		m_is_opting = true;
 		//////////////测试错误代码，后期没错可以删掉//////////
 		cnt++;
 		if (cnt > 100)
 		{
-			printf("error,  endless loop?\n");
+			L_DEBUG("error,  endless loop?\n");
 		}
 		////////////////////////////////////////
 		auto it = m_id_2_vec.find(target_id);
@@ -108,7 +106,7 @@ void DelayOptMgr<Obj, ObjId, MAX_OPT_NUM>::OptTarget(ObjId target_id, Obj &targe
 			m_is_opting = false;
 			return;
 		}
-		//复制一份,避免直接引用 m_id_2_vec 导致下面递归错误
+		//复制一份,避免直接引用 m_id_2_vec 导致下面递归错误。 用局部变量 vec_opt 操作，确保不会被回调函数修改。
 		VecDelayOpt vec_opt;
 		vec_opt.swap(it->second);
 		m_id_2_vec.erase(it);
@@ -117,7 +115,7 @@ void DelayOptMgr<Obj, ObjId, MAX_OPT_NUM>::OptTarget(ObjId target_id, Obj &targe
 		{
 			if (nullptr == opt)
 			{
-				printf("error, why save null point?\n");
+				L_DEBUG("error, why save null point?\n");
 				continue;
 			}
 			opt(target);//里面会可能继续调用AddOpt，给m_id_2_vec[id]加成员
@@ -131,7 +129,7 @@ void DelayOptMgr<Obj, ObjId, MAX_OPT_NUM>::AddOpt(ObjId target_id, OptFun opt)
 {
 	if (nullptr == opt || 0 == target_id)
 	{
-		printf("error para \n");
+		L_DEBUG("error para \n");
 		return;
 	}
 
@@ -139,7 +137,7 @@ void DelayOptMgr<Obj, ObjId, MAX_OPT_NUM>::AddOpt(ObjId target_id, OptFun opt)
 	if (vec_opt.size() >= MAX_OPT_NUM)
 	{
 		//缓存操作太多了		
-		printf("error, req is too more, id=%ld\n", target_id);
+		L_DEBUG("error, req is too more, id=%ld\n", target_id);
 		return;
 	}
 
