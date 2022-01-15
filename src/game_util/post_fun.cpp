@@ -11,10 +11,10 @@ void su::PostFunMgr::Excute()
 	{
 		return;
 	}
-	std::vector<PostFun> vec;
-	vec.swap(m_vec); //复制，天知道回调函数会不会修改 m_vec！
-	for (PostFun &v : vec)
+	m_tmpVec.swap(m_vec); //复制，天知道回调函数会不会修改 m_vec！
+	for (PostFun &v : m_tmpVec)
 	{
 		v();
 	}
+	m_tmpVec.clear();
 }

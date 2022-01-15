@@ -56,8 +56,16 @@ brief: 延时处理逻辑，
 template<class Obj, class ObjId=uint64, const uint32 MAX_OPT_NUM = 3>
 class  DelayOptMgr
 {
+public:
 	using OptFun = std::function<void(Obj &)>;
-	typedef std::vector<OptFun> VecDelayOpt;
+	using OptFunFail = std::function<void(ObjId id)>;
+private:
+	struct Fun 
+	{
+		OptFun fun=nullptr;
+		OptFunFail funFail = nullptr;
+	};
+	typedef std::vector<Fun> VecDelayOpt;
 	typedef std::map<ObjId, VecDelayOpt> Id2Vec;
 
 	bool m_is_opting = false;				                            //true表示进入BaseDelayOptMgr::OptTarget运行中
@@ -65,7 +73,8 @@ class  DelayOptMgr
 public:
 	//加一个操作.		(目标找到马上执行，不在就等调用  HandleTarget 再操作)
 	//注意：你传一些指针，引用进去延后调用，就需要注意是否会野指针。
-	void AddOpt(ObjId target_id, OptFun opt);	
+	//@optFail 获取Obj失败的情况调用
+	void AddOpt(ObjId target_id, OptFun opt, OptFunFail optFail = nullptr);
 	void OptTarget(ObjId target_id, Obj &target);//对目标操作缓存操作
 	void DelOpt(ObjId target_id);//调用删除目标缓存操作  (读档失败，目标不存时调用)
 
@@ -111,21 +120,21 @@ void DelayOptMgr<Obj, ObjId, MAX_OPT_NUM>::OptTarget(ObjId target_id, Obj &targe
 		vec_opt.swap(it->second);
 		m_id_2_vec.erase(it);
 
-		for(OptFun opt: vec_opt)
+		for(Fun opt: vec_opt)
 		{
-			if (nullptr == opt)
+			if (nullptr == opt.fun)
 			{
 				L_DEBUG("error, why save null point?\n");
 				continue;
 			}
-			opt(target);//里面会可能继续调用AddOpt，给m_id_2_vec[id]加成员
+			opt.fun(target);//里面会可能继续调用AddOpt，给m_id_2_vec[id]加成员
 		}
 	}
 	m_is_opting = false;
 }
 
 template<class Obj, class ObjId, const uint32 MAX_OPT_NUM>
-void DelayOptMgr<Obj, ObjId, MAX_OPT_NUM>::AddOpt(ObjId target_id, OptFun opt)
+void DelayOptMgr<Obj, ObjId, MAX_OPT_NUM>::AddOpt(ObjId target_id, OptFun opt, OptFunFail optFail )
 {
 	if (nullptr == opt || 0 == target_id)
 	{
@@ -141,7 +150,7 @@ void DelayOptMgr<Obj, ObjId, MAX_OPT_NUM>::AddOpt(ObjId target_id, OptFun opt)
 		return;
 	}
 
-	vec_opt.push_back(opt);
+	vec_opt.push_back({ opt, optFail });
 
 	if (Obj *pTarget = OnFindTarget(target_id))
 	{
@@ -166,7 +175,14 @@ void DelayOptMgr<Obj, ObjId, MAX_OPT_NUM>::DelOpt(ObjId target_id)
 	{
 		return;
 	}
-
+	VecDelayOpt& vec_opt = it->second;
+	for (Fun &v : vec_opt)
+	{
+		if (v.funFail != nullptr)
+		{
+			v.funFail(target_id);
+		}
+	}
 	m_id_2_vec.erase(it);
 }
 

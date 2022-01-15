@@ -32,6 +32,7 @@ namespace su
 	class PostFunMgr
 	{
 		std::vector<PostFun> m_vec;
+		std::vector<PostFun> m_tmpVec;//避免每次构造
 	public:
 		static PostFunMgr& Ins()
 		{
