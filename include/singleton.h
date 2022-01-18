@@ -28,6 +28,7 @@ private:
 	Noncopyable(const Noncopyable&)=delete; 
 	Noncopyable & operator= (const Noncopyable &) = delete;
 	Noncopyable(Noncopyable&&) = delete; //移动构造函数
+	Noncopyable & operator=(Noncopyable&&) = delete;//移动赋值函数
 };
 
 
