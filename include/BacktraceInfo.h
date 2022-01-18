@@ -35,7 +35,7 @@ addr2line -e ./zonesvr 0xbd0f18
 		*/
 		const char* GetBacktrackInfo();
 
-		//main函数调用注册，死机就会当前目录输出堆栈日志文件（hangup_log.log）。
+		//main函数调用注册，死机就会当前目录输出堆栈日志文件（hangup.log）。
 		void RegHangUpHandler();
 
 	private:

@@ -1,6 +1,7 @@
 #!/bin/sh
 
 #SVN_VERSION=`svnversion -c |sed 's/^.*://' |sed 's/[A-Z]*$//'`  
+#SVN_VERSION=`svn info ${Ŀ¼} | grep Revision | awk -F' ' '{ print $2 }'`
 
 if  [ "$SVN_VERSION" = "Unversioned directory" ]
 then  

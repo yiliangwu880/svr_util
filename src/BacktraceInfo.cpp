@@ -96,28 +96,28 @@ using namespace std;
 	{
 		std::string s = GetBacktrackInfo();
 
-		if (-1 == system("date >> ./hangup_log.log"))
+		if (-1 == system("date >> ./hangup.log"))
 		{
 			printf("error cmd!");
 		}
-		system("echo s1 >> ./hangup_log.log");
+		system("echo s1 >> ./hangup.log");
 		if (s.length() > 1024 * 9)
 		{
-			system("info too long, truncate!!!! >> ./hangup_log.log");
+			system("info too long, truncate!!!! >> ./hangup.log");
 			s.resize(1024 * 9);
 		}
 		char cmd[1024 * 10] = {};
-		snprintf(cmd, sizeof(cmd), "echo -e \"signal[%d] %s\" >> ./hangup_log.log", signum, s.c_str());
-		system("echo s2 >> ./hangup_log.log");
+		snprintf(cmd, sizeof(cmd), "echo -e \"signal[%d] %s\" >> ./hangup.log", signum, s.c_str());
+		system("echo s2 >> ./hangup.log");
 		if (-1 == system(cmd))
 		{
 			printf("error cmd!");
 		}
-		system("echo s3 >> ./hangup_log.log");
+		system("echo s3 >> ./hangup.log");
 		switch (signum)
 		{
 		default:
-			system("echo error signum. >> ./hangup_log.log");
+			system("echo error signum. >> ./hangup.log");
 			signal(signum, SIG_DFL);
 			break;
 		case SIGSEGV:
