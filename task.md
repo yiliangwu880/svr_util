@@ -4,14 +4,13 @@
 # 参考三消项目，app启动器
 main:
 	Reg(libevent::Ins(), id);
-	Reg(ZoneSvr::Ins(), id);
-	Reg(Gate::Ins(), id);
 	su::app.Start();
 	while(app.Loop());
 	app.exit();
 
 静态库实现zone,gate等。
 
+STATIC_REG(Reg(ZoneSvr::Ins(), id););
 class ZoneSvr ： public BaseSvr
 {
 	virtual void Init() override{}
