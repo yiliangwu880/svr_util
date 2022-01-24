@@ -1,6 +1,9 @@
 
 
 
+#定时器，测试
+三消项目的timer（时间轮询算法） ,libevent, svr_util . 那个效率高
+
 # 参考三消项目，app启动器
 main:
 	Reg(libevent::Ins(), id);
