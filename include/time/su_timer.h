@@ -68,8 +68,8 @@ namespace su
 			S_WAIT_START_TIMER,
 			S_WAIT_TIME_OUT,
 		};
-		State m_state;
-		TimerCB m_cb; //用std::bind方式绑定的回调函数
+		State m_state = S_WAIT_START_TIMER;
+		TimerCB m_cb = nullptr; //用std::bind方式绑定的回调函数
 		inner::CtrlData m_ctrlData;
 
 	public:

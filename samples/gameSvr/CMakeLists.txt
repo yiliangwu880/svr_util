@@ -16,7 +16,7 @@ INCLUDE_DIRECTORIES(after  ${PROJECT_SOURCE_DIR})
 file(GLOB_RECURSE SRCS  ${PROJECT_SOURCE_DIR} "*.cc")
 file(GLOB_RECURSE SRCS2  ${PROJECT_SOURCE_DIR} "*.cpp")
 
-message("cpp=", ${SRCS2})
+#message("cpp=", ${SRCS2})
 # 指定生成目标
 ADD_EXECUTABLE(${prj} ${SRCS} ${SRCS2})
 
