@@ -1,7 +1,17 @@
 
+# 标准输出日志
+
+template<class ... Args>
+void  WriteFormatLogSTemplate(const char* file, int line, const char* fun, LOG_PRIORITY priority, Args&& ... args)
+{
+	std::ostringstream s;
+	std::initializer_list<int> { (s << std::forward<Args>(args), 0)... }; //例如vector<int> v = { (3,1), (3,2) }; 和 {1,2} 返回结果一样; 里面的3只是执行，不返回给任何表达式使用
+																			//如果不用完美转发，这样写 std::initializer_list<int> { (cout << args, 0)... }; 
+    WriteFormatLogS(file, line, fun, priority, s.str().c_str());
+}
 
 
-#定时器，测试
+# 定时器，测试
 三消项目的timer（时间轮询算法） ,libevent, svr_util . 那个效率高
 
 # 参考三消项目，app启动器
