@@ -4,3 +4,7 @@ vs2017
 .vs
 .vscode
 /out
+/bin/test
+/bin/single_process_test
+/bin/gameSvr
+/Debug

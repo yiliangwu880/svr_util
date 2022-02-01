@@ -1,0 +1,5 @@
+[2022-02-01 13:32:07]  [info]  below line print error is ok  --/mnt/f/svr_util/test/test_event_mgr.cpp:141 reg
+[2022-02-01 13:32:07]  [error] repeated reg  --/mnt/f/svr_util/./include/game_util/event_mgr.h:205 Reg
+[2022-02-01 13:32:07]  [error] can't RegEvent when firing  --/mnt/f/svr_util/./include/game_util/publish_subscribe.h:136 RegEvent
+[2022-02-01 13:32:07]  [error] can't RegEvent when firing  --/mnt/f/svr_util/./include/game_util/publish_subscribe.h:136 RegEvent
+[2022-02-01 13:32:07]  [error] can't recursion trigger  --/mnt/f/svr_util/./include/game_util/publish_subscribe.h:163 FireEvent
