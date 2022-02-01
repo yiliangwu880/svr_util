@@ -8,6 +8,7 @@
 #include   <time.h>   
 #include "easy_code.h"
 #include "unit_test.h"
+#include "../src/log_def.h"
 
 using namespace std;
 using namespace su;
@@ -731,3 +732,15 @@ UNITTEST(IncTimer)
 {
 	testIncTimer();
 }
+
+//UNITTEST_SINGLE(CPP_LOG)
+//{
+//	LDEBUG("A", 1, "B");
+//	VecUint32 vec{ 1,2,3 };
+//	LDEBUG(vec);
+//	std::map<int,string> m;
+//	m[1] = "ab";
+//	m[2] = "a";
+//	LDEBUG(m);
+//	L_COND_V(false, "dd", 3, vec);
+//}

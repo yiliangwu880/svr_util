@@ -34,7 +34,7 @@ UnitTestMgr::Ins().Start();
 class IUnitTest
 {
 public:
-	IUnitTest(const char *unit_name);
+	IUnitTest(const char *unit_name, bool isSingle = false);
 	virtual void Run() = 0;
 
 	const char *m_unit_name = "";
@@ -47,6 +47,7 @@ class UnitTestMgr
 	std::map < std::string, IUnitTest* > m_name2unit;
 	UnitTestPrintf m_print = nullptr;
 	bool m_isEnable = true;
+	IUnitTest* m_singleUnit = nullptr;
 
 public:
 	static UnitTestMgr &Ins()
@@ -57,6 +58,7 @@ public:
 	void Start(UnitTestPrintf printf = nullptr);
 	void Run(const std::string &testName, UnitTestPrintf printf = nullptr);//只运行测试一个注册模块
 	void Reg(IUnitTest *p);
+	void RegSingle(IUnitTest *p);//独立测试，会忽略Reg函数的注册
 	void Printf(bool is_error, const char * file, int line, const char *pFun, const char * pattern, ...);
 	void Enable(bool isEnalbe) { m_isEnable = isEnalbe; } //fasle == isEnalbe表示不打日志
 
@@ -87,6 +89,18 @@ public:
    {                                                                                     \
    public:                                                                               \
       Test##Name():IUnitTest(#Name){} \
+   private:                                                                              \
+      virtual void Run();                                                      \
+   };                                         \
+    namespace { Test##Name  test##Name##Ins;}                                   \
+   void Test##Name::Run()
+
+
+#define UNITTEST_SINGLE(Name)                                                   \
+   class Test##Name : public IUnitTest                                            \
+   {                                                                                     \
+   public:                                                                               \
+      Test##Name():IUnitTest(#Name, true){} \
    private:                                                                              \
       virtual void Run();                                                      \
    };                                         \

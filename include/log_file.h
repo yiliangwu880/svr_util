@@ -27,6 +27,9 @@ int main(int argc, char* argv[])
 */
 #pragma once
 #include <string>
+#include <sstream>
+#include <map>
+#include <vector>
 
 namespace su
 {
@@ -72,8 +75,62 @@ namespace su
 		void Printf(LogLv lv, const char * file, int line, const char *fun, const char * pattern, va_list vp);
 		void PrintfCond(LogLv lv, const char * file, int line, const char *fun, const char * cond, const char * pattern = "", ...);
 		void Enable(bool isEnable);//false == isEnable 表示不打日志
+
+		template<class ... Args>
+		void Write(LogLv lv, const char * file, int line, const char *fun, Args && ... args)
+		{
+			if (!m_isEnable)
+			{
+				return;
+			}
+			std::stringstream s;		
+			std::initializer_list<int> { (s << std::forward<Args>(args), 0)... }; //例如vector<int> v = { (3,1), (3,2) }; 和 {1,2} 返回结果一样; 里面的3只是执行，不返回给任何表达式使用
+
+			std::string out_str = s.str();
+			m_cb(lv, file, line, fun, out_str.c_str());
+			if (out_str.length() >= 1000)
+			{
+				m_cb(lv, file, line, fun, "-----------[before str too long，was truncated,actual len=%d]-----------\n");
+			}
+		}
 	private:
 		LogMgr() {};
 		static void DefaultPrintf(LogLv lv, const char *file, int line, const char *fun, const char * pattern);
 	};
+}
+
+template<class T> 
+std::stringstream& operator<<(std::stringstream& s, const std::vector<T> &vec)
+{
+	s << '[';
+	bool isFirst = true;
+	for (auto &v : vec)
+	{
+		if (!isFirst)
+		{
+			s << ", ";
+		}
+		s << v;
+		isFirst = false;
+	}
+	s << ']';
+	return s;
+}
+
+template<class K, class V>
+std::stringstream& operator<<(std::stringstream& s, const std::map<K,V> &map)
+{
+	s << '{';
+	bool isFirst = true;
+	for (auto &v : map)
+	{
+		if (!isFirst)
+		{
+			s << ", ";
+		}
+		s << v.first << "=" << v.second;
+		isFirst = false;
+	}
+	s << '}';
+	return s;
 }

@@ -7,6 +7,17 @@
 
 #define LOG_NAMESPACE su::  
 
+//////////////////////CPP方式
+#define _CPP_PRINTER_(log_lv, ...) LOG_NAMESPACE LogMgr::Ins().Write(log_lv, __FILE__, __LINE__, __FUNCTION__, ##__VA_ARGS__);
+
+#define LFATAL(...) _CPP_PRINTER_(LOG_NAMESPACE LL_FATAL, ##__VA_ARGS__);
+#define LERROR(...) _CPP_PRINTER_(LOG_NAMESPACE LL_ERROR, ##__VA_ARGS__);
+#define LWARN(...)  _CPP_PRINTER_(LOG_NAMESPACE LL_WARN, ##__VA_ARGS__);
+#define LINFO(...)  _CPP_PRINTER_(LOG_NAMESPACE LL_INFO, ##__VA_ARGS__);
+#define LDEBUG(...) _CPP_PRINTER_(LOG_NAMESPACE LL_DEBUG, ##__VA_ARGS__);
+#define LTRACE(...) _CPP_PRINTER_(LOG_NAMESPACE LL_TRACE, ##__VA_ARGS__);
+
+/////////C语言方式，不推荐
 #define _LOG_PRINTER_(x, log_lv, ...) LOG_NAMESPACE LogMgr::Ins().Printf(log_lv, __FILE__, __LINE__, __FUNCTION__, x, ##__VA_ARGS__);
 #define _LOG_COND_PRINTER_(cond, ...) LOG_NAMESPACE LogMgr::Ins().PrintfCond(LOG_NAMESPACE LL_ERROR, __FILE__, __LINE__, __FUNCTION__, cond, ##__VA_ARGS__); 
 
@@ -27,7 +38,7 @@
         if (iCurrTime >= iBaseLogTime + iSec)\
         {\
             iBaseLogTime = iCurrTime;\
-            _LOG_PRINTER_(x, LOG_NAMESPACE LL_TRACE, ##__VA_ARGS__);\
+            _CPP_PRINTER_(LOG_NAMESPACE LL_TRACE, ##__VA_ARGS__);\
         }\
     }while(0);
 
@@ -35,7 +46,7 @@
 #define L_COND(cond, ret, ...)\
 	do{\
 	if(!(cond)){\
-	_LOG_COND_PRINTER_("condition fail \[" #cond "]. ", ##__VA_ARGS__); \
+	_CPP_PRINTER_(LOG_NAMESPACE LL_ERROR, "condition fail \[" #cond "]. ", ##__VA_ARGS__); \
 	return ret;\
 	}	\
 	}while(0);
@@ -56,10 +67,12 @@
 #define L_ASSERT(cond)\
 	do{\
 	if(!(cond)){\
-	L_ERROR("assert error, condition \[" #cond "]. "); \
+	LERROR("assert error, condition \[" #cond "]. "); \
 	*(int *)(nullptr) = 1;\
 	}	\
 	}while(0);
+
+
 
 
 

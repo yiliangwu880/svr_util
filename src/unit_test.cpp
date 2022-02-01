@@ -6,14 +6,27 @@
 
 using namespace std;
 
-IUnitTest::IUnitTest(const char *unit_name) 
+IUnitTest::IUnitTest(const char *unit_name, bool isSingle)
 	:m_unit_name(unit_name)
 {
-	UnitTestMgr::Ins().Reg(this);
+	if (isSingle)
+	{
+		UnitTestMgr::Ins().RegSingle(this);
+	}
+	else
+	{
+		UnitTestMgr::Ins().Reg(this);
+	}
 }
 
 void UnitTestMgr::Start(UnitTestPrintf printf)
 {
+	if (m_singleUnit)
+	{
+		UNIT_INFO("=========[%s]========", m_singleUnit->m_unit_name);
+		m_singleUnit->Run();
+		return;
+	}
 	m_print = printf;
 	for (auto &var : m_name2unit)
 	{
@@ -49,6 +62,10 @@ void UnitTestMgr::Reg(IUnitTest *p)
 		return;
 	}
 	m_name2unit[p->m_unit_name]=p;
+}
+void UnitTestMgr::RegSingle(IUnitTest *p)
+{
+	m_singleUnit = p;
 }
 
 void UnitTestMgr::Printf(bool is_error, const char * file, int line, const char *fun, const char * pattern, ...)

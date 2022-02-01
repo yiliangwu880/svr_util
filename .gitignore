@@ -8,3 +8,5 @@ vs2017
 /bin/single_process_test
 /bin/gameSvr
 /Debug
+/bin/svr_util_log.txt
+/lib/libsvr_util.a
